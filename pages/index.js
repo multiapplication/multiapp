@@ -9,7 +9,7 @@ const HomePage = () => {
 
     <div className='flex flex-col gap-4'>
       <Button label="LOGIN" onClick = {()=> Router.push('/login')}/>
-      <Button label="SIGNUP" onClick = {() => {}}/>
+      <Button label="SIGNUP" onClick = {() => Router.push('/signup')}/>
     </div>
 
 
