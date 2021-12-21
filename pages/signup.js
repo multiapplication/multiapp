@@ -1,7 +1,6 @@
 import { useFormik } from "formik";
 import { firebase } from "../utils/firebase";
 
-const auth = firebase.auth();
 
 const SignupPage = () => {
   const formik = useFormik({
@@ -17,6 +16,8 @@ const SignupPage = () => {
           // Signed in
           var user = userCredential.user;
           // ...
+
+          console.log("User created");
         })
         .catch((error) => {
           var errorCode = error.code;
