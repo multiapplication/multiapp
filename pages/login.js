@@ -1,5 +1,8 @@
 import { useFormik } from "formik";
 import { firebase } from "../utils/firebase";
+import Router from "next/router";
+
+
 
 const auth = firebase.auth();
 
@@ -17,7 +20,7 @@ const LoginPage = () => {
           // Signed in
           var user = userCredential.user;
           // ...
-
+            Router.push("/confirm");
           console.log("User logged in...");
         })
         .catch((error) => {

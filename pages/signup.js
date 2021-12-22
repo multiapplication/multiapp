@@ -1,11 +1,43 @@
 import { useFormik } from "formik";
 import { firebase } from "../utils/firebase";
+import * as Yup from "yup";
+
+const Schema = Yup.object().shape({
+  password: Yup.string().required("This field is required"),
+  changepassword: Yup.string().when("password", {
+    is: (val) => (val && val.length > 0 ? true : false),
+    then: Yup.string().oneOf(
+      [Yup.ref("password")],
+      "Both password need to be the same"
+    ),
+  }),
+});
 
 const SignupPage = () => {
   const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
+      changepassword: "",
+    },
+    validate: (values) => {
+      let errors = {};
+
+      if (!values.email) {
+        errors.email = "Required";
+      } else if (
+        !/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i.test(
+          values.email
+        )
+      ) {
+        errors.email = "Email should contain an @";
+      }
+
+      if (!(values.password == values.changepassword)) {
+        errors.changepassword = "Password should match";
+      }
+
+      return errors;
     },
     onSubmit: (values) => {
       firebase
@@ -26,31 +58,6 @@ const SignupPage = () => {
     },
   });
   return (
-    // <div>
-    //   <form onSubmit={formik.handleSubmit}>
-    //     <label htmlFor="email">Email Address</label>
-    //     <input
-    //       id="email"
-    //       name="email"
-    //       type="email"
-    //       onChange={formik.handleChange}
-    //       value={formik.values.email}
-    //     />
-    //     <br />
-
-    //     <label htmlFor="password">Password</label>
-    //     <input
-    //       id="password"
-    //       name="password"
-    //       type="password"
-    // onChange={formik.handleChange}
-    // value={formik.values.password}
-    //     />
-    //     <br />
-    //     <button type="submit">Submit</button>
-    //   </form>
-    // </div>
-
     <div className="flex flex-row ">
       <div className="bg-green-400 h-screen w-1/3 flex flex-col content-between justify-center items-center">
         <p className="font-bold text-white">
@@ -82,6 +89,7 @@ const SignupPage = () => {
                   onChange={formik.handleChange}
                   value={formik.values.email}
                 />
+                { formik.errors.email ? <div className="text-red-600">{ formik.errors.email }</div> : null }
               </div>
             </div>
 
@@ -105,6 +113,32 @@ const SignupPage = () => {
                 />
               </div>
             </div>
+
+
+
+            {formik.values.password.length >= 6 ? <div className="md:flex md:items-center mb-6">
+              <div className="md:w-1/3">
+                <label
+                  className="block text-black font-bold md:text-right mb-1 md:mb-0 pr-4"
+                  htmlFor="changepassword"
+                >
+                  Confirm Password
+                </label>
+              </div>
+              <div className="md:w-2/3">
+                <input
+                  className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-green-300"
+                  id="changepassword"
+                  name="changepassword"
+                  type="password"
+                  onChange={formik.handleChange}
+                  value={formik.values.changepassword}
+                />
+                { formik.errors.changepassword ? <div className="text-red-600">{ formik.errors.changepassword }</div> : null }
+              </div>
+            </div> : null}
+
+            
 
             <div className="md:flex md:items-center">
               <div className="md:w-1/3"></div>
