@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import { firebase } from "../utils/firebase";
+import { firebase } from "../utils/firebase.config";
 import * as Yup from "yup";
 
 const Schema = Yup.object().shape({
