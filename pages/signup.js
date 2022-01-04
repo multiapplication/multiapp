@@ -1,6 +1,11 @@
 import { useFormik } from "formik";
 import { firebase } from "../utils/firebase.config";
 import * as Yup from "yup";
+import Router from "next/router";
+import { SpinnerCircularFixed } from 'spinners-react';
+import { useState } from "react";
+
+
 
 const Schema = Yup.object().shape({
   password: Yup.string().required("This field is required"),
@@ -14,6 +19,13 @@ const Schema = Yup.object().shape({
 });
 
 const SignupPage = () => {
+
+
+
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+
+
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -30,7 +42,7 @@ const SignupPage = () => {
           values.email
         )
       ) {
-        errors.email = "Email should contain an @";
+        errors.email = "Email should contain an @, use a valid email format.";
       }
 
       if (!(values.password == values.changepassword)) {
@@ -40,6 +52,10 @@ const SignupPage = () => {
       return errors;
     },
     onSubmit: (values) => {
+
+
+      setLoading(true);
+
       firebase
         .auth()
         .createUserWithEmailAndPassword(values.email, values.password)
@@ -47,13 +63,15 @@ const SignupPage = () => {
           // Signed in
           var user = userCredential.user;
           // ...
-
+          Router.push("/confirm");
           console.log("User created");
         })
         .catch((error) => {
           var errorCode = error.code;
           var errorMessage = error.message;
           // ..
+          setErrorMessage(error.message);
+          setLoading(false);
         });
     },
   });
@@ -111,6 +129,11 @@ const SignupPage = () => {
                   onChange={formik.handleChange}
                   value={formik.values.password}
                 />
+
+
+                {formik.values.password.length >= 1 ? (<p className="text-xs">Password must be more than 6 characters long.</p>):null}
+
+
               </div>
             </div>
 
@@ -147,10 +170,17 @@ const SignupPage = () => {
                   className="shadow bg-green-400 hover:bg-green-300 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
                   type="submit"
                 >
-                  Create account
+                  {loading ? (<SpinnerCircularFixed size={30} thickness={180} speed={100} color="#ffffff" secondaryColor="rgba(0, 0, 0, 0)" />):"Create Account"}
                 </button>
+
+                {errorMessage ? (
+                  <p className="text-xs text-red-600">{errorMessage}</p>
+                ): null}
+
               </div>
             </div>
+
+
           </form>
         </div>
       </div>

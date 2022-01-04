@@ -1,18 +1,34 @@
 import { useFormik } from "formik";
 import { firebase } from "../utils/firebase.config";
 import Router from "next/router";
+import { useState } from "react";
+import { SpinnerCircularFixed } from 'spinners-react';
+
 
 
 
 const auth = firebase.auth();
 
 const LoginPage = () => {
+
+
+
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+
+  
+
   const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
     },
     onSubmit: (values) => {
+
+    
+      
+      setLoading(true);
+
       firebase
         .auth()
         .signInWithEmailAndPassword(values.email, values.password)
@@ -20,13 +36,19 @@ const LoginPage = () => {
           // Signed in
           var user = userCredential.user;
           // ...
-            Router.push("/confirm");
+          Router.push("/confirm");
           console.log("User logged in...");
         })
         .catch((error) => {
-          var errorCode = error.code;
-          var errorMessage = error.message;
+          // var errorCode = error.code;
+          // var errorMessage = error.message;
+          setErrorMessage(error.message);
+          setLoading(false);
+
         });
+
+        
+
     },
   });
   return (
@@ -92,10 +114,21 @@ const LoginPage = () => {
                   className="shadow bg-green-400 hover:bg-green-300 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
                   type="submit"
                 >
-                  Login
+                  {loading ? (
+                 <SpinnerCircularFixed size={30} thickness={180} speed={100} color="#ffffff" secondaryColor="rgba(0, 0, 0, 0)" />
+                  ): "Login"}
                 </button>
+                  
+                {errorMessage ? (
+                  <p className="text-xs text-red-600">{errorMessage}</p>
+                ): null}
+                
               </div>
             </div>
+
+
+
+
           </form>
         </div>
       </div>
