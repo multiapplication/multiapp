@@ -4,11 +4,6 @@ import Router from "next/router";
 import { useState } from "react";
 import { SpinnerCircularFixed } from 'spinners-react';
 
-
-
-
-const auth = firebase.auth();
-
 const LoginPage = () => {
 
 
