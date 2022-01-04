@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import { firebase } from "../utils/firebase.config";
+import { firebase } from "../utils/firebas.config";
 import Router from "next/router";
 import { useState } from "react";
 import { SpinnerCircularFixed } from 'spinners-react';
