@@ -99,6 +99,7 @@ const SignupPage = () => {
           sunt non irure mollit sit.
         </p>
       </div>
+
       <div className="h-screen w-2/3 flex flex-col gap-60 justify-center items-center content-between ">
         <div>
           <form onSubmit={formik.handleSubmit}>
@@ -161,12 +162,16 @@ const SignupPage = () => {
               </div>
               <div className="md:w-2/3">
                 <select
-                  className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-green-300"
+                  // className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-green-300"
                   id="role"
                   name="role"
                   onChange={formik.handleChange}
                   value={formik.values.role}
                 >
+                  <option value="" disabled selected>
+                    Choose role
+                  </option>
+
                   <option value="Clinician">Clinician</option>
                   <option value="Co-ordinator">Co-ordinator</option>
                   <option value="Scribe">Scribe</option>

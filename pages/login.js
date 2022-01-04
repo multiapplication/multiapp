@@ -1,8 +1,10 @@
+/* eslint-disable react/no-unescaped-entities */
 import { useFormik } from "formik";
 import { firebase } from "../utils/firebase.config";
 import Router from "next/router";
 import { useState } from "react";
 import { SpinnerCircularFixed } from 'spinners-react';
+import Link from "next/link";
 
 const LoginPage = () => {
 
@@ -113,13 +115,21 @@ const LoginPage = () => {
                  <SpinnerCircularFixed size={30} thickness={180} speed={100} color="#ffffff" secondaryColor="rgba(0, 0, 0, 0)" />
                   ): "Login"}
                 </button>
-                  
+                <br/>
                 {errorMessage ? (
-                  <p className="text-xs text-red-600">{errorMessage}</p>
+                  <><br /><p className="text-xs text-red-600">{errorMessage}</p></>
                 ): null}
                 
+                  <br/>
+
+                  <p className="text-xs text-gray-300">Don't have an account, <Link href="/signup"><a className="text-green-400">Sign Up</a></Link></p>
+
               </div>
+             
             </div>
+
+
+            
 
 
 
