@@ -8,12 +8,13 @@ export const PatientTile = ({
   age,
   description,
   doctorsAttending,
+  onClick
 }) => {
+
+    
   return (
     
-      <div className="rounded-xl shadow-md bg-white cursor-pointer hover:bg-gray-100" onClick={()=>{
-          Router.push("/login");
-      }}>
+      <div className="rounded-xl shadow-md bg-white cursor-pointer hover:bg-gray-100" onClick={onClick}>
         <div className="px-4">
           <div className="text-xl font-bold">
             {firstName} {lastName}
