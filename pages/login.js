@@ -50,14 +50,8 @@ const LoginPage = () => {
   });
   return (
     <div className="flex flex-row ">
-      <div className="bg-green-400 h-screen w-1/3 flex flex-col content-between justify-center items-center">
-        <p className="font-bold text-white">
-          Fugiat nulla deserunt aute elit aute labore ad culpa enim cillum et
-          labore ex non. Anim eu id nisi consequat cupidatat nisi esse
-          cupidatat. Aliquip sint qui commodo non sint proident dolor laborum
-          mollit duis incididunt minim proident. Et occaecat elit pariatur irure
-          sunt non irure mollit sit.
-        </p>
+      <div className=" bg-gradient-to-b from-[#22577A] via-[#38A3A5] to-[#57CC99] h-screen w-1/3 flex flex-col content-between justify-center items-center">
+
       </div>
       <div className="h-screen w-2/3 flex flex-col gap-60 justify-center items-center content-between ">
         <div>
@@ -73,7 +67,7 @@ const LoginPage = () => {
               </div>
               <div className="md:w-2/3">
                 <input
-                  className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-green-300"
+                  className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-[#57CC99]"
                   id="email"
                   name="email"
                   type="email"
@@ -94,7 +88,7 @@ const LoginPage = () => {
               </div>
               <div className="md:w-2/3">
                 <input
-                  className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-green-300"
+                  className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-[#57CC99]"
                   id="password"
                   name="password"
                   type="password"
@@ -108,7 +102,7 @@ const LoginPage = () => {
               <div className="md:w-1/3"></div>
               <div className="md:w-2/3">
                 <button
-                  className="shadow bg-green-400 hover:bg-green-300 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
+                  className="shadow bg-[#57CC99] hover:bg-[#38A3A5] focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
                   type="submit"
                 >
                   {loading ? (
@@ -122,7 +116,7 @@ const LoginPage = () => {
                 
                   <br/>
 
-                  <p className="text-xs text-gray-300">Don't have an account, <Link href="/signup"><a className="text-green-400">Sign Up</a></Link></p>
+                  <p className="text-xs text-gray-300">Don't have an account, <Link href="/signup"><a className="text-[#57CC99]">Sign Up</a></Link></p>
 
               </div>
              
