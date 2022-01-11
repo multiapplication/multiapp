@@ -1,17 +1,15 @@
+/* eslint-disable @next/next/no-img-element */
 import { useEffect, useState } from "react";
 import { db } from "../utils/firebase.config";
-import { PatientTile } from "../components/PatientTile";
+import Avatar from "react-avatar";
+import { UsersIcon } from "@heroicons/react/solid";
+import Link from "next/link";
 import Searchbar from "../components/Searchbar";
-import Navbar from "../components/Navbar";
-import { Dialog, Transition } from "@headlessui/react";
-import { Fragment } from "react";
 
 const DashboardPage = () => {
   const collectionName = "patients";
   const [patients, setPatients] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-
-
 
   async function searchPatients(name, setData, term) {
     const response = db.collection(name);
@@ -39,37 +37,54 @@ const DashboardPage = () => {
     searchPatients(collectionName, setPatients, searchTerm);
   }, [searchTerm]);
 
-
   return (
     <>
-      <Navbar />
-      <div className="h-screen flex flex-col gap-20 justify-center items-center content-between">
-        <Searchbar setTerm={setSearchTerm} />
+      <div className="flex flex-row">
+        {/* flex flex-col content-between justify-center items-center */}
+        <div className=" h-screen w-1/5 flex flex-col ">
+          <div className="flex flex-col items-center">
+            <img
+              src="logo.svg"
+              alt="multi logo"
+              className="mb-10 mt-5 w-1/3"
+            ></img>
+          </div>
 
-        <div className="grid grid-cols-3 gap-4 place-content-center">
-          {patients.map(
-            ({
-              id,
-              first_name,
-              last_name,
-              gender,
-              age,
-              description,
-              doctors_attending,
-            }) => (
-              <PatientTile
-                key={id}
-                firstName={first_name}
-                lastName={last_name}
-                age={age}
-                description={description}
-                gender={gender}
-                doctorsAttending={doctors_attending}
-                onClick={()=>{
-                }}
+          <div className="flex flex-row mb-5 ml-5">
+            <div>
+              <Avatar
+                name="Mark Cullinan"
+                size="50"
+                round={true}
+                className="mr-5"
               />
-            )
-          )}
+            </div>
+
+            <div>
+              <p className="font-semibold opacity-70">Mark Cullinan</p>
+              <p className="opacity-50">Epworth/Monash</p>
+              <p className="opacity-50">Clinician</p>
+            </div>
+          </div>
+
+          <hr />
+
+          <div className="flex flex-row ml-5 cursor-pointer">
+            <UsersIcon className="w-5 mr-5" />
+            <p className=" opacity-70 text-l">My Patients</p>
+          </div>
+
+          <div>
+            <Link href="/">
+              <a className="text-red-500 text-l">Logout</a>
+            </Link>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-b from-[#22577A] via-[#38A3A5] to-[#57CC99] h-screen w-4/5 flex flex-col  items-center content-between">
+         
+            <Searchbar />
+          
         </div>
       </div>
     </>

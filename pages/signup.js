@@ -25,6 +25,7 @@ const SignupPage = () => {
       first_name: "",
       last_name: "",
       role: "",
+      organisation: "",
       email: "",
       password: "",
       changepassword: "",
@@ -71,6 +72,7 @@ const SignupPage = () => {
               first_name: formik.values.first_name,
               last_name: formik.values.last_name,
               role: formik.values.role,
+              organisation: formik.values.organisation,
               email: user.email,
             });
           });
@@ -94,7 +96,7 @@ const SignupPage = () => {
        
       </div>
 
-      <div className="h-screen w-2/3 flex flex-col gap-60 justify-center items-center content-between ">
+      <div className="h-screen w-2/3 flex flex-col justify-center items-center content-between ">
         <div>
           <form onSubmit={formik.handleSubmit}>
             <div className="md:flex md:items-center mb-6">
@@ -174,6 +176,27 @@ const SignupPage = () => {
             </div>
 
             {/* -------------- */}
+
+            <div className="md:flex md:items-center mb-6">
+              <div className="md:w-1/3">
+                <label
+                  className="block text-black font-bold md:text-right mb-1 md:mb-0 pr-4"
+                  htmlFor="organisation"
+                >
+                  Organisation
+                </label>
+              </div>
+              <div className="md:w-2/3">
+                <input
+                  className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-[#57CC99]"
+                  id="organisation"
+                  name="organisation"
+                  type="text"
+                  onChange={formik.handleChange}
+                  value={formik.values.organisation}
+                />
+              </div>
+            </div>
 
             <div className="md:flex md:items-center mb-6">
               <div className="md:w-1/3">

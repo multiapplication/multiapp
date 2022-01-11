@@ -13,8 +13,6 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
-  
-
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -42,10 +40,7 @@ const LoginPage = () => {
           setErrorMessage(error.message);
           setLoading(false);
 
-        });
-
-        
-
+        });    
     },
   });
   return (
@@ -53,8 +48,10 @@ const LoginPage = () => {
       <div className=" bg-gradient-to-b from-[#22577A] via-[#38A3A5] to-[#57CC99] h-screen w-1/3 flex flex-col content-between justify-center items-center">
 
       </div>
-      <div className="h-screen w-2/3 flex flex-col gap-60 justify-center items-center content-between ">
+      <div className="h-screen w-2/3 flex flex-col justify-center items-center content-between ">
+      
         <div>
+        {/* <img src="logo.svg" alt="multi logo" className="md:flex md:items-center mb-6" width="200"></img> */}
           <form onSubmit={formik.handleSubmit}>
             <div className="md:flex md:items-center mb-6">
               <div className="md:w-1/3">
@@ -113,21 +110,12 @@ const LoginPage = () => {
                 {errorMessage ? (
                   <><br /><p className="text-xs text-red-600">{errorMessage}</p></>
                 ): null}
-                
                   <br/>
-
                   <p className="text-xs text-gray-300">Don't have an account, <Link href="/signup"><a className="text-[#57CC99]">Sign Up</a></Link></p>
 
               </div>
              
             </div>
-
-
-            
-
-
-
-
           </form>
         </div>
       </div>
