@@ -78,7 +78,7 @@ const SignupPage = () => {
           });
 
           // ...
-          Router.push("/confirm");
+          Router.push("/dashboard");
           console.log("User created");
         })
         .catch((error) => {

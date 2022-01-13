@@ -31,7 +31,7 @@ const LoginPage = () => {
           // Signed in
           var user = userCredential.user;
           // ...
-          Router.push("/confirm");
+          Router.push("/dashboard");
           console.log("User logged in...");
         })
         .catch((error) => {

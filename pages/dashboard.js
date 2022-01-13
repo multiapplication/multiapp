@@ -5,6 +5,7 @@ import Avatar from "react-avatar";
 import { UsersIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import Searchbar from "../components/Searchbar";
+import  Router  from "next/router";
 
 const DashboardPage = () => {
   const collectionName = "patients";
@@ -50,10 +51,14 @@ const DashboardPage = () => {
             ></img>
           </div>
 
-          <div className="flex flex-row mb-5 ml-5">
+
+          <div className="cursor-pointer hover:bg-[#22577A] hover:text-white" onClick={()=>{
+            Router.push('/user')
+          }}>
+          <div className="flex flex-row mb-5 ml-5 mt-5">
             <div>
               <Avatar
-                name="Mark Cullinan"
+                name="John Appleseed"
                 size="50"
                 round={true}
                 className="mr-5"
@@ -61,17 +66,28 @@ const DashboardPage = () => {
             </div>
 
             <div>
-              <p className="font-semibold opacity-70">Mark Cullinan</p>
-              <p className="opacity-50">Epworth/Monash</p>
+              <p className="font-semibold opacity-70">John Appleseed</p>
+              <p className="opacity-50">Monash</p>
               <p className="opacity-50">Clinician</p>
             </div>
           </div>
+          </div>
+
+          
 
           <hr />
 
-          <div className="flex flex-row ml-5 cursor-pointer">
+          {/* <div className="flex flex-row ml-5 cursor-pointer">
             <UsersIcon className="w-5 mr-5" />
             <p className=" opacity-70 text-l">My Patients</p>
+          </div> */}
+
+          <div className="p-5 cursor-pointer hover:bg-[#22577A] hover:text-white">
+            <p className=" opacity-70 text-xl">My Patients</p>
+          </div>
+
+          <div className="p-5 cursor-pointer hover:bg-[#22577A] hover:text-white">
+            <p className=" opacity-70 text-xl">My MDMs</p>
           </div>
 
           <div>
