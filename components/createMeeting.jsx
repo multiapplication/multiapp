@@ -1,7 +1,13 @@
 import { firebase } from "../utils/firebase.config.js";
 import { useState, useEffect } from "react"
+import { dateState } from "./AddDate.jsx";
+import { indivState } from "./AddIndividual.jsx";
+import { useRecoilValue } from "recoil";
 
 const CreateMeeting = () => {
+
+    const meetingDate = useRecoilValue(dateState);
+    const indivList = useRecoilValue(indivState);
 
     const [create,setCreate] = useState(false);
 
@@ -18,6 +24,8 @@ const CreateMeeting = () => {
     }
     
     useEffect(() => {
+        console.log(meetingDate)
+        console.log(indivList)
         if (create){
             const confirmBox = window.confirm("Confirm Meeting Creation")
             if (confirmBox){
