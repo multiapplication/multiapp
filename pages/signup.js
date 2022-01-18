@@ -74,6 +74,9 @@ const SignupPage = () => {
               role: formik.values.role,
               organisation: formik.values.organisation,
               email: user.email,
+              healthcare_occupation: "",
+              meeting_role: "",
+              about_me: "",
             });
           });
 
@@ -92,9 +95,7 @@ const SignupPage = () => {
   });
   return (
     <div className="flex flex-row ">
-      <div className="bg-gradient-to-b from-[#22577A] via-[#38A3A5] to-[#57CC99] h-screen w-1/3 flex flex-col content-between justify-center items-center">
-       
-      </div>
+      <div className="bg-gradient-to-b from-[#22577A] via-[#38A3A5] to-[#57CC99] h-screen w-1/3 flex flex-col content-between justify-center items-center"></div>
 
       <div className="h-screen w-2/3 flex flex-col justify-center items-center content-between ">
         <div>

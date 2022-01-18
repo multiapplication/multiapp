@@ -1,42 +1,84 @@
 /* eslint-disable @next/next/no-img-element */
 import { useEffect, useState } from "react";
-import { db } from "../utils/firebase.config";
+import { db, auth } from "../utils/firebase.config";
 import Avatar from "react-avatar";
 import { UsersIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import Searchbar from "../components/Searchbar";
-import  Router  from "next/router";
+import Router from "next/router";
 
 const DashboardPage = () => {
-  const collectionName = "patients";
-  const [patients, setPatients] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
+  // const collectionName = "patients";
+  // const [patients, setPatients] = useState([]);
+  // const [searchTerm, setSearchTerm] = useState("");
 
-  async function searchPatients(name, setData, term) {
-    const response = db.collection(name);
+  // async function searchPatients(name, setData, term) {
+  //   const response = db.collection(name);
 
-    const data = await response.orderBy("first_name").get();
+  //   const data = await response.orderBy("first_name").get();
 
-    if (searchTerm != "") {
-      data = await response.where("first_name", "==", term).get();
-    }
+  //   if (searchTerm != "") {
+  //     data = await response.where("first_name", "==", term).get();
+  //   }
 
-    setData(
-      data.docs.map((doc) => ({
-        id: doc.id,
-        first_name: doc.data().first_name,
-        last_name: doc.data().last_name,
-        age: doc.data().age,
-        gender: doc.data().gender,
-        description: doc.data().description,
-        doctors_attending: doc.data().doctors_attending,
-      }))
-    );
-  }
+  //   setData(
+  //     data.docs.map((doc) => ({
+  //       id: doc.id,
+  //       first_name: doc.data().first_name,
+  //       last_name: doc.data().last_name,
+  //       age: doc.data().age,
+  //       gender: doc.data().gender,
+  //       description: doc.data().description,
+  //       doctors_attending: doc.data().doctors_attending,
+  //     }))
+  //   );
+  // }
+
+  // useEffect(() => {
+  //   searchPatients(collectionName, setPatients, searchTerm);
+  // }, [searchTerm]);
+
+  const [user, setUser] = useState("");
+  const [userData, setUserData] = useState([]);
+  const [userName, setUserName] = useState("");
 
   useEffect(() => {
-    searchPatients(collectionName, setPatients, searchTerm);
-  }, [searchTerm]);
+    auth.onAuthStateChanged((currentUser) => {
+
+      setUser(currentUser.uid);
+
+      const docRef = db.collection("users").doc(currentUser.uid);
+
+
+      docRef.onSnapshot((doc)=>{
+        if (doc.exists) {
+          setUserData(doc.data());
+          setUserName(doc.data().first_name + " " + doc.data().last_name);
+
+          console.log("shit happens");
+        } else {
+          // doc.data() will be undefined in this case
+          console.log("No such document!");
+        }
+      });
+
+      // docRef
+      //   .get()
+      //   .then((doc) => {
+      //     if (doc.exists) {
+      //       setUserData(doc.data())
+      //       setUserName(doc.data().first_name +" "+ doc.data().last_name)
+      //       console.log("shit is happening");
+      //     } else {
+      //       // doc.data() will be undefined in this case
+      //       console.log("No such document!");
+      //     }
+      //   })
+      //   .catch((error) => {
+      //     console.log("Error getting document:", error);
+      //   });
+    });
+  },[]);
 
   return (
     <>
@@ -51,29 +93,29 @@ const DashboardPage = () => {
             ></img>
           </div>
 
+          <div
+            className="cursor-pointer hover:bg-[#22577A] hover:text-white"
+            onClick={() => {
+              Router.push("/user");
+            }}
+          >
+            <div className="flex flex-row mb-5 ml-5 mt-5">
+              <div>
+                <Avatar
+                  name={userName}
+                  size="50"
+                  round={true}
+                  className="mr-5"
+                />
+              </div>
 
-          <div className="cursor-pointer hover:bg-[#22577A] hover:text-white" onClick={()=>{
-            Router.push('/user')
-          }}>
-          <div className="flex flex-row mb-5 ml-5 mt-5">
-            <div>
-              <Avatar
-                name="John Appleseed"
-                size="50"
-                round={true}
-                className="mr-5"
-              />
-            </div>
-
-            <div>
-              <p className="font-semibold opacity-70">John Appleseed</p>
-              <p className="opacity-50">Monash</p>
-              <p className="opacity-50">Clinician</p>
+              <div>
+                <p className="font-semibold opacity-70">{userData.first_name} {userData.last_name}</p>
+                <p className="opacity-50">{userData.organisation}</p>
+                <p className="opacity-50">{userData.role}</p>
+              </div>
             </div>
           </div>
-          </div>
-
-          
 
           <hr />
 
@@ -98,9 +140,7 @@ const DashboardPage = () => {
         </div>
 
         <div className="bg-gradient-to-b from-[#22577A] via-[#38A3A5] to-[#57CC99] h-screen w-4/5 flex flex-col  items-center content-between">
-         
-            <Searchbar />
-          
+          <Searchbar />
         </div>
       </div>
     </>

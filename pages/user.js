@@ -1,13 +1,60 @@
 /* eslint-disable @next/next/no-img-element */
 import { useEffect, useState } from "react";
-import { db } from "../utils/firebase.config";
+import { db, auth } from "../utils/firebase.config";
 import Avatar from "react-avatar";
-import { UsersIcon } from "@heroicons/react/solid";
+
 import Link from "next/link";
-import Searchbar from "../components/Searchbar";
-import Button from "../components/Button";
+import { useFormik } from "formik";
+import { SpinnerCircularFixed } from "spinners-react";
+import Select from "react-select";
 
 const UserPage = () => {
+  const [user, setUser] = useState("");
+  const [userData, setUserData] = useState([]);
+  const [userName, setUserName] = useState("");
+  const [userMeetingRoles, setUserMeetingRoles] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+
+  const options = [
+    { value: "chocolate", label: "Chocolate" },
+    { value: "strawberry", label: "Strawberry" },
+    { value: "vanilla", label: "Vanilla" },
+  ];
+
+  const formik = useFormik({
+    initialValues: {
+      healthcare_occupation: userData.healthcare_occupation,
+      meeting_role: userData.meeting_role,
+      organisation: userData.organisation,
+      about_me: userData.about_me,
+    },
+    enableReinitialize: "true",
+  });
+
+  const getUser = () => {
+    auth.onAuthStateChanged((currentUser) => {
+      setUser(currentUser.uid);
+
+      const docRef = db.collection("users").doc(currentUser.uid);
+      docRef.onSnapshot((doc) => {
+        if (doc.exists) {
+          setUserData(doc.data());
+          setUserName(doc.data().first_name + " " + doc.data().last_name);
+          setUserMeetingRoles(doc.data().meeting_role);
+          console.log("shit happens");
+        } else {
+          // doc.data() will be undefined in this case
+          console.log("No such document!");
+        }
+      });
+    });
+  };
+
+  useEffect(() => {
+    getUser();
+  }, []);
+
   return (
     <>
       <div className="flex flex-row">
@@ -24,7 +71,7 @@ const UserPage = () => {
             <div className="flex flex-row mb-5 ml-5 mt-5">
               <div>
                 <Avatar
-                  name="John Appleseed"
+                  name={userName}
                   size="50"
                   round={true}
                   className="mr-5"
@@ -32,9 +79,11 @@ const UserPage = () => {
               </div>
 
               <div>
-                <p className="font-semibold opacity-70">John Appleseed</p>
-                <p className="opacity-50">Monash</p>
-                <p className="opacity-50">Clinician</p>
+                <p className="font-semibold opacity-70">
+                  {userData.first_name} {userData.last_name}
+                </p>
+                <p className="opacity-50">{userData.organisation}</p>
+                <p className="opacity-50">{userData.role}</p>
               </div>
             </div>
           </div>
@@ -62,25 +111,16 @@ const UserPage = () => {
         </div>
 
         <div className="bg-gradient-to-b from-[#22577A] via-[#38A3A5] to-[#57CC99] h-screen w-4/5 flex flex-col justify-evenly items-center">
-          <Avatar
-            name="John Appleseed"
-            size="100"
-            round={true}
-            className="mr-5"
-          />
-
+          <Avatar name={userName} size="100" round={true} className="mr-5" />
           <div className="">
             <select
               className="bg-white rounded-lg w-96 py-2 px-4 text-gray-700 leading-tight"
-              id="role"
-              name="role"
-              //   onChange={formik.handleChange}
-              //   value={formik.values.role}
+              id="healthcare_occupation"
+              name="healthcare_occupation"
+              onChange={formik.handleChange}
+              value={formik.values.healthcare_occupation}
+              defaultValue="Healthcare Occupation/Position"
             >
-              <option value="" disabled selected>
-                Healthcare Occupation/Position
-              </option>
-
               <option value="Clinician">Clinician</option>
               <option value="PA">PA</option>
               <option value="Radiologist">Radiologist</option>
@@ -89,23 +129,32 @@ const UserPage = () => {
             </select>
           </div>
 
+         
+
           <div className="bg-white rounded-lg text-gray-700 p-5 w-fit">
             <p className="text-lg"> Meeting Role</p>
             <p className="text-sm">Click all that apply</p>
 
             <div className="grid grid-cols-3 gap-5 m-5">
+
+              
               <div>
                 <input
                   className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-lg bg-white checked:bg-[#22577A] checked:border-[#22577A] focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
                   type="checkbox"
-                  id="inlineCheckbox1"
-                  value="option1"
+                  id="meeting_role"
+                  name="meeting_role"
+                  value="Clinician"
+                  onChange={formik.handleChange}
+                  // checked= {userMeetingRoles.includes("Clinician")=== true ? "true":"false"}
+                  
                 />
                 <label
                   className="form-check-label inline-block text-gray-700"
-                  htmlFor="inlineCheckbox1"
+                  htmlFor="meeting_role"
+                  name="meeting_role"
                 >
-                  Chair
+                  Clinician
                 </label>
               </div>
 
@@ -113,12 +162,17 @@ const UserPage = () => {
                 <input
                   className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-lg bg-white checked:bg-[#22577A] checked:border-[#22577A] focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
                   type="checkbox"
-                  id="inlineCheckbox1"
-                  value="option1"
+                  id="meeting_role"
+                  name="meeting_role"
+                  value="Co-ordinator"
+                  onChange={formik.handleChange}
+                  // checked= {userMeetingRoles.includes("Co-ordinator")=== true ? "true":"false"}
+
                 />
                 <label
                   className="form-check-label inline-block text-gray-700"
-                  htmlFor="inlineCheckbox1"
+                  htmlFor="meeting_role"
+                  name="meeting_role"
                 >
                   Co-ordinator
                 </label>
@@ -128,12 +182,17 @@ const UserPage = () => {
                 <input
                   className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-lg bg-white checked:bg-[#22577A] checked:border-[#22577A] focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
                   type="checkbox"
-                  id="inlineCheckbox1"
-                  value="option1"
+                  id="meeting_role"
+                  name="meeting_role"
+                  value="Scribe"
+                  onChange={formik.handleChange}
+                  // checked= {userMeetingRoles.includes("Scribe")=== true ? "true":"false"}
+
                 />
                 <label
                   className="form-check-label inline-block text-gray-700"
-                  htmlFor="inlineCheckbox1"
+                  htmlFor="meeting_role"
+                  name="meeting_role"
                 >
                   Scribe
                 </label>
@@ -143,12 +202,17 @@ const UserPage = () => {
                 <input
                   className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-lg bg-white checked:bg-[#22577A] checked:border-[#22577A] focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
                   type="checkbox"
-                  id="inlineCheckbox1"
-                  value="option1"
+                  id="meeting_role"
+                  name="meeting_role"
+                  value="Tech Assistance"
+                  onChange={formik.handleChange}
+                  // checked= {userMeetingRoles.includes("Tech Assistance")=== true ? "false":"true"}
+
                 />
                 <label
                   className="form-check-label inline-block text-gray-700"
-                  htmlFor="inlineCheckbox1"
+                  htmlFor="meeting_role"
+                  name="meeting_role"
                 >
                   Tech Assistance
                 </label>
@@ -158,35 +222,39 @@ const UserPage = () => {
                 <input
                   className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-lg bg-white checked:bg-[#22577A] checked:border-[#22577A] focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
                   type="checkbox"
-                  id="inlineCheckbox1"
-                  value="option1"
+                  id="meeting_role"
+                  name="meeting_role"
+                  value="Other"
+                  onChange={formik.handleChange}
+                  // checked= {userMeetingRoles.includes("Other")=== true ? "true":"false"}
+
                 />
                 <label
                   className="form-check-label inline-block text-gray-700"
-                  htmlFor="inlineCheckbox1"
+                  htmlFor="meeting_role"
+                  name="meeting_role"
                 >
                   Other
                 </label>
               </div>
             </div>
           </div>
-
           <div className="">
             <input
               className="bg-white rounded-lg w-96 py-2 px-4 text-gray-700 leading-tight"
-              placeholder="Organisation(s)"
+              placeholder={"Organisation(s):  " + userData.organisation}
               id="organisation"
               name="organisation"
               type="text"
-              //   onChange={formik.handleChange}
-              //   value={formik.values.organisation}
+              onChange={formik.handleChange}
+              value={formik.values.organisation}
             />
           </div>
-
           <div className="">
             <textarea
               className="
         w-96
+        h-48
         px-3
         py-1.5
         text-base
@@ -200,16 +268,58 @@ const UserPage = () => {
         m-0
         focus:text-gray-700
       "
-              id="exampleFormControlTextarea1"
+              id="about_me"
+              name="about_me"
+              type="text"
+              onChange={formik.handleChange}
+              value={formik.values.about_me}
               rows="3"
               placeholder="About me"
             ></textarea>
           </div>
+          <button
+            className="bg-white hover:bg-[#22577A] hover:text-white text-gray-700 font-bold py-2 px-10 rounded-2xl w-fit"
+            onClick={() => {
+              setLoading(true);
+              auth.onAuthStateChanged((currentUser) => {
+                setUser(currentUser.uid);
 
-          <button className="bg-white hover:bg-[#22577A] hover:text-white text-gray-700 font-bold py-2 px-10 rounded-2xl w-fit"
-    onClick={()=>{}}>
-        Save
-    </button>
+                const docRef = db.collection("users").doc(currentUser.uid);
+
+                docRef
+                  .update({
+                    healthcare_occupation: formik.values.healthcare_occupation,
+                    meeting_role: formik.values.meeting_role,
+                    organisation: formik.values.organisation,
+                    about_me: formik.values.about_me,
+                  })
+                  .catch((error) => {
+                    setErrorMessage(error.message);
+                    setLoading(false);
+                  })
+                  .finally(() => {
+                    setLoading(false);
+                  });
+
+                alert(userMeetingRoles);
+              });
+            }}
+          >
+            {loading ? (
+              <SpinnerCircularFixed
+                size={30}
+                thickness={180}
+                speed={100}
+                color="#ffffff"
+                secondaryColor="rgba(0, 0, 0, 0)"
+              />
+            ) : (
+              "Save"
+            )}
+          </button>
+          {errorMessage ? (
+            <p className="text-xs text-red-600">{errorMessage}</p>
+          ) : null}
         </div>
       </div>
     </>
