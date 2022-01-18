@@ -1,0 +1,19 @@
+<svg width="2078" height="1110" viewBox="0 0 2078 1110" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="1630.41" height="542.609" transform="matrix(0.986258 -0.165214 7.59288e-08 1 15 284.366)" stroke="url(#paint0_linear_237_2573)" stroke-width="30" stroke-linejoin="bevel"/>
+<rect width="1630.41" height="542.609" transform="matrix(0.986258 -0.165214 7.59288e-08 1 239 414.757)" stroke="url(#paint1_linear_237_2573)" stroke-width="30" stroke-linejoin="bevel"/>
+<rect width="1630.41" height="542.609" transform="matrix(0.986258 -0.165214 7.59288e-08 1 455 552.391)" stroke="url(#paint2_linear_237_2573)" stroke-width="30" stroke-linejoin="bevel"/>
+<defs>
+<linearGradient id="paint0_linear_237_2573" x1="815.203" y1="0" x2="815.203" y2="542.609" gradientUnits="userSpaceOnUse">
+<stop stop-color="#57CC99"/>
+<stop offset="1" stop-color="#22577A"/>
+</linearGradient>
+<linearGradient id="paint1_linear_237_2573" x1="815.203" y1="0" x2="815.203" y2="542.609" gradientUnits="userSpaceOnUse">
+<stop stop-color="#57CC99"/>
+<stop offset="1" stop-color="#22577A"/>
+</linearGradient>
+<linearGradient id="paint2_linear_237_2573" x1="815.203" y1="0" x2="815.203" y2="542.609" gradientUnits="userSpaceOnUse">
+<stop stop-color="#57CC99"/>
+<stop offset="1" stop-color="#22577A"/>
+</linearGradient>
+</defs>
+</svg>
