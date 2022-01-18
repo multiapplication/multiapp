@@ -1,11 +1,8 @@
 import { useFormik } from "formik";
-import { firebase } from "../utils/firebas.config";
+import { firebase } from "../utils/firebase.config";
 import Router from "next/router";
 import { useState } from "react";
 import { SpinnerCircularFixed } from 'spinners-react';
-
-
-
 
 const auth = firebase.auth();
 
