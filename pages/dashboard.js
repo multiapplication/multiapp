@@ -6,6 +6,7 @@ import { UsersIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import Searchbar from "../components/Searchbar";
 import Router from "next/router";
+import { SpinnerCircularFixed } from "spinners-react";
 
 const DashboardPage = () => {
   // const collectionName = "patients";
@@ -39,46 +40,35 @@ const DashboardPage = () => {
   // }, [searchTerm]);
 
   const [user, setUser] = useState("");
+  const [pageLoading, setPageLoading] = useState(false);
+
   const [userData, setUserData] = useState([]);
   const [userName, setUserName] = useState("");
 
-  useEffect(() => {
+  const getUserDetails = () => {
+    setPageLoading(true);
     auth.onAuthStateChanged((currentUser) => {
-
       setUser(currentUser.uid);
 
       const docRef = db.collection("users").doc(currentUser.uid);
 
-
-      docRef.onSnapshot((doc)=>{
+      docRef.onSnapshot((doc) => {
         if (doc.exists) {
           setUserData(doc.data());
           setUserName(doc.data().first_name + " " + doc.data().last_name);
-
           console.log("shit happens");
+          setPageLoading(false);
         } else {
           // doc.data() will be undefined in this case
           console.log("No such document!");
         }
       });
-
-      // docRef
-      //   .get()
-      //   .then((doc) => {
-      //     if (doc.exists) {
-      //       setUserData(doc.data())
-      //       setUserName(doc.data().first_name +" "+ doc.data().last_name)
-      //       console.log("shit is happening");
-      //     } else {
-      //       // doc.data() will be undefined in this case
-      //       console.log("No such document!");
-      //     }
-      //   })
-      //   .catch((error) => {
-      //     console.log("Error getting document:", error);
-      //   });
     });
-  },[]);
+  };
+
+  useEffect(() => {
+    getUserDetails();
+  }, []);
 
   return (
     <>
@@ -101,16 +91,29 @@ const DashboardPage = () => {
           >
             <div className="flex flex-row mb-5 ml-5 mt-5">
               <div>
-                <Avatar
-                  name={userName}
-                  size="50"
-                  round={true}
-                  className="mr-5"
-                />
+                {pageLoading ? (
+                  <SpinnerCircularFixed
+                    className="items-center"
+                    size={50}
+                    thickness={180}
+                    speed={100}
+                    color="#22577A"
+                    secondaryColor="rgba(0, 0, 0, 0)"
+                  />
+                ) : (
+                  <Avatar
+                    name={userName}
+                    size="50"
+                    round={true}
+                    className="mr-5"
+                  />
+                )}
               </div>
 
               <div>
-                <p className="font-semibold opacity-70">{userData.first_name} {userData.last_name}</p>
+                <p className="font-semibold opacity-70">
+                  {userData.first_name} {userData.last_name}
+                </p>
                 <p className="opacity-50">{userData.organisation}</p>
                 <p className="opacity-50">{userData.role}</p>
               </div>
@@ -139,8 +142,21 @@ const DashboardPage = () => {
           </div>
         </div>
 
-        <div className="bg-gradient-to-b from-[#22577A] via-[#38A3A5] to-[#57CC99] h-screen w-4/5 flex flex-col  items-center content-between">
+        <div className="bg-gradient-to-b from-[#22577A] via-[#38A3A5] to-[#57CC99] h-screen w-4/5 ">
           <Searchbar />
+
+          <div className="rounded-md shadow-md bg-[#F1F5FA] cursor-pointer hover:bg-[#22577A] hover:text-white p-2 w-fit">
+            <div className="flex flex-row gap-5">
+              <p className="text-lg font-bold">Astitva Gautam</p>
+              <p className="text-lg">22 M</p>
+              <p className="opacity-50">DOB</p>
+            </div>
+            
+            <div className="flex flex-col gap-1 mt-5">
+              <p className="opacity-50">Mark Cullinan</p>
+              <p className="opacity-50">Anil Srivastava</p>
+            </div>
+          </div>
         </div>
       </div>
     </>
