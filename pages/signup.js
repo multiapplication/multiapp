@@ -75,7 +75,6 @@ const SignupPage = () => {
               organisation: formik.values.organisation,
               email: user.email,
               healthcare_occupation: "",
-              meeting_role: "",
               about_me: "",
             });
           });
