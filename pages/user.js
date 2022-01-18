@@ -14,6 +14,7 @@ const UserPage = () => {
   const [userName, setUserName] = useState("");
 
   const [loading, setLoading] = useState(false);
+  const [pageLoading, setPageLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
   const formik = useFormik({
@@ -27,6 +28,7 @@ const UserPage = () => {
   });
 
   const getUser = () => {
+    setPageLoading(true);
     auth.onAuthStateChanged((currentUser) => {
       setUser(currentUser.uid);
 
@@ -36,6 +38,7 @@ const UserPage = () => {
           setUserData(doc.data());
           setUserName(doc.data().first_name + " " + doc.data().last_name);
           console.log("shit happens");
+          setPageLoading(false);
         } else {
           // doc.data() will be undefined in this case
           console.log("No such document!");
@@ -63,12 +66,25 @@ const UserPage = () => {
           <div className="cursor-pointer hover:bg-[#22577A] hover:text-white">
             <div className="flex flex-row mb-5 ml-5 mt-5">
               <div>
-                <Avatar
-                  name={userName}
-                  size="50"
-                  round={true}
-                  className="mr-5"
-                />
+
+              {pageLoading ? ( <SpinnerCircularFixed
+              size={50}
+              thickness={180}
+              speed={100}
+              color="#38A3A5"
+              secondaryColor="rgba(0, 0, 0, 0)"
+            />):
+               <Avatar
+               name={userName}
+               size="50"
+               round={true}
+               className="mr-5"
+             />
+            
+            }
+
+
+               
               </div>
 
               <div>
@@ -104,7 +120,18 @@ const UserPage = () => {
         </div>
 
         <div className="bg-gradient-to-b from-[#22577A] via-[#38A3A5] to-[#57CC99] h-screen w-4/5 flex flex-col justify-start gap-16 items-center ">
-          <Avatar name={userName} size="100" round={true} className="mt-5" />
+          {pageLoading ? (
+            <SpinnerCircularFixed
+              size={50}
+              thickness={180}
+              speed={100}
+              color="#ffffff"
+              secondaryColor="rgba(0, 0, 0, 0)"
+            />
+          ) : (
+            <Avatar name={userName} size="100" round={true} className="mt-5" />
+          )}
+
           <div className="">
             <label
               className="block text-white font-bold mb-2"
