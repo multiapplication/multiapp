@@ -7,6 +7,14 @@ import Link from "next/link";
 import Searchbar from "../components/Searchbar";
 import Router from "next/router";
 import { SpinnerCircularFixed } from "spinners-react";
+import { atom, useRecoilState, useRecoilValue } from "recoil";
+
+
+
+export const currentPatientState = atom({
+  key: "currentPatientState",
+  default: ""
+});
 
 const DashboardPage = () => {
   // const collectionName = "patients";
@@ -44,6 +52,9 @@ const DashboardPage = () => {
 
   const [userData, setUserData] = useState([]);
   const [userName, setUserName] = useState("");
+  const [patientList, setPatientList] = useState([]);
+
+  const [patientId, setPatientId] = useRecoilState(currentPatientState);
 
   const getUserDetails = () => {
     setPageLoading(true);
@@ -66,8 +77,23 @@ const DashboardPage = () => {
     });
   };
 
+  const getPatientList = () => {
+    auth.onAuthStateChanged((currentUser) => {
+      const docRef = db.collection("users").doc(currentUser.uid);
+      docRef.collection("user_patients").onSnapshot((snapshot) => {
+        const patients = [];
+        snapshot.forEach((doc) => {
+          patients.push({ ...doc.data(), key: doc.id });
+        });
+        setPatientList(patients);
+        console.log("List fetched");
+      });
+    });
+  };
+
   useEffect(() => {
     getUserDetails();
+    getPatientList();
   }, []);
 
   return (
@@ -122,11 +148,6 @@ const DashboardPage = () => {
 
           <hr />
 
-          {/* <div className="flex flex-row ml-5 cursor-pointer">
-            <UsersIcon className="w-5 mr-5" />
-            <p className=" opacity-70 text-l">My Patients</p>
-          </div> */}
-
           <div className="p-5 cursor-pointer hover:bg-[#22577A] hover:text-white">
             <p className=" opacity-70 text-xl">My Patients</p>
           </div>
@@ -145,18 +166,51 @@ const DashboardPage = () => {
         <div className="bg-gradient-to-b from-[#22577A] via-[#38A3A5] to-[#57CC99] h-screen w-4/5 ">
           <Searchbar />
 
-          <div className="rounded-md shadow-md bg-[#F1F5FA] cursor-pointer hover:bg-[#22577A] hover:text-white p-2 w-fit">
-            <div className="flex flex-row gap-5">
-              <p className="text-lg font-bold">Astitva Gautam</p>
-              <p className="text-lg">22 M</p>
-              <p className="opacity-50">DOB</p>
+         
+
+          {patientList.length > 0 ? (
+            patientList.map((patient) => {
+              return (
+                <div
+                  key={patient.key}
+                  className="rounded-md shadow-md bg-[#F1F5FA] cursor-pointer hover:bg-[#22577A] hover:text-white p-2 w-fit"
+                  onClick={() => {
+
+
+                    setPatientId(patient.key);
+
+                    Router.push("/patientDetails");
+                  }}
+                >
+                  <div className="flex flex-row gap-5">
+                    <p className="text-lg font-bold" id="patient">
+                      {patient.first_name} {patient.last_name}
+                    </p>
+                    <p className="text-lg">
+                      {patient.age} {patient.sex}
+                    </p>
+                    <p className="opacity-50">{patient.dob}</p>
+                  </div>
+
+                  <div>
+                    <p className="text-lg font-semibold">Summary</p>
+                    <p>{patient.summary}</p>
+                  </div>
+
+                  <div className="flex flex-col gap-1 mt-5">
+                    {patient.doctors_attending.map((doctor) => {
+                      // eslint-disable-next-line react/jsx-key
+                      return <p className="opacity-50">{doctor}</p>;
+                    })}
+                  </div>
+                </div>
+              );
+            })
+          ) : (
+            <div className="rounded-md shadow-md bg-[#F1F5FA] p-2 w-fit ">
+              <p>You have no patients to view yet</p>
             </div>
-            
-            <div className="flex flex-col gap-1 mt-5">
-              <p className="opacity-50">Mark Cullinan</p>
-              <p className="opacity-50">Anil Srivastava</p>
-            </div>
-          </div>
+          )}
         </div>
       </div>
     </>
@@ -164,3 +218,4 @@ const DashboardPage = () => {
 };
 
 export default DashboardPage;
+
