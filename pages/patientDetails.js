@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { useEffect, useState } from "react";
 import { db, auth } from "../utils/firebase.config";
 import Avatar from "react-avatar";
@@ -8,6 +9,7 @@ import { SpinnerCircularFixed } from "spinners-react";
 import Select from "react-select";
 import { useRecoilValue } from "recoil";
 import { currentPatientState } from "./dashboard";
+import Router from "next/router";
 
 
 const PatientDetailsPage = () => {
@@ -16,9 +18,8 @@ const PatientDetailsPage = () => {
   const [userName, setUserName] = useState("");
   const [pageLoading, setPageLoading] = useState(false);
 
+  const [patientDetails, setPatientDetails] = useState([]);
   const patientId = useRecoilValue(currentPatientState);
-
-
 
   const getUser = () => {
     setPageLoading(true);
@@ -40,9 +41,27 @@ const PatientDetailsPage = () => {
     });
   };
 
+  const getPatientDetails = () => {
+    auth.onAuthStateChanged((currentUser) => {
+      const docRef = db.collection("users").doc(currentUser.uid);
+
+      docRef
+        .collection("user_patients")
+        .doc(patientId)
+        .onSnapshot((doc) => {
+          if (doc.exists) {
+            setPatientDetails(doc.data());
+          } else {
+            console.log("No such document!");
+          }
+        });
+    });
+  };
+
   useEffect(() => {
 
     getUser();
+    getPatientDetails();
   }, []);
 
   return (
@@ -57,7 +76,9 @@ const PatientDetailsPage = () => {
             ></img>
           </div>
 
-          <div className="cursor-pointer hover:bg-[#22577A] hover:text-white">
+          <div className="cursor-pointer hover:bg-[#22577A] hover:text-white" onClick={()=>{
+            Router.push('/user');
+          }}>
             <div className="flex flex-row mb-5 ml-5 mt-5">
               <div>
                 {pageLoading ? (
@@ -82,7 +103,7 @@ const PatientDetailsPage = () => {
                 <p className="font-semibold opacity-70">
                   {userData.first_name} {userData.last_name}
                 </p>
-                
+
                 <p className="opacity-50">{userData.organisation}</p>
                 <p className="opacity-50">{userData.role}</p>
               </div>
@@ -112,36 +133,34 @@ const PatientDetailsPage = () => {
         </div>
 
         <div className="bg-gradient-to-b from-[#22577A] via-[#38A3A5] to-[#57CC99] h-screen w-4/5 flex flex-col justify-start items-center ">
-          <div className="rounded-md shadow-md bg-[#F1F5FA]  p-2 w-3/4">
+          <div className="rounded-md shadow-md bg-[#F1F5FA]  p-2 mt-5 w-3/4">
             <div className="flex flex-row justify-evenly mb-5">
-              <p className="text-lg font-bold">Astitva Gautam</p>
-              <p>{patientId}</p>
-              <p className="text-lg">22 M</p>
-              <p className="opacity-50">16/10/1999</p>
+              <p className="text-lg font-bold">
+                {patientDetails.first_name} {patientDetails.last_name}
+              </p>
+              <p className="text-lg">
+                {patientDetails.age} {patientDetails.sex}
+              </p>
+              <p className="opacity-50">{patientDetails.dob}</p>
               <p className="opacity-50">Hospital</p>
               <p className="opacity-50">URN</p>
             </div>
 
             <div className="mb-5">
               <p className="text-lg font-bold opacity-50">Summary</p>
-              <p>
-                Excepteur dolor dolore est minim. Laborum excepteur labore magna
-                est Lorem qui minim mollit ipsum. Velit eu proident ipsum enim.
-                Do cupidatat ipsum magna nulla incididunt culpa velit enim non.
-                Dolore officia quis nostrud est qui. Veniam dolore eiusmod nisi
-                non voluptate minim nostrud.
-              </p>
+              <p>{patientDetails.summary}</p>
+            </div>
+
+            <div className="mb-5">
+              <p className="text-lg font-bold opacity-50">Clinical Question</p>
+              <p>{patientDetails.clinical_question}</p>
             </div>
 
             <div className="mb-5">
               <p className="text-lg font-bold opacity-50">
                 Patient Outcomes(s)
               </p>
-              <p>
-                Sit labore ipsum adipisicing nisi tempor do sint tempor commodo
-                consectetur veniam. Cupidatat qui exercitation et aliqua eu do
-                excepteur amet. Sunt nostrud aute cillum cupidatat et anim.
-              </p>
+              <p>{patientDetails.patient_outcome}</p>
             </div>
           </div>
         </div>
@@ -151,4 +170,3 @@ const PatientDetailsPage = () => {
 };
 
 export default PatientDetailsPage;
-

@@ -9,11 +9,9 @@ import Router from "next/router";
 import { SpinnerCircularFixed } from "spinners-react";
 import { atom, useRecoilState, useRecoilValue } from "recoil";
 
-
-
 export const currentPatientState = atom({
   key: "currentPatientState",
-  default: ""
+  default: "",
 });
 
 const DashboardPage = () => {
@@ -163,26 +161,21 @@ const DashboardPage = () => {
           </div>
         </div>
 
-        <div className="bg-gradient-to-b from-[#22577A] via-[#38A3A5] to-[#57CC99] h-screen w-4/5 ">
+        <div className="bg-gradient-to-b from-[#22577A] via-[#38A3A5] to-[#57CC99] h-screen w-4/5 flex flex-col items-center gap-5">
           <Searchbar />
-
-         
 
           {patientList.length > 0 ? (
             patientList.map((patient) => {
               return (
                 <div
                   key={patient.key}
-                  className="rounded-md shadow-md bg-[#F1F5FA] cursor-pointer hover:bg-[#22577A] hover:text-white p-2 w-fit"
+                  className="rounded-md shadow-md bg-[#F1F5FA] cursor-pointer hover:bg-[#22577A] hover:text-white p-2 w-4/5"
                   onClick={() => {
-
-
                     setPatientId(patient.key);
-
                     Router.push("/patientDetails");
                   }}
                 >
-                  <div className="flex flex-row gap-5">
+                  <div className="flex flex-row gap-10">
                     <p className="text-lg font-bold" id="patient">
                       {patient.first_name} {patient.last_name}
                     </p>
@@ -192,10 +185,10 @@ const DashboardPage = () => {
                     <p className="opacity-50">{patient.dob}</p>
                   </div>
 
-                  <div>
+                  {/* <div className="mt-5">
                     <p className="text-lg font-semibold">Summary</p>
                     <p>{patient.summary}</p>
-                  </div>
+                  </div> */}
 
                   <div className="flex flex-col gap-1 mt-5">
                     {patient.doctors_attending.map((doctor) => {
@@ -218,4 +211,3 @@ const DashboardPage = () => {
 };
 
 export default DashboardPage;
-

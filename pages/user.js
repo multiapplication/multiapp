@@ -119,7 +119,7 @@ const UserPage = () => {
           </div>
         </div>
 
-        <div className="bg-gradient-to-b from-[#22577A] via-[#38A3A5] to-[#57CC99] h-screen w-4/5 flex flex-col justify-start gap-16 items-center ">
+        <div className="bg-gradient-to-b from-[#22577A] via-[#38A3A5] to-[#57CC99] h-screen w-4/5 flex flex-col justify-start gap-10 items-center ">
           {pageLoading ? (
             <SpinnerCircularFixed
               size={50}
