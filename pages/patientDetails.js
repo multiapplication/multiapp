@@ -2,35 +2,31 @@
 import { useEffect, useState } from "react";
 import { db, auth } from "../utils/firebase.config";
 import Avatar from "react-avatar";
-import { UsersIcon } from "@heroicons/react/solid";
+
 import Link from "next/link";
-import Searchbar from "../components/Searchbar";
-import Router from "next/router";
+import { useFormik } from "formik";
 import { SpinnerCircularFixed } from "spinners-react";
-import { atom, useRecoilState, useRecoilValue } from "recoil";
+import Select from "react-select";
+import { useRecoilValue } from "recoil";
+import { currentPatientState } from "./dashboard";
+import Router from "next/router";
 
-export const currentPatientState = atom({
-  key: "currentPatientState",
-  default: "",
-});
 
-const DashboardPage = () => {
+const PatientDetailsPage = () => {
   const [user, setUser] = useState("");
-  const [pageLoading, setPageLoading] = useState(false);
-
   const [userData, setUserData] = useState([]);
   const [userName, setUserName] = useState("");
-  const [patientList, setPatientList] = useState([]);
+  const [pageLoading, setPageLoading] = useState(false);
 
-  const [patientId, setPatientId] = useRecoilState(currentPatientState);
+  const [patientDetails, setPatientDetails] = useState([]);
+  const patientId = useRecoilValue(currentPatientState);
 
-  const getUserDetails = () => {
+  const getUser = () => {
     setPageLoading(true);
     auth.onAuthStateChanged((currentUser) => {
       setUser(currentUser.uid);
 
       const docRef = db.collection("users").doc(currentUser.uid);
-
       docRef.onSnapshot((doc) => {
         if (doc.exists) {
           setUserData(doc.data());
@@ -45,30 +41,33 @@ const DashboardPage = () => {
     });
   };
 
-  const getPatientList = () => {
+  const getPatientDetails = () => {
     auth.onAuthStateChanged((currentUser) => {
       const docRef = db.collection("users").doc(currentUser.uid);
-      docRef.collection("user_patients").onSnapshot((snapshot) => {
-        const patients = [];
-        snapshot.forEach((doc) => {
-          patients.push({ ...doc.data(), key: doc.id });
+
+      docRef
+        .collection("user_patients")
+        .doc(patientId)
+        .onSnapshot((doc) => {
+          if (doc.exists) {
+            setPatientDetails(doc.data());
+          } else {
+            console.log("No such document!");
+          }
         });
-        setPatientList(patients);
-        console.log("List fetched");
-      });
     });
   };
 
   useEffect(() => {
-    getUserDetails();
-    getPatientList();
+
+    getUser();
+    getPatientDetails();
   }, []);
 
   return (
     <>
       <div className="flex flex-row">
-        {/* flex flex-col content-between justify-center items-center */}
-        <div className=" h-screen w-1/5 flex flex-col  ">
+      <div className=" h-screen w-1/5 flex flex-col  ">
           <div className="flex flex-col items-center">
             <img
               src="logo.svg"
@@ -117,7 +116,9 @@ const DashboardPage = () => {
           <hr />
 
           <div className="flex flex-col gap-5">
-            <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white">
+            <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white" onClick={()=>{
+              Router.push('/dashboard');
+            }}>
               <p className=" opacity-70 text-xl">My Patients</p>
             </div>
 
@@ -170,53 +171,41 @@ const DashboardPage = () => {
           </div>
         </div>
 
-        <div className="bg-gradient-to-b from-[#22577A] via-[#38A3A5] to-[#57CC99] h-screen w-4/5 flex flex-col items-center gap-5">
-          <Searchbar />
-
-          {patientList.length > 0 ? (
-            patientList.map((patient) => {
-              return (
-                <div
-                  key={patient.key}
-                  className="rounded-md shadow-md bg-[#F1F5FA] cursor-pointer hover:bg-[#22577A] hover:text-white p-2 w-4/5"
-                  onClick={() => {
-                    setPatientId(patient.key);
-                    Router.push("/patientDetails");
-                  }}
-                >
-                  <div className="flex flex-row gap-10">
-                    <p className="text-lg font-bold" id="patient">
-                      {patient.first_name} {patient.last_name}
-                    </p>
-                    <p className="text-lg">
-                      {patient.age} {patient.sex}
-                    </p>
-                    <p className="opacity-50">{patient.dob}</p>
-                  </div>
-
-                  {/* <div className="mt-5">
-                    <p className="text-lg font-semibold">Summary</p>
-                    <p>{patient.summary}</p>
-                  </div> */}
-
-                  <div className="flex flex-col gap-1 mt-5">
-                    {patient.doctors_attending.map((doctor) => {
-                      // eslint-disable-next-line react/jsx-key
-                      return <p className="opacity-50">{doctor}</p>;
-                    })}
-                  </div>
-                </div>
-              );
-            })
-          ) : (
-            <div className="rounded-md shadow-md bg-[#F1F5FA] p-2 w-fit ">
-              <p>You have no patients to view yet</p>
+        <div className="bg-gradient-to-b from-[#22577A] via-[#38A3A5] to-[#57CC99] h-screen w-4/5 flex flex-col justify-start items-center ">
+          <div className="rounded-md shadow-md bg-[#F1F5FA]  p-2 mt-5 w-3/4">
+            <div className="flex flex-row justify-evenly mb-5">
+              <p className="text-lg font-bold">
+                {patientDetails.first_name} {patientDetails.last_name}
+              </p>
+              <p className="text-lg">
+                {patientDetails.age} {patientDetails.sex}
+              </p>
+              <p className="opacity-50">{patientDetails.dob}</p>
+              <p className="opacity-50">Hospital</p>
+              <p className="opacity-50">URN</p>
             </div>
-          )}
+
+            <div className="mb-5">
+              <p className="text-lg font-bold opacity-50">Summary</p>
+              <p>{patientDetails.summary}</p>
+            </div>
+
+            <div className="mb-5">
+              <p className="text-lg font-bold opacity-50">Clinical Question</p>
+              <p>{patientDetails.clinical_question}</p>
+            </div>
+
+            <div className="mb-5">
+              <p className="text-lg font-bold opacity-50">
+                Patient Outcomes(s)
+              </p>
+              <p>{patientDetails.patient_outcome}</p>
+            </div>
+          </div>
         </div>
       </div>
     </>
   );
 };
 
-export default DashboardPage;
+export default PatientDetailsPage;
