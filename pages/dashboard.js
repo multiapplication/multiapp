@@ -15,36 +15,6 @@ export const currentPatientState = atom({
 });
 
 const DashboardPage = () => {
-  // const collectionName = "patients";
-  // const [patients, setPatients] = useState([]);
-  // const [searchTerm, setSearchTerm] = useState("");
-
-  // async function searchPatients(name, setData, term) {
-  //   const response = db.collection(name);
-
-  //   const data = await response.orderBy("first_name").get();
-
-  //   if (searchTerm != "") {
-  //     data = await response.where("first_name", "==", term).get();
-  //   }
-
-  //   setData(
-  //     data.docs.map((doc) => ({
-  //       id: doc.id,
-  //       first_name: doc.data().first_name,
-  //       last_name: doc.data().last_name,
-  //       age: doc.data().age,
-  //       gender: doc.data().gender,
-  //       description: doc.data().description,
-  //       doctors_attending: doc.data().doctors_attending,
-  //     }))
-  //   );
-  // }
-
-  // useEffect(() => {
-  //   searchPatients(collectionName, setPatients, searchTerm);
-  // }, [searchTerm]);
-
   const [user, setUser] = useState("");
   const [pageLoading, setPageLoading] = useState(false);
 
@@ -98,7 +68,7 @@ const DashboardPage = () => {
     <>
       <div className="flex flex-row">
         {/* flex flex-col content-between justify-center items-center */}
-        <div className=" h-screen w-1/5 flex flex-col ">
+        <div className=" h-screen w-1/5 flex flex-col  ">
           <div className="flex flex-col items-center">
             <img
               src="logo.svg"
@@ -146,18 +116,57 @@ const DashboardPage = () => {
 
           <hr />
 
-          <div className="p-5 cursor-pointer hover:bg-[#22577A] hover:text-white">
-            <p className=" opacity-70 text-xl">My Patients</p>
-          </div>
+          <div className="flex flex-col gap-5">
+            <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white">
+              <p className=" opacity-70 text-xl">My Patients</p>
+            </div>
 
-          <div className="p-5 cursor-pointer hover:bg-[#22577A] hover:text-white">
-            <p className=" opacity-70 text-xl">My MDMs</p>
-          </div>
+            <div>
+              <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white">
+                <p className=" opacity-70 text-xl">My MDMs</p>
+              </div>
 
-          <div>
-            <Link href="/">
-              <a className="text-red-500 text-l">Logout</a>
-            </Link>
+              <div className="ml-2">
+                <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1 cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                  <p className=" opacity-70 ">Upcoming MDMs</p>
+                </div>
+
+                <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                  <p className=" opacity-70 ">Past MDMs</p>
+                </div>
+
+                <div className="ml-20 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                  <p className=" opacity-70 ">Attendance</p>
+                </div>
+
+                <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                  <p className=" opacity-70 ">Manage MDMs</p>
+                </div>
+
+                <div className="ml-20 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                  <p className=" opacity-70 ">+ New MDM</p>
+                </div>
+              </div>
+            </div>
+
+                  <div>
+                  <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white">
+              <p className=" opacity-70 text-xl">My Teams</p>
+            </div>
+
+            <div className="ml-2">
+              <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                <p className=" opacity-70 ">+ New Team</p>
+              </div>
+            </div>
+                  </div>
+            
+
+            <div className="p-3">
+              <Link href="/">
+                <a className="text-red-500 text-l">Logout</a>
+              </Link>
+            </div>
           </div>
         </div>
 

@@ -67,7 +67,7 @@ const PatientDetailsPage = () => {
   return (
     <>
       <div className="flex flex-row">
-        <div className=" h-screen w-1/5 flex flex-col ">
+      <div className=" h-screen w-1/5 flex flex-col  ">
           <div className="flex flex-col items-center">
             <img
               src="logo.svg"
@@ -76,17 +76,21 @@ const PatientDetailsPage = () => {
             ></img>
           </div>
 
-          <div className="cursor-pointer hover:bg-[#22577A] hover:text-white" onClick={()=>{
-            Router.push('/user');
-          }}>
+          <div
+            className="cursor-pointer hover:bg-[#22577A] hover:text-white"
+            onClick={() => {
+              Router.push("/user");
+            }}
+          >
             <div className="flex flex-row mb-5 ml-5 mt-5">
               <div>
                 {pageLoading ? (
                   <SpinnerCircularFixed
+                    className="items-center"
                     size={50}
                     thickness={180}
                     speed={100}
-                    color="#38A3A5"
+                    color="#22577A"
                     secondaryColor="rgba(0, 0, 0, 0)"
                   />
                 ) : (
@@ -103,7 +107,6 @@ const PatientDetailsPage = () => {
                 <p className="font-semibold opacity-70">
                   {userData.first_name} {userData.last_name}
                 </p>
-
                 <p className="opacity-50">{userData.organisation}</p>
                 <p className="opacity-50">{userData.role}</p>
               </div>
@@ -112,23 +115,59 @@ const PatientDetailsPage = () => {
 
           <hr />
 
-          {/* <div className="flex flex-row ml-5 cursor-pointer">
-              <UsersIcon className="w-5 mr-5" />
-              <p className=" opacity-70 text-l">My Patients</p>
-            </div> */}
+          <div className="flex flex-col gap-5">
+            <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white" onClick={()=>{
+              Router.push('/dashboard');
+            }}>
+              <p className=" opacity-70 text-xl">My Patients</p>
+            </div>
 
-          <div className="p-5 cursor-pointer hover:bg-[#22577A] hover:text-white">
-            <p className=" opacity-70 text-xl">My Patients</p>
-          </div>
+            <div>
+              <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white">
+                <p className=" opacity-70 text-xl">My MDMs</p>
+              </div>
 
-          <div className="p-5 cursor-pointer hover:bg-[#22577A] hover:text-white">
-            <p className=" opacity-70 text-xl">My MDMs</p>
-          </div>
+              <div className="ml-2">
+                <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1 cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                  <p className=" opacity-70 ">Upcoming MDMs</p>
+                </div>
 
-          <div>
-            <Link href="/">
-              <a className="text-red-500 text-l">Logout</a>
-            </Link>
+                <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                  <p className=" opacity-70 ">Past MDMs</p>
+                </div>
+
+                <div className="ml-20 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                  <p className=" opacity-70 ">Attendance</p>
+                </div>
+
+                <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                  <p className=" opacity-70 ">Manage MDMs</p>
+                </div>
+
+                <div className="ml-20 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                  <p className=" opacity-70 ">+ New MDM</p>
+                </div>
+              </div>
+            </div>
+
+                  <div>
+                  <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white">
+              <p className=" opacity-70 text-xl">My Teams</p>
+            </div>
+
+            <div className="ml-2">
+              <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                <p className=" opacity-70 ">+ New Team</p>
+              </div>
+            </div>
+                  </div>
+            
+
+            <div className="p-3">
+              <Link href="/">
+                <a className="text-red-500 text-l">Logout</a>
+              </Link>
+            </div>
           </div>
         </div>
 
