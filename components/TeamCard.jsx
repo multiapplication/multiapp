@@ -46,7 +46,6 @@ const TeamCard = () => {
 
         </div>
     )
-
 }
 
 export default TeamCard

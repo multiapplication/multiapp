@@ -17,7 +17,9 @@ module.exports = {
       'charcoal': '#33373E',
       'red': '#E92C2C',
       'coolblue': '#F1F5FA',
-      'hovercoolblue': '#B7D0E0'
+      'hovercoolblue': '#B7D0E0',
+      'dark-grey':"#c4c4c4",
+      'light-grey': "#e5e5e5",
     },
   },
   plugins: [],
