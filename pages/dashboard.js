@@ -21,8 +21,10 @@ const DashboardPage = () => {
   const [userData, setUserData] = useState([]);
   const [userName, setUserName] = useState("");
   const [patientList, setPatientList] = useState([]);
-
+  const [searchPatientList, setSearchPatientList] = useState([]);
   const [patientId, setPatientId] = useRecoilState(currentPatientState);
+
+  const [input, setInput] = useState("");
 
   const getUserDetails = () => {
     setPageLoading(true);
@@ -54,9 +56,18 @@ const DashboardPage = () => {
           patients.push({ ...doc.data(), key: doc.id });
         });
         setPatientList(patients);
+        setSearchPatientList(patients);
         console.log("List fetched");
       });
     });
+  };
+
+  const updateInput = async (input) => {
+    const filtered = patientList.filter((patient) => {
+      return patient.first_name.toLowerCase().includes(input.toLowerCase());
+    });
+    setInput(input);
+    setSearchPatientList(filtered);
   };
 
   useEffect(() => {
@@ -139,9 +150,12 @@ const DashboardPage = () => {
                   <p className=" opacity-70 ">Attendance</p>
                 </div>
 
-                <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white" onClick={()=>{
-                  Router.push('/manageMDM');
-                }}>
+                <div
+                  className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white"
+                  onClick={() => {
+                    Router.push("/manageMDM");
+                  }}
+                >
                   <p className=" opacity-70 ">Manage MDMs</p>
                 </div>
 
@@ -151,32 +165,38 @@ const DashboardPage = () => {
               </div>
             </div>
 
-                  <div>
-                  <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white">
-              <p className=" opacity-70 text-xl">My Teams</p>
-            </div>
+            <div>
+              <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white">
+                <p className=" opacity-70 text-xl">My Teams</p>
+              </div>
 
-            <div className="ml-2">
-              <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
-                <p className=" opacity-70 ">+ New Team</p>
+              <div className="ml-2">
+                <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                  <p className=" opacity-70 ">+ New Team</p>
+                </div>
               </div>
             </div>
-                  </div>
-            
 
             <div className="p-3">
-              <Link href="/">
-                <a className="text-red-500 text-l">Logout</a>
-              </Link>
+              <p
+                className="text-red-500 text-l cursor-pointer"
+                onClick={() => {
+                  auth.signOut().finally(() => {
+                    Router.push("/");
+                  });
+                }}
+              >
+                Logout
+              </p>
             </div>
           </div>
         </div>
 
         <div className="bg-gradient-to-b from-[#22577A] via-[#38A3A5] to-[#57CC99] h-screen w-4/5 flex flex-col items-center gap-5">
-          <Searchbar />
+          <Searchbar setKeyword={updateInput}  keyword={input}/>
 
-          {patientList.length > 0 ? (
-            patientList.map((patient) => {
+          {searchPatientList.length > 0 ? (
+            searchPatientList.map((patient) => {
               return (
                 <div
                   key={patient.key}
@@ -212,7 +232,7 @@ const DashboardPage = () => {
             })
           ) : (
             <div className="rounded-md shadow-md bg-[#F1F5FA] p-2 w-fit ">
-              <p>You have no patients to view yet</p>
+              <p>You have no patients to view</p>
             </div>
           )}
         </div>
