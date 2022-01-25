@@ -1,8 +1,13 @@
-import SearchEmailBar from "../components/SearchEmailBar"
-import { useState } from "react"
-const newTeamPage = () => {
+import TeamList from "../components/TeamList"
+import AddParticipant from "../components/AddParticipant"
+import { useState, useEffect } from "react"
 
+const createMeetingPage = () => {
     const [teamName,setTeamName] = useState("")
+
+    // useEffect(() => {
+    //     console.log(teamName)
+    // },[teamName]);
 
     return (
         <div className="flex flex-row h-full">
@@ -107,33 +112,47 @@ const newTeamPage = () => {
                 
             </div>
     
-            {/* <!-- my teams page --> */}
-            <div className="bg-gradient-to-b from-navy via-aqua to-green w-screen p-6 text-lg h-screen">
+            {/* <!-- team creation page --> */}
+            <div className="bg-gradient-to-b from-navy via-aqua to-green w-full p-12 text-lg h-full">
+                                
+                {/* <!-- form styling --> */}
 
-                {/* Team Name Inout */}
-                <input className="w-full h-12 px-4 mb-2 text-lg text-grey placeholder-grey border rounded-lg focus:shadow-outline" type="text" placeholder="Enter Team Name" onChange={e => setTeamName(e.target.value)}/>
+                <div className="flex flex-col mt-12 mx-12">
+                    <div className="text-3xl bg-white font-bold pt-4 pb-6 px-4">
+                        Create a new team
+                    </div>
                 
-                {/* Adding participants */}
-                <div className="flex flex-row space-x-4">
-                    
-                    <button className="bg-white hover:bg-aqua text-aqua hover:text-white font-bold py-2 px-4 border-b-4 border-white hover:border-aqua rounded">
-                        Add Participant
-                    </button>
+                    <div className="bg-metal py-6 px-12 h-full">
+                        
+                        <label for="teamName" className="mt-12">Team name</label>
+                        <input
+                            className="bg-white appearance-none border-2 border-metal rounded-lg w-1/3 mx-4 py-2 px-4 text-charcoal leading-tight focus:outline-none focus:bg-white focus:border-green"
+                            id="teamName"
+                            name="teamName"
+                            type="teamName"                        
+                            placeholder="enter team name..."
+                            onChange={e => setTeamName(e.target.value)}
+                            
+                        />
+                        <div className="flex flex-row items-center mt-8">
+                            <AddParticipant></AddParticipant>
+                        </div>                        
+                        
+                        <TeamList></TeamList>
 
-                    <div className="relative text-gray-700 w-1/2">
-                        
-                        <SearchEmailBar></SearchEmailBar>
-                        
-                        <div className="absolute inset-y-0 left-0 flex items-center px-2 pointer-events-none">
-                            <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path></svg>
+                        <div className="flex flex-row justify-center mt-12 gap-6 ">
+                            <button className="w-64 mb-4 uppercase shadow bg-white text-aqua hover:bg-navy hover:text-white rounded-full py-2 px-4 font-bold">ADD TEAM</button>
+                            <button className="w-64 mb-4 uppercase shadow border-2 border-white hover:border-grey hover:text-grey focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded-full">CANCEL</button>
+                                                
                         </div>
                         
                     </div>
                 </div>
-            
             </div>
+                
         </div>
+    
     )
 }
 
-export default newTeamPage 
+export default createMeetingPage
