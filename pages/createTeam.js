@@ -1,29 +1,36 @@
+import {firebase} from "../utils/firebase.config"
+import { useRouter } from 'next/router';
+import { useState } from "react"
+import { useRecoilValue } from "recoil"
+import { confirmAlert } from "react-confirm-alert"
+import 'react-confirm-alert/src/react-confirm-alert.css' // CSS for dialog box
 import TeamList from "../components/TeamList"
 import AddParticipant from "../components/AddParticipant"
-import {firebase} from "../utils/firebase.config"
-import { useState, useEffect } from "react"
-import { useRecoilValue } from "recoil"
 import { idListState } from "../components/AddParticipant"
-import { confirmAlert } from "react-confirm-alert"
-import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 
-const createMeetingPage = () => {
+const createTeamPage = () => {
     const [teamName,setTeamName] = useState("")
     const [hospitalName,setHospitalName] = useState("")
     const idList = useRecoilValue(idListState)
 
+    const router = useRouter()
+
+    // if all fields are complete, add team to database
     const addTeam = async () => {
         if (hospitalName === "" || teamName === "" ){
             alert("Incomplete fields!")
             return;
         }
-        const res = await firebase.firestore().collection("teams").add({
+        const idListRef = idList.map(i=>"/users/"+i)
+        const res = await firebase.firestore().collection("teams").add({ // data structure for teams
             attached_hospital: hospitalName,
             group_name: teamName,
-            participants: idList
+            participants: idListRef
         })
+        router.push("/myTeams")
     }
 
+    // dialog box 
     const submit = () => {
         confirmAlert({
           title: 'Are you sure you want to create this team?',
@@ -186,7 +193,7 @@ const createMeetingPage = () => {
 
                         <div className="flex flex-row justify-center mt-12 gap-6 ">
                             <button className="w-64 mb-4 uppercase shadow bg-white text-aqua hover:bg-navy hover:text-white rounded-full py-2 px-4 font-bold" onClick={submit}>ADD TEAM</button>
-                            <button className="w-64 mb-4 uppercase shadow border-2 border-white hover:border-grey hover:text-grey focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded-full">CANCEL</button>       
+                            <button className="w-64 mb-4 uppercase shadow border-2 border-white hover:border-grey hover:text-grey focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded-full" onClick={() => router.push('/myTeams')}>CANCEL</button>       
                         </div>
                         
                     </div>
@@ -198,4 +205,4 @@ const createMeetingPage = () => {
     )
 }
 
-export default createMeetingPage
+export default createTeamPage

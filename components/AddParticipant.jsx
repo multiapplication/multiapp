@@ -1,9 +1,10 @@
 import {firebase} from "../utils/firebase.config"
 import { useEffect, useState } from "react"
-import { TiTick } from 'react-icons/ti';
 import {MdPersonAdd} from "react-icons/md";
 import { atom, useRecoilState } from "recoil";
+import { TiTick } from 'react-icons/ti';
 
+// userID list, contains unique ID for all users in a team 
 export const idListState = atom({
     key:"idListState",
     default:[],
@@ -16,6 +17,7 @@ const AddParticipant = () => {
     const [id,setId] = useState("")
     const [idList, setIdList] = useRecoilState(idListState)
 
+    // search if user exists by email
     const searchUsers = async () => {
         
         const userRef = firebase.firestore().collection("users").where('email','==',email);
@@ -33,6 +35,7 @@ const AddParticipant = () => {
         });
     }
     
+    // if either the email or add participant prompt state changes, do a search check or add user id to shared id array 
     useEffect(() => {
         if (email.includes("@")){
             searchUsers()

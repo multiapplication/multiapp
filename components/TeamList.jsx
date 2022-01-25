@@ -1,13 +1,14 @@
 import {firebase} from "../utils/firebase.config"
 import { useRecoilState } from "recoil"
-import { idListState } from "./AddParticipant"
 import { useState, useEffect } from "react"
+import { idListState } from "./AddParticipant"
 
 const TeamList = () => {
 
     const [idList, setIdList] = useRecoilState(idListState)
     const [userList, setUserList] = useState([])
 
+    // retrieve users based on ID 
     const fetchUsers = () => {
         const userRef = firebase.firestore().collection("users")
         
@@ -25,12 +26,14 @@ const TeamList = () => {
         })
     }
 
+    // remove user based on index in idList. Index is the same as the button id assigned to the participant
     const removeFromTeam = (index) => {
         const temp = [...idList]
         temp.splice(index,1)
         setIdList(temp)
     }
     
+    // update userList based on changes to id array
     useEffect(() => {
         fetchUsers()
     },[idList]);
@@ -68,7 +71,8 @@ const TeamList = () => {
 
                     <tbody className="bg-white divide-y divide-metal">
 
-                        {userList.map(({id,first_name, last_name, healthcare_occupation, organisation, role},index) => (
+                        {/* based on id array, map the relevant user data to display participant list */}
+                        {userList.map(({id,first_name, last_name, healthcare_occupation, organisation, role},index) => ( 
                             <tr className="odd:bg-white even:bg-coolblue" id={index}>
                                 <td className="px-6 py-4 ">
                                     <div className="text-sm font-medium text-charcoal">
