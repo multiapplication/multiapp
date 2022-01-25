@@ -25,7 +25,7 @@ const AddParticipant = () => {
             console.log('No matching documents.');
             setExists(false)
             return;
-          }  
+        }  
           
         snapshot.forEach(doc => {
             setId(doc.id)
@@ -49,9 +49,8 @@ const AddParticipant = () => {
                 console.log("user already in team!")
             }
         }
-        else {
-            setClicked(false)
-        }
+        
+        setClicked(false)
     },[email,click])
 
     return( 

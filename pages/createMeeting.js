@@ -1,13 +1,44 @@
 import TeamList from "../components/TeamList"
 import AddParticipant from "../components/AddParticipant"
+import {firebase} from "../utils/firebase.config"
 import { useState, useEffect } from "react"
+import { useRecoilValue } from "recoil"
+import { idListState } from "../components/AddParticipant"
+import { confirmAlert } from "react-confirm-alert"
+import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 
 const createMeetingPage = () => {
     const [teamName,setTeamName] = useState("")
+    const [hospitalName,setHospitalName] = useState("")
+    const idList = useRecoilValue(idListState)
 
-    // useEffect(() => {
-    //     console.log(teamName)
-    // },[teamName]);
+    const addTeam = async () => {
+        if (hospitalName === "" || teamName === "" ){
+            alert("Incomplete fields!")
+            return;
+        }
+        const res = await firebase.firestore().collection("teams").add({
+            attached_hospital: hospitalName,
+            group_name: teamName,
+            participants: idList
+        })
+    }
+
+    const submit = () => {
+        confirmAlert({
+          title: 'Are you sure you want to create this team?',
+          message: '',
+          buttons: [
+            {
+              label: 'Yes',
+              onClick: () => {addTeam()}
+            },
+            {
+              label: 'No',
+            }
+          ]
+        })
+    };
 
     return (
         <div className="flex flex-row h-full">
@@ -123,17 +154,30 @@ const createMeetingPage = () => {
                     </div>
                 
                     <div className="bg-metal py-6 px-12 h-full">
-                        
-                        <label for="teamName" className="mt-12">Team name</label>
-                        <input
-                            className="bg-white appearance-none border-2 border-metal rounded-lg w-1/3 mx-4 py-2 px-4 text-charcoal leading-tight focus:outline-none focus:bg-white focus:border-green"
-                            id="teamName"
-                            name="teamName"
-                            type="teamName"                        
-                            placeholder="enter team name..."
-                            onChange={e => setTeamName(e.target.value)}
-                            
-                        />
+                        <div>
+                            <label for="teamName" className="mt-12">Team name</label>
+                            <input
+                                className="bg-white appearance-none border-2 border-metal rounded-lg w-1/3 mx-4 py-2 px-4 text-charcoal leading-tight focus:outline-none focus:bg-white focus:border-green"
+                                id="teamName"
+                                name="teamName"
+                                type="teamName"                        
+                                placeholder="enter team name..."
+                                onChange={e => setTeamName(e.target.value)}
+                                
+                            />
+                        </div>
+                        <div className="mt-6">
+                            <label for="attached_hospital" className="mt-12">Attached hospital</label>
+                            <input
+                                className="bg-white appearance-none border-2 border-metal rounded-lg w-1/3 mx-4 py-2 px-4 text-charcoal leading-tight focus:outline-none focus:bg-white focus:border-green"
+                                id="attached_hospital"
+                                name="attached_hospital"
+                                type="attached_hospital"                        
+                                placeholder="enter hospital name..."
+                                onChange={e => setHospitalName(e.target.value)}
+                                
+                            />
+                        </div>
                         <div className="flex flex-row items-center mt-8">
                             <AddParticipant></AddParticipant>
                         </div>                        
@@ -141,9 +185,8 @@ const createMeetingPage = () => {
                         <TeamList></TeamList>
 
                         <div className="flex flex-row justify-center mt-12 gap-6 ">
-                            <button className="w-64 mb-4 uppercase shadow bg-white text-aqua hover:bg-navy hover:text-white rounded-full py-2 px-4 font-bold">ADD TEAM</button>
-                            <button className="w-64 mb-4 uppercase shadow border-2 border-white hover:border-grey hover:text-grey focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded-full">CANCEL</button>
-                                                
+                            <button className="w-64 mb-4 uppercase shadow bg-white text-aqua hover:bg-navy hover:text-white rounded-full py-2 px-4 font-bold" onClick={submit}>ADD TEAM</button>
+                            <button className="w-64 mb-4 uppercase shadow border-2 border-white hover:border-grey hover:text-grey focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded-full">CANCEL</button>       
                         </div>
                         
                     </div>

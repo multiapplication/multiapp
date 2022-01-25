@@ -69,37 +69,37 @@ const TeamList = () => {
                     <tbody className="bg-white divide-y divide-metal">
 
                         {userList.map(({id,first_name, last_name, healthcare_occupation, organisation, role},index) => (
-                            <tr className="odd:bg-white even:bg-coolblue">
+                            <tr className="odd:bg-white even:bg-coolblue" id={index}>
                                 <td className="px-6 py-4 ">
                                     <div className="text-sm font-medium text-charcoal">
                                         {index+1}
                                     </div>
                                 </td>
                                 
-                                <td className="px-6 py-4 ">
+                                <td className="px-6 py-4" id={index}>
                                     <div className="text-sm font-medium text-charcoal">
                                         {first_name+" "+last_name}
                                     </div>
                                     
                                 </td>
                                 
-                                <td className="px-6 py-4 ">
+                                <td className="px-6 py-4" id={index}>
                                     <div className="text-sm text-charcoal">
                                         {role}
                                     </div>
                                 </td>
 
-                                <td className="px-6 py-4 ">
+                                <td className="px-6 py-4" id={index}>
                                     <div className="text-sm text-charcoal">
                                         {healthcare_occupation}
                                     </div>
                                 </td>
 
-                                <td className="px-6 py-4  text-sm text-charcoal">
+                                <td className="px-6 py-4  text-sm text-charcoal" id={index}>
                                     {organisation}
                                 </td>
 
-                                <td className="px-6 py-4 text-right text-sm font-medium">
+                                <td className="px-6 py-4 text-right text-sm font-medium" id={index}>
                                     <button id={index} className="text-red hover:text-hovered" onClick={e => (removeFromTeam(e.target.id))}>Remove</button>
                                 </td>
                             </tr> 
