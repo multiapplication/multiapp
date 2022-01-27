@@ -1,3 +1,12 @@
+/**
+ * Checks if a user exists in the database via email and provides the ability to add a user to a team 
+ *
+ * Current functionality:
+ *  - checks if user exists by email
+ * 
+ * Todo:
+ *  - 
+ */
 import {firebase} from "../utils/firebase.config"
 import { useEffect, useState } from "react"
 import {MdPersonAdd} from "react-icons/md";

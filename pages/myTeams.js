@@ -1,11 +1,22 @@
+/**
+ * Displays information about teams associated to a user which includes the team name, the attached hospital as well as the number of participants. 
+ *
+ * Current functionality:
+ *  - When a team is selected, the associated team UID is attached to a global state which is used by ViewTeam.js
+ * 
+ * Todo:
+ * - Fix Nav bar (make it static)
+ * - Fix Dynamic Scrolling
+ * - Search Functionality for teams 
+ */
 import TeamCard from "../components/TeamCard"
 
-const MyTeamsPage = () => {
+const myTeamsPage = () => {
     
     return (
         <div className="flex flex-row h-full">
     
-            {/* <!-- nav bar --> */}
+            {/* nav bar */}
             <div className="flex flex-col bg-white w-64 p-4">
                 <div className="flex items-center justify-center">
                     <img src="logo.png" className="h-16 mb-4"></img>
@@ -14,7 +25,6 @@ const MyTeamsPage = () => {
                 <div className="flex flex-row border-metal border-b-2 items-center mb-6 p-2 hover:bg-navy hover:text-white">
                    <div className="flex bg-green rounded-full w-12 h-12 mr-4 text-center items-center justify-center">
                        SG 
-                       {/* <!-- placeholder for profile picture or initials if no pic uploaded --> */}
                    </div>
     
                    <div className="flex flex-col">
@@ -98,6 +108,7 @@ const MyTeamsPage = () => {
                 
             </div>
     
+            {/* Team Cards */}
             <div className="bg-gradient-to-b from-navy via-aqua to-green w-screen p-6 text-lg h-screen">
                 <div>
                    <TeamCard></TeamCard>
@@ -108,4 +119,4 @@ const MyTeamsPage = () => {
     )
 }
 
-export default MyTeamsPage
+export default myTeamsPage

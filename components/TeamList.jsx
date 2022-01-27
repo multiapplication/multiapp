@@ -1,3 +1,13 @@
+/**
+ * Renders a participants list based on a global state containing UserID's. This is dynamically changed through user interaction 
+ *
+ * Current functionality:
+ *  - render all participants from a global state 
+ *  - delete any participant 
+ * 
+ * Todo:
+ *  - 
+ */
 import {firebase} from "../utils/firebase.config"
 import { useRecoilState } from "recoil"
 import { useState, useEffect } from "react"
