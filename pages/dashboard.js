@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { db, auth } from "../utils/firebase.config";
 import Avatar from "react-avatar";
-import { UsersIcon } from "@heroicons/react/solid";
+import { UserIcon, UsersIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import Searchbar from "../components/Searchbar";
 import Router from "next/router";
@@ -47,6 +47,7 @@ const DashboardPage = () => {
     });
   };
 
+  // fetch current patients for the user in authentication session
   const getPatientList = () => {
     auth.onAuthStateChanged((currentUser) => {
       const docRef = db.collection("users").doc(currentUser.uid);
@@ -62,6 +63,7 @@ const DashboardPage = () => {
     });
   };
 
+  // update input for search, based on key input to the search bar
   const updateInput = async (input) => {
     const filtered = patientList.filter((patient) => {
       return patient.first_name.toLowerCase().includes(input.toLowerCase());
@@ -128,7 +130,8 @@ const DashboardPage = () => {
           <hr />
 
           <div className="flex flex-col gap-5">
-            <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white">
+            <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white flex flex-row">
+             
               <p className=" opacity-70 text-xl">My Patients</p>
             </div>
 
@@ -216,10 +219,7 @@ const DashboardPage = () => {
                     <p className="opacity-50">{patient.dob}</p>
                   </div>
 
-                  {/* <div className="mt-5">
-                    <p className="text-lg font-semibold">Summary</p>
-                    <p>{patient.summary}</p>
-                  </div> */}
+                  
 
                   <div className="flex flex-col gap-1 mt-5">
                     {patient.doctors_attending.map((doctor) => {

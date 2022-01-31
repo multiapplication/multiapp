@@ -9,15 +9,14 @@ import Router from "next/router";
 import Link from "next/link";
 import Avatar from "react-avatar";
 
-
-
-
 const ManageMDMPage = () =>{
   const [user, setUser] = useState("");
   const [userName, setUserName] = useState("");
   const [userData, setUserData] = useState([]);
   const [pageLoading, setPageLoading] = useState(false);
 
+
+  // for fetching user details, utilised in useEffect hook
   const getUserDetails = () => {
     setPageLoading(true);
     auth.onAuthStateChanged((currentUser) => {

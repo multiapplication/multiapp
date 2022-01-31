@@ -18,6 +18,7 @@ const UserPage = () => {
   const [pageLoading, setPageLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
+  // form logic hook
   const formik = useFormik({
     initialValues: {
       healthcare_occupation: userData.healthcare_occupation,
@@ -27,6 +28,9 @@ const UserPage = () => {
     },
     enableReinitialize: "true",
   });
+
+
+  // fetching user data for rendering
 
   const getUser = () => {
     setPageLoading(true);
