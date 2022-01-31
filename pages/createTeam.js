@@ -21,7 +21,7 @@ const createTeamPage = () => {
     const [teamName,setTeamName] = useState("")
     const [hospitalName,setHospitalName] = useState("")
     const idList = useRecoilValue(idListState)
-
+    const auth = firebase.auth()
     const router = useRouter()
 
     // if all fields are complete, add team to database
@@ -55,6 +55,8 @@ const createTeamPage = () => {
           ]
         })
     };
+
+    console.log(auth.currentUser.uid)
 
     return (
         <div className="flex flex-row h-full">

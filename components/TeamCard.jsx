@@ -5,9 +5,10 @@
  *  - Retrieves all team data and associated UIDs
  *  - Renders every team information as a "card" which can be clicked
  *  - When a team is selected, the associated team UID is attached to a global state which is used by ViewTeam.js
+ *  - Generate team cards associated to a specific user session
  * 
  * Todo:
- *  - Generate team cards associated to a specific user session
+ *  - 
  */
 import {firebase} from "../utils/firebase.config"
 import { useState, useEffect } from "react"
@@ -20,33 +21,31 @@ export const viewTeamState = atom({
     default:{},
 });
 
-const TeamCard = () => {
+const TeamCard = (authData) => {
 
     const [teams,setTeams] = useState([]) //holds all team data
     const [teamsId,setTeamsId] = useState([]) // holds all team ID
     const [viewTeam,setViewTeam] = useRecoilState(viewTeamState) // holds the team ID associated to a selected card 
 
     const router = useRouter()
-    
-    // retrieve all teams
-    const getTeams = async () => {
-        const dataArr = [];
-        const idArr = [];
-        const db = firebase.firestore();
-        const teamsRef = db.collection("teams");
 
-        const snapshot = await teamsRef.get(); // listener not needed as teams are user defined 
-        snapshot.forEach(doc => {
-            if (doc.exists){
-                dataArr.push(doc.data());
-                idArr.push(doc.id)
+    // retrieve team data
+    const getTeams = async (data) => {
+        data.teams.forEach(async (teamRef)=> {
+            const team = await teamRef.get();
+            if (team.exists){
+                setTeams(teamsArr => [...teamsArr, team.data()]);
+                setTeamsId(teamsIdArr => [...teamsIdArr, team.id]);
             }
-            else {
-                console.log("error: document does not exist")
-            }
-        });
-        setTeamsId(idArr)
-        setTeams(dataArr)
+        })
+    }
+    
+    // retrieve user data
+    const getUserDoc = async () => {
+        const db = firebase.firestore();
+        const userRef = db.collection("users").doc(authData.authId);
+        const doc = await userRef.get(); 
+        getTeams(doc.data())
     }
 
     // add selected team ID to global state and route to viewTeam page
@@ -57,13 +56,15 @@ const TeamCard = () => {
     }
 
     useEffect(() => {
-        getTeams()
+        getUserDoc()
     },[]);
 
     return (
         <div className="grid gap-6">
             {/* Team card with elements mapped to team data */}
-            {teams.map(({ group_name, attached_hospital, participants },index) => (
+            {!teams.length
+            ? <div className="rounded-md shadow-md bg-coolblue p-2 w-fit "><p>You have no teams to view</p></div>
+            : teams.map(({ group_name, attached_hospital, participants },index) => (
                 <button id={index} className="flex flex-col sm:flex-row justify-between bg-coolblue rounded p-4 h-96 w-full sm:h-32 sm:w-full shadow-lg hover:bg-hovercoolblue" onClick={e=>clickTeam(e.target.id)}>
                     <div className="p-4 py-2">
                         {group_name}

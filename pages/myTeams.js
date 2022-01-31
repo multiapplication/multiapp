@@ -10,8 +10,12 @@
  * - Search Functionality for teams 
  */
 import TeamCard from "../components/TeamCard"
+import { firebase } from "../utils/firebase.config";
+import Router from "next/router";
 
 const myTeamsPage = () => {
+
+    const auth = firebase.auth()
     
     return (
         <div className="flex flex-row h-full">
@@ -90,14 +94,18 @@ const myTeamsPage = () => {
                 </div>
     
                 <div className="ml-2">
-                    <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 hover:bg-navy hover:bg-navy hover:text-white">
+                    <button className="ml-12 mt-2 border-metal border-b-2 border-l-2 hover:bg-navy hover:bg-navy hover:text-white" onClick={console.log("shit")}>
                         + New Team
-                    </div>
+                    </button>
                 </div>
     
                 <div className="mb-4 mt-16 py-8 absolute bottom-0">
     
-                    <button className="text-aqua font-bold">Logout</button>
+                    <button className="text-aqua font-bold" onClick={() => {
+                  auth.signOut().finally(() => {
+                    Router.push("/");
+                  });
+                }}>Logout</button>
                     <div className="flex flex-row mt-2 hover:text-white hover:bg-navy">
                         <img src="gear-fill.png" className="w-12 h-12"></img>
                         <div className="flex items-center justify-center ml-2">
@@ -111,7 +119,7 @@ const myTeamsPage = () => {
             {/* Team Cards */}
             <div className="bg-gradient-to-b from-navy via-aqua to-green w-screen p-6 text-lg h-screen">
                 <div>
-                   <TeamCard></TeamCard>
+                   <TeamCard authId={auth.currentUser.uid}></TeamCard>
                 </div>
             </div>
         </div>
