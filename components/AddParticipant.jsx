@@ -7,8 +7,8 @@
  * Todo:
  *  - 
  */
-import {firebase} from "../utils/firebase.config"
-import { useEffect, useState } from "react"
+import {firebase} from "../utils/firebase.config";
+import { useEffect, useState } from "react";
 import {MdPersonAdd} from "react-icons/md";
 import { atom, useRecoilState } from "recoil";
 import { TiTick } from 'react-icons/ti';
@@ -20,11 +20,11 @@ export const idListState = atom({
 });
 
 const AddParticipant = () => {
-    const [click,setClicked] = useState(false)
-    const [email, setEmail] = useState("")
-    const [exists, setExists] = useState(false)
-    const [id,setId] = useState("")
-    const [idList, setIdList] = useRecoilState(idListState)
+    const [click,setClicked] = useState(false);
+    const [email, setEmail] = useState("");
+    const [exists, setExists] = useState(false);
+    const [id,setId] = useState("");
+    const [idList, setIdList] = useRecoilState(idListState);
 
     // search if user exists by email
     const searchUsers = async () => {
@@ -34,35 +34,36 @@ const AddParticipant = () => {
 
         if (snapshot.empty) {
             console.log('No matching documents.');
-            setExists(false)
+            setExists(false);
             return;
         }  
           
         snapshot.forEach(doc => {
-            setId(doc.id)
-            setExists(true)
+            setId(doc.id);
+            setExists(true);
         });
     }
     
     // if either the email or add participant prompt state changes, do a search check or add user id to shared id array 
     useEffect(() => {
         if (email.includes("@")){
-            searchUsers()
+            searchUsers();
         }
         else{
-            setExists(false)
+            setExists(false);
         }
 
         if (click && exists){
             if (!idList.includes(id)) {
-                setIdList((idList) => [...idList, id])
+                setIdList((idList) => [...idList, id]);
             }
             else {
-                console.log("user already in team!")
+                console.log("user already in team!");
             }
         }
         
-        setClicked(false)
+        setClicked(false);
+
     },[email,click])
 
     return( 

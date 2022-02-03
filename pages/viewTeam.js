@@ -1,33 +1,34 @@
 /**
- * Allows user to view an existing team. Editable fields include: team name, attached hospital and a participants list  
- *
+ * Allows user to view an existing team. Editable fields include: team name, attached hospital and a participants list. 
+ * 
  * Current functionality:
  *  - change any details about an exisiting team 
  *  - delete team
  * 
  * Todo:
- *  - correct user referencing
- *  - if only the UID for the team is linked to a user, all changes including deletion only need to be limited to the specific team UID as this is the only link to the user 
+ *  - Finish Routing
  */
-import {firebase} from "../utils/firebase.config"
+import {firebase} from "../utils/firebase.config";
 import { useRouter } from 'next/router';
-import { useState,useEffect } from "react"
-import { useRecoilValue, useRecoilState } from "recoil"
-import { confirmAlert } from "react-confirm-alert"
-import 'react-confirm-alert/src/react-confirm-alert.css' // CSS for dialog box
-import {FaTrash} from "react-icons/fa"
-import TeamList from "../components/TeamList"
-import AddParticipant from "../components/AddParticipant"
-import { idListState } from "../components/AddParticipant"
-import { viewTeamState } from "../components/TeamCard"
+import { useState,useEffect } from "react";
+import { useRecoilValue, useRecoilState, useResetRecoilState } from "recoil";
+import { confirmAlert } from "react-confirm-alert";
+import 'react-confirm-alert/src/react-confirm-alert.css'; // CSS for dialog box
+import {FaTrash} from "react-icons/fa";
+import TeamList from "../components/TeamList";
+import AddParticipant from "../components/AddParticipant";
+import { idListState } from "../components/AddParticipant";
+import { viewTeamState } from "../components/TeamCard";
 
 const viewTeamPage = () => {
-    const [teamName,setTeamName] = useState("")
-    const [hospitalName,setHospitalName] = useState("")
-    const [idList, setIdList] = useRecoilState(idListState) // All relevant user ID linked to a team 
-    const teamId = useRecoilValue(viewTeamState) // UID for the selected team, used to correctly render  
+    const [teamName,setTeamName] = useState("");
+    const [hospitalName,setHospitalName] = useState("");
+    const [idList, setIdList] = useRecoilState(idListState); // All relevant user ID linked to a team 
+    const teamId = useRecoilValue(viewTeamState); // UID for the selected team, used to correctly render  
+    const resetIdList = useResetRecoilState(idListState);
+    const auth = firebase.auth();
 
-    const router = useRouter()
+    const router = useRouter();
 
     // fetch all data relevant to the selected team 
     const getTeam = async () => {
@@ -37,9 +38,9 @@ const viewTeamPage = () => {
         console.log('No such document!');
         } 
         else {
-            setTeamName(doc.data().group_name)
-            setHospitalName(doc.data().attached_hospital)
-            setIdList(doc.data().participants) // set global state of userIDs used to render list 
+            setTeamName(doc.data().group_name);
+            setHospitalName(doc.data().attached_hospital);
+            setIdList(doc.data().participants); // set global state of userIDs used to render list 
         }
     }
 
@@ -49,14 +50,20 @@ const viewTeamPage = () => {
             attached_hospital: hospitalName,
             group_name: teamName,
             participants: idList
-        })
-        router.push("/myTeams")
+        });
+        resetIdList();
+        router.push("/myTeams");
     }
 
     // delete team from database 
     const deleteTeam = async () => {
-        const res = await firebase.firestore().collection('teams').doc(teamId).delete();
-        router.push('/myTeams')
+        const respTeam = await firebase.firestore().collection('teams').doc(teamId).delete();
+        const userRef = firebase.firestore().collection("users").doc(auth.currentUser.uid);
+        const respUser = await userRef.update({
+            teams: firebase.firestore.FieldValue.arrayRemove(firebase.firestore().doc('/teams/'+ teamId))
+        })
+        resetIdList();
+        router.push('/myTeams');
     }
 
     const submit = () =>{
@@ -72,7 +79,7 @@ const viewTeamPage = () => {
                 label: 'No',
               }
             ]
-        })
+        });
     }
 
     const removeTeam = () => {
@@ -88,12 +95,12 @@ const viewTeamPage = () => {
                 label: 'No',
               }
             ]
-        })
+        });
     }
     
     // fetch all team data
     useEffect(() => {
-        getTeam()
+        getTeam();
     },[]);
 
     return (
@@ -236,7 +243,11 @@ const viewTeamPage = () => {
 
                         <div className="flex flex-row justify-center mt-12 gap-6 ">
                             <button className="w-64 mb-4 uppercase shadow bg-white text-aqua hover:bg-navy hover:text-white rounded-full py-2 px-4 font-bold" onClick={submit}>SUBMIT CHANGES</button>
-                            <button className="w-64 mb-4 uppercase shadow border-2 border-white hover:border-grey hover:text-grey focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded-full" onClick={() => router.push('/myTeams')}>CANCEL</button>       
+                            <button className="w-64 mb-4 uppercase shadow border-2 border-white hover:border-grey hover:text-grey focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded-full" 
+                            onClick={() => {
+                                resetIdList()
+                                router.push('/myTeams')
+                            }}>CANCEL</button>       
                         </div>
                         
                     </div>

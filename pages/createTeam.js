@@ -5,38 +5,46 @@
  *  - dynamically add and remove participants to team via email
  * 
  * Todo:
- * - when creating team, add the generated team UID to specific user 
+ * - Finish Routing
+ * - Fix Nav bar (make it static)
+ * - Fix Dynamic Scrolling
  */
-import {firebase} from "../utils/firebase.config"
+import {firebase} from "../utils/firebase.config";
 import { useRouter } from 'next/router';
-import { useState } from "react"
-import { useRecoilValue } from "recoil"
-import { confirmAlert } from "react-confirm-alert"
-import 'react-confirm-alert/src/react-confirm-alert.css' // CSS for dialog box
-import TeamList from "../components/TeamList"
-import AddParticipant from "../components/AddParticipant"
-import { idListState } from "../components/AddParticipant"
+import { useState,useEffect } from "react";
+import { useRecoilValue, useResetRecoilState } from "recoil";
+import { confirmAlert } from "react-confirm-alert";
+import 'react-confirm-alert/src/react-confirm-alert.css'; // CSS for dialog box
+import TeamList from "../components/TeamList";
+import AddParticipant from "../components/AddParticipant";
+import { idListState } from "../components/AddParticipant";
 
 const createTeamPage = () => {
-    const [teamName,setTeamName] = useState("")
-    const [hospitalName,setHospitalName] = useState("")
-    const idList = useRecoilValue(idListState)
-    const auth = firebase.auth()
-    const router = useRouter()
+    const [teamName,setTeamName] = useState("");
+    const [hospitalName,setHospitalName] = useState("");
+    const resetIdList = useResetRecoilState(idListState);
+    const idList = useRecoilValue(idListState);
+    const auth = firebase.auth();
+    const router = useRouter();
 
     // if all fields are complete, add team to database
     const addTeam = async () => {
         if (hospitalName === "" || teamName === "" ){
-            alert("Incomplete fields!")
+            alert("Incomplete fields!");
             return;
         }
         //const idListRef = idList.map(i=>"/users/"+i) // CORRECT USER REFERENCE IGNORED FOR NOW 
-        const res = await firebase.firestore().collection("teams").add({ // data structure for teams
+        const respTeam = await firebase.firestore().collection("teams").add({ // data structure for teams
             attached_hospital: hospitalName,
             group_name: teamName,
             participants: idList // need to change to idListRef once referencing is correct 
+        });
+        const userRef = firebase.firestore().collection("users").doc(auth.currentUser.uid);
+        const respUser = await userRef.update({
+            teams: firebase.firestore.FieldValue.arrayUnion(firebase.firestore().doc('teams/'+ respTeam.id))
         })
-        router.push("/myTeams")
+        resetIdList()
+        router.push("/myTeams");
     }
 
     // dialog box 
@@ -53,10 +61,12 @@ const createTeamPage = () => {
               label: 'No',
             }
           ]
-        })
+        });
     };
 
-    console.log(auth.currentUser.uid)
+    useEffect(() => {
+        resetIdList();
+    },[]);
 
     return (
         <div className="flex flex-row h-full">

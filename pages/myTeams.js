@@ -5,17 +5,18 @@
  *  - When a team is selected, the associated team UID is attached to a global state which is used by ViewTeam.js
  * 
  * Todo:
+*  - Finish Routing
  * - Fix Nav bar (make it static)
  * - Fix Dynamic Scrolling
  * - Search Functionality for teams 
  */
-import TeamCard from "../components/TeamCard"
+import TeamCard from "../components/TeamCard";
 import { firebase } from "../utils/firebase.config";
 import Router from "next/router";
 
 const myTeamsPage = () => {
 
-    const auth = firebase.auth()
+    const auth = firebase.auth();
     
     return (
         <div className="flex flex-row h-full">
@@ -94,7 +95,7 @@ const myTeamsPage = () => {
                 </div>
     
                 <div className="ml-2">
-                    <button className="ml-12 mt-2 border-metal border-b-2 border-l-2 hover:bg-navy hover:bg-navy hover:text-white" onClick={console.log("shit")}>
+                    <button className="ml-12 mt-2 border-metal border-b-2 border-l-2 hover:bg-navy hover:bg-navy hover:text-white" onClick={() => {Router.push("/createTeam")}}>
                         + New Team
                     </button>
                 </div>

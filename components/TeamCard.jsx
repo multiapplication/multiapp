@@ -10,9 +10,9 @@
  * Todo:
  *  - 
  */
-import {firebase} from "../utils/firebase.config"
-import { useState, useEffect } from "react"
-import { atom, useRecoilState } from "recoil"
+import {firebase} from "../utils/firebase.config";
+import { useState, useEffect } from "react";
+import { atom, useRecoilState } from "recoil";
 import { useRouter } from 'next/router';
 
 // contains relevant team UID to use when viewing/editing 
@@ -23,40 +23,42 @@ export const viewTeamState = atom({
 
 const TeamCard = (authData) => {
 
-    const [teams,setTeams] = useState([]) //holds all team data
-    const [teamsId,setTeamsId] = useState([]) // holds all team ID
-    const [viewTeam,setViewTeam] = useRecoilState(viewTeamState) // holds the team ID associated to a selected card 
+    const [teams,setTeams] = useState([]); //holds all team data
+    const [teamsId,setTeamsId] = useState([]); // holds all team ID
+    const [viewTeam,setViewTeam] = useRecoilState(viewTeamState); // holds the team ID associated to a selected card 
 
-    const router = useRouter()
+    const router = useRouter();
 
     // retrieve team data
     const getTeams = async (data) => {
-        data.teams.forEach(async (teamRef)=> {
-            const team = await teamRef.get();
-            if (team.exists){
-                setTeams(teamsArr => [...teamsArr, team.data()]);
-                setTeamsId(teamsIdArr => [...teamsIdArr, team.id]);
-            }
-        })
+        if (data.teams.length){
+            data.teams.forEach(async (teamRef)=> {
+                const team = await teamRef.get();
+                if (team.exists){
+                    setTeams(teamsArr => [...teamsArr, team.data()]);
+                    setTeamsId(teamsIdArr => [...teamsIdArr, team.id]);
+                }
+            })
+        }
     }
     
-    // retrieve user data
+    // retrieve user data           
     const getUserDoc = async () => {
         const db = firebase.firestore();
         const userRef = db.collection("users").doc(authData.authId);
         const doc = await userRef.get(); 
-        getTeams(doc.data())
+        getTeams(doc.data());
     }
 
     // add selected team ID to global state and route to viewTeam page
     // index is linked to order in which team cards are rendered  
     const clickTeam = (index) => {
-        setViewTeam(teamsId[index])
-        router.push("/viewTeam")
+        setViewTeam(teamsId[index]);
+        router.push("/viewTeam");
     }
 
     useEffect(() => {
-        getUserDoc()
+        getUserDoc();
     },[]);
 
     return (
