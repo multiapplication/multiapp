@@ -5,6 +5,7 @@ import { firebase } from "../utils/firebase.config";
 import Router from "next/router";
 import { useState } from "react";
 import { SpinnerCircularFixed } from 'spinners-react';
+import Link from "next/link";
 
 const auth = firebase.auth();
 

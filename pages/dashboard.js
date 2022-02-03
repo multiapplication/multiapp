@@ -179,7 +179,7 @@ const DashboardPage = () => {
 
             <div className="p-3">
               <p
-                className="text-red-500 text-l cursor-pointer"
+                className="text-red text-l cursor-pointer"
                 onClick={() => {
                   auth.signOut().finally(() => {
                     Router.push("/");
