@@ -194,7 +194,7 @@ const MyMDMPage = () => {
         </div>
 
         <div className="bg-gradient-to-b from-[#22577A] via-[#38A3A5] to-[#57CC99] h-screen w-4/5 flex flex-col items-center gap-5">
-          <Searchbar setKeyword={updateInput} keyword={input} />
+          <Searchbar setKeyword={updateInput} keyword={input} placeholder="Search MDMs by name" />
 
           {searchMDMList.length > 0 ? (
             searchMDMList.map((mdm) => {
@@ -202,7 +202,7 @@ const MyMDMPage = () => {
                 <div
                   key={mdm.key}
                   //   hover:bg-[#22577A] hover:text-white
-                  className="rounded-md shadow-md bg-[#F1F5FA] cursor-pointer  p-2 w-4/5"
+                  className="rounded-md shadow-md bg-[#F1F5FA] p-2 w-4/5"
                   //   onClick={() => {
                   //     setmdmId(mdm.key);
                   //     Router.push("/patientDetails");
