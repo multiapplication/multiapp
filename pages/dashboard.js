@@ -160,7 +160,7 @@ const DashboardPage = () => {
                 </div>
 
                 <div className="ml-20 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
-                  <p className=" opacity-70 ">+ New MDM</p>
+                  <button className=" opacity-70 " onClick={() => {Router.push("/createMDM")}}>+ New MDM</button>
                 </div>
               </div>
             </div>
