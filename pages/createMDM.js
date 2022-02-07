@@ -1,8 +1,29 @@
 import { useEffect, useState } from "react";
 import { db, auth } from "../utils/firebase.config";
+import Select from 'react-select'
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const createMDMPage = () => {
     const [user, setUser] = useState("");
+    const [meetingName, setMeetingName] = useState("");
+    const [selectedMeetingOption, setSelectedMeetingOption] = useState(null);
+    const [selectedTeamOption, setSelectedTeamOption] = useState(null);
+    const [meetingLocation, setMeetingLocation] = useState("");
+    const [meetingLink, setMeetingLink] = useState("");
+    const [startDate, setStartDate] = useState(new Date());
+    const [cutOffDays, setCutOffDays] = useState(0);
+    const [reminderDays, setReminderDays] = useState(0);
+
+    const meetingOptions = [
+        { value: 'online', label: 'online' },
+        { value: 'in person', label: 'in person' },
+        { value: 'hybrid', label: 'hybrid' }
+    ]
+
+    const teamOptions = [
+        { value: 'none', label: 'none' }
+    ]
 
     const getUserDetails = () => {
         auth.onAuthStateChanged((currentUser) => {
@@ -11,8 +32,9 @@ const createMDMPage = () => {
     };
 
     useEffect(()=>{
-        getUserDetails();
-    },[]);
+        //getUserDetails();
+        console.log(selectedMeetingOption)
+    },[selectedMeetingOption]);
 
     return (
         <div className="flex flex-row h-full">
@@ -132,99 +154,70 @@ const createMDMPage = () => {
                         <div className="flex flex-col">
                             
                              {/* enter name */}
-                            <label for="mdmName" className="block text-sm text-charcoal mb-2">Name</label>
+                            <label className="block text-sm text-charcoal mb-2">Name</label>
                             <input
                                 className="bg-white border-2 border-white appearance-none rounded-lg w-1/2 py-2 px-4 text-charcoal leading-tight focus:outline-none focus:bg-white focus:border-green"
                                 id="mdmName"
-                                name="mdmName"
-                                type="mdmName"                        
-                                placeholder="enter meeting name..."
-                                
+                                type="text"                        
+                                placeholder="Enter meeting name..."
+                                onChange={e=>setMeetingName(e.target.value)}
                             />
                             
                             {/* location */}                                                      
                             {/* single select checklist */}
-                            <label for="online" className="text-sm text-charcoal mt-8 mb-2">Location</label>
+                            <label className="text-sm text-charcoal mt-8 mb-2">Location</label>
 
                             <div className="flex flex-row items-center">
-                                <input className="rounded-full mr-2" type="checkbox" id="online" name="" value="" />
-                                <label for="online" className="mr-8">Online</label>
-
-                                <input className="rounded-full mr-2" type="checkbox" id="in-person" name="" value="" />
-                                <label for="in-person" className="mr-8">In person</label>
-
-                                <input className="rounded-full mr-2" type="checkbox" id="hybrid" name="" value="" />
-                                <label for="hybrid" className="mr-8">Hybrid</label>
+                                <Select 
+                                    options={meetingOptions}
+                                    defaultValue={selectedMeetingOption}
+                                    onChange={setSelectedMeetingOption}
+                                />
                             </div>
                         
 
                             {/* Location field */}
-                            <label for="in-person" className="block text-sm text-charcoal mt-8 mb-2">Room location</label>
+                            <label className="block text-sm text-charcoal mt-8 mb-2">Room location</label>
                             <input
                                 className="bg-white border-2 border-white appearance-none rounded-lg w-2/3 py-2 px-4 text-charcoal leading-tight focus:outline-none focus:bg-white focus:border-green"
-                                id="in-person"
-                                name="in-person"
-                                type="in-person"                        
-                                placeholder="enter room and building..."
-                                
+                                type="text"                      
+                                placeholder="Enter room and building..."
+                                onChange={(e)=>setMeetingLocation(e.target.value)}
                             />
 
                             {/* link field */}
-                            <label for="virtual" className="block text-sm text-charcoal mt-8 mb-2">Conferencing link</label>
+                            <label className="block text-sm text-charcoal mt-8 mb-2">Conferencing link</label>
                             <input
                                 className="bg-white border-2 border-white appearance-none rounded-lg w-2/3 py-2 px-4 text-charcoal leading-tight focus:outline-none focus:bg-white focus:border-green"
-                                id="virtual"
-                                name="virtual"
-                                type="virtual"                        
+                                type="text"                        
                                 placeholder="e.g. zoom or webex conference link..."
-                                
+                                onChange={(e)=>setMeetingLink(e.target.value)}
                             />
 
                             {/* meeting date and time */}
 
-                            <div className="flex flex-col lg:flex-row w-10/12">
-                                {/* calendar placeholder text. make something like this: https://tailwindcomponents.com/component/datepicker-with-tailwindcss-and-alpinejs */}                                                                
+                            <div className="flex flex-col lg:flex-row w-full">
                                 <div className="mt-5">
                                     <label for="datepicker" className="block text-sm text-charcoal mt-8 mb-2">MDM Date</label>
-                                    <input
-                                        className="bg-white border-2 border-white appearance-none rounded-lg py-2 px-4 text-charcoal leading-tight focus:outline-none focus:bg-white focus:border-green"
-                                        id="datepicker"
-                                        name="datepicker"
-                                        type="datepicker"                        
-                                        placeholder="Select date"
-                                    
+                                    <DatePicker
+                                    className="bg-white border-2 border-white appearance-none rounded-lg py-2 px-4 text-charcoal leading-tight focus:outline-none focus:bg-white focus:border-green"
+                                    showTimeSelect
+                                    selected={startDate}
+                                    onChange={(date) => setStartDate(date)}
+                                    dateFormat="MMMM d, yyyy h:mm aa"
                                     />
                                 </div>
                                 
-
-                                {/* time - numerical value and am/pm */}
-                                
-                                <div className="mt-5 lg:ml-4">
-                                    <label for="ampm" className="block text-sm text-charcoal mt-8 mb-2">Time</label>
-                                    <div className="flex flex-row items-center">
-                                        <input type="text" name="ampm" id="ampm" className="py-2 px-4 bg-white border-2 border-white rounded-lg text-charcoal leading-tight focus:outline-none focus:bg-white focus:border-green" placeholder="7:30"/>
-                                            
-                                        <div className="">
-                                            <select id="" name="" className="-ml-12 block appearance-none border-1 p-0 border-white rounded-lg text-charcoal leading-tight focus:outline-none focus:bg-white focus:border-green">
-                                                    <option>AM</option>
-                                                    <option>PM</option>
-                                            </select>
-                                            
-                                        </div>
-                                    </div>
-                                        
-                                </div>
 
                                 <div className="lg:ml-8">
                                     <label for="cutoff" className="block text-sm text-charcoal mt-8 ">Days before meeting: </label>
                                     <label for="cutoff" className="block text-sm text-charcoal mb-2">Cuttoff patient additions</label>
                                     <input
                                         className="bg-white border-2 border-white appearance-none rounded-lg py-2 px-4 text-charcoal leading-tight focus:outline-none focus:bg-white focus:border-green"
-                                        id="cutoff"
-                                        name="cutoff"
-                                        type="cutoff"                        
+                                        type="number"                        
                                         placeholder="e.g 5..."
-                                    
+                                        min={0}
+                                        onChange={e=>setCutOffDays(e.target.value)}
                                     />
                                 </div>
 
@@ -233,11 +226,10 @@ const createMDMPage = () => {
                                     <label for="cutoff" className="block text-sm text-charcoal mb-2">Email reminder to participants</label>
                                     <input
                                         className="bg-white border-2 border-white appearance-none rounded-lg py-2 px-4 text-charcoal leading-tight focus:outline-none focus:bg-white focus:border-green"
-                                        id="reminder"
-                                        name="reminder"
-                                        type="reminder"                        
+                                        type="number"                        
                                         placeholder="e.g. 2..."
-                                    
+                                        min={0}
+                                        onChange={e=>setReminderDays(e.target.value)}
                                     />
                                 </div>
                                 
