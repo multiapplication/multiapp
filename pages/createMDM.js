@@ -1,40 +1,103 @@
+/**
+ * User is able to create an MDM  
+ *
+ * Current functionality:
+ *  - 
+ * 
+ * Todo:
+ *  - 
+ */
+import {firebase} from "../utils/firebase.config"
 import { useEffect, useState } from "react";
 import { db, auth } from "../utils/firebase.config";
-import Select from 'react-select'
+import { useRouter } from 'next/router';
+import Select from 'react-select';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import AddParticipant from "../components/AddParticipant"
+import AddTeam from "../components/AddTeam"
+import TeamList from "../components/TeamList"
+import { idListState } from "../components/AddParticipant"
+import { useRecoilValue, useResetRecoilState } from "recoil";
+import { confirmAlert } from "react-confirm-alert";
+import 'react-confirm-alert/src/react-confirm-alert.css' 
 
 const createMDMPage = () => {
     const [user, setUser] = useState("");
+    const [teams, setTeams] = useState([]);
     const [meetingName, setMeetingName] = useState("");
     const [selectedMeetingOption, setSelectedMeetingOption] = useState(null);
-    const [selectedTeamOption, setSelectedTeamOption] = useState(null);
     const [meetingLocation, setMeetingLocation] = useState("");
     const [meetingLink, setMeetingLink] = useState("");
     const [startDate, setStartDate] = useState(new Date());
     const [cutOffDays, setCutOffDays] = useState(0);
     const [reminderDays, setReminderDays] = useState(0);
+    const idList = useRecoilValue(idListState)
+    const resetIdList = useResetRecoilState(idListState);
+
+    const router = useRouter();
 
     const meetingOptions = [
-        { value: 'online', label: 'online' },
+        { value: 'online', label: 'online'},
         { value: 'in person', label: 'in person' },
         { value: 'hybrid', label: 'hybrid' }
-    ]
+    ];
 
-    const teamOptions = [
-        { value: 'none', label: 'none' }
-    ]
-
-    const getUserDetails = () => {
-        auth.onAuthStateChanged((currentUser) => {
+    const getUserData = () => {
+        auth.onAuthStateChanged(async (currentUser) => {
             setUser(currentUser.uid);
+            const userRef = db.collection("users").doc(currentUser.uid)
+            const doc = await userRef.get(); 
+            setTeams(doc.data().teams)
         });
     };
 
+    // if all fields are complete, add team to database
+    const addMDM = async () => {
+        if (meetingName === ""){
+            alert("Incomplete fields!");
+            return;
+        }
+       
+        const respMeeting = await db.collection("mdms").add({ // data structure for mdms
+            meeting_name: meetingName,
+            meeting_format: selectedMeetingOption.value,
+            meeting_location: meetingLocation,
+            meeting_link: meetingLink,
+            meeting_date: startDate,
+            cut_off_days: cutOffDays,
+            reminder_days: reminderDays,
+            participants: idList 
+        });
+        const userRef = db.collection("users").doc(auth.currentUser.uid);
+        const respUser = await userRef.update({
+            mdms: firebase.firestore.FieldValue.arrayUnion(db.doc('mdms/'+respMeeting.id))
+        })
+
+        resetIdList()
+        router.push("/dashboard");
+    }
+
+    const submit = () =>{
+        confirmAlert({
+            title: 'Are you sure you want to Create this MDM?',
+            message: '',
+            buttons: [
+              {
+                label: 'Yes',
+                onClick: () => {addMDM()}
+              },
+              {
+                label: 'No',
+              }
+            ]
+        })
+    }
+
     useEffect(()=>{
-        //getUserDetails();
-        console.log(selectedMeetingOption)
-    },[selectedMeetingOption]);
+        getUserData();
+        console.log(idList)
+    },[idList]);
 
     return (
         <div className="flex flex-row h-full">
@@ -168,7 +231,8 @@ const createMDMPage = () => {
                             <label className="text-sm text-charcoal mt-8 mb-2">Location</label>
 
                             <div className="flex flex-row items-center">
-                                <Select 
+                                <Select
+                                    className='max-w-fit'
                                     options={meetingOptions}
                                     defaultValue={selectedMeetingOption}
                                     onChange={setSelectedMeetingOption}
@@ -196,11 +260,11 @@ const createMDMPage = () => {
 
                             {/* meeting date and time */}
 
-                            <div className="flex flex-col lg:flex-row w-full">
+                            <div className="flex flex-col lg:flex-row">
                                 <div className="mt-5">
                                     <label for="datepicker" className="block text-sm text-charcoal mt-8 mb-2">MDM Date</label>
                                     <DatePicker
-                                    className="bg-white border-2 border-white appearance-none rounded-lg py-2 px-4 text-charcoal leading-tight focus:outline-none focus:bg-white focus:border-green"
+                                    className="bg-white border-2 border-white appearance-none rounded-lg py-2 px-4 ml-6 w-full text-charcoal leading-tight focus:outline-none focus:bg-white focus:border-green"
                                     showTimeSelect
                                     selected={startDate}
                                     onChange={(date) => setStartDate(date)}
@@ -235,335 +299,26 @@ const createMDMPage = () => {
                                 
                             </div>
 
-                            
-
                             {/* adding meeting members */}
-                            <div className="flex flex-row items-center text-sm text-charcoal mt-8 w-1/2">
-                                <div className="mr-6">
-                                    Add team participants
-                                </div>
-                                <button className="mr-6 flex flex-row items-center rounded-full bg-white shadow-lg hover:bg-grey hover:text-white">
-                                    <img src="person-plus.png" className="h-6 m-2"></img>
-                                    <div className="mr-2">Add team</div>
-                                </button>
-
-                                <button className="flex flex-row items-center rounded-full bg-white shadow-lg hover:bg-grey hover:text-white">
-                                    <img src="person-plus.png" className="h-6 m-2"></img>
-                                    <div className="mr-2">Add participant</div>
-                                </button>
+                            <div className="flex flex-col items-center text-sm space-y-8 text-charcoal mt-12 w-fit">
+                                <AddParticipant></AddParticipant>
+                                <AddTeam TeamRefs={teams}></AddTeam>
                             </div>
                         
                             <div className="flex flex-non justify-center">
-                                <table className="table-fixed text-left divide-y divide-metal w-max sm:min-w-3/4 mt-12">
-                                    <div className="overflow-y-auto h-[28rem]">
-                                        <thead className="bg-navy text-white">
-                                            <tr className="">
-                                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase">
-                                                    No.
-                                                </th>
-
-                                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase">
-                                                    Name
-                                                </th>
-                                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase">
-                                                    MDM Role
-                                                </th>
-                                                
-                                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase">
-                                                    Hospital Role
-                                                </th>
-
-                                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase">
-                                                    Hospital
-                                                </th>
-                                                
-                                                <th scope="col" className="relative px-6 py-3">
-                                                    <span className="sr-only">Remove</span>
-                                                </th>
-                                            </tr>
-                                        </thead>
-
-                                        <tbody className="bg-white divide-y divide-metal">
-                                            
-                                            {/* make this the component that gets created */}
-                                            <tr className="odd:bg-white even:bg-coolblue">
-                                                <td className="px-6 py-4 ">
-                                                    {/* number on list */}
-                                                    <div className="text-sm font-medium text-charcoal">
-                                                        1.
-                                                    </div>
-                                                </td>
-                                                
-                                                <td className="px-6 py-4 ">
-                                                    <div className="text-sm font-medium text-charcoal">
-                                                        
-                                                    </div>
-                                                    
-                                                </td>
-                                                
-                                                <td className="px-6 py-4 ">
-                                                    <div className="text-sm text-charcoal"></div>
-                                                </td>
-
-                                                <td className="px-6 py-4 ">
-                                                    <div className="text-sm text-charcoal"></div>
-                                                </td>
-
-                                                <td className="px-6 py-4  text-sm text-charcoal">
-                                                    
-                                                </td>
-
-                                                <td className="px-6 py-4  text-right text-sm font-medium">
-                                                    <a href="#" className="text-red hover:text-hovered">Remove</a>
-                                                </td>
-                                                
-                                            </tr>
-
-                                            <tr className="odd:bg-white even:bg-coolblue">
-                                                <td className="px-6 py-4 ">
-                                                    {/* number on list */}
-                                                    <div className="text-sm font-medium text-charcoal">
-                                                        2.
-                                                    </div>
-                                                </td>
-                                                
-                                                <td className="px-6 py-4 ">
-                                                    <div className="text-sm font-medium text-charcoal">
-                                                        
-                                                    </div>
-                                                    
-                                                </td>
-                                                
-                                                <td className="px-6 py-4 ">
-                                                    <div className="text-sm text-charcoal"></div>
-                                                </td>
-
-                                                <td className="px-6 py-4 ">
-                                                    <div className="text-sm text-charcoal"></div>
-                                                </td>
-
-                                                <td className="px-6 py-4  text-sm text-charcoal">
-                                                    
-                                                </td>
-
-                                                <td className="px-6 py-4  text-right text-sm font-medium">
-                                                    <a href="#" className="text-red hover:text-hovered">Remove</a>
-                                                </td>
-                                                
-                                            </tr>
-                                            
-                                            <tr className="odd:bg-white even:bg-coolblue">
-                                                <td className="px-6 py-4 ">
-                                                    {/* number on list */}
-                                                    <div className="text-sm font-medium text-charcoal">
-                                                        3.
-                                                    </div>
-                                                </td>
-                                                
-                                                <td className="px-6 py-4 ">
-                                                    <div className="text-sm font-medium text-charcoal">
-                                                        
-                                                    </div>
-                                                    
-                                                </td>
-                                                
-                                                <td className="px-6 py-4 ">
-                                                    <div className="text-sm text-charcoal"></div>
-                                                </td>
-
-                                                <td className="px-6 py-4 ">
-                                                    <div className="text-sm text-charcoal"></div>
-                                                </td>
-
-                                                <td className="px-6 py-4  text-sm text-charcoal">
-                                                    
-                                                </td>
-
-                                                <td className="px-6 py-4  text-right text-sm font-medium">
-                                                    <a href="#" className="text-red hover:text-hovered">Remove</a>
-                                                </td>
-                                                
-                                            </tr>
-
-                                            <tr className="odd:bg-white even:bg-coolblue">
-                                                <td className="px-6 py-4 ">
-                                                    {/* number on list */}
-                                                    <div className="text-sm font-medium text-charcoal">
-                                                        4.
-                                                    </div>
-                                                </td>
-                                                
-                                                <td className="px-6 py-4 ">
-                                                    <div className="text-sm font-medium text-charcoal">
-                                                        
-                                                    </div>
-                                                    
-                                                </td>
-                                                
-                                                <td className="px-6 py-4 ">
-                                                    <div className="text-sm text-charcoal"></div>
-                                                </td>
-
-                                                <td className="px-6 py-4 ">
-                                                    <div className="text-sm text-charcoal"></div>
-                                                </td>
-
-                                                <td className="px-6 py-4  text-sm text-charcoal">
-                                                    
-                                                </td>
-
-                                                <td className="px-6 py-4  text-right text-sm font-medium">
-                                                    <a href="#" className="text-red hover:text-hovered">Remove</a>
-                                                </td>
-                                                
-                                            </tr>
-
-                                            <tr className="odd:bg-white even:bg-coolblue">
-                                                <td className="px-6 py-4 ">
-                                                    {/* number on list */}
-                                                    <div className="text-sm font-medium text-charcoal">
-                                                        5.
-                                                    </div>
-                                                </td>
-                                                
-                                                <td className="px-6 py-4 ">
-                                                    <div className="text-sm font-medium text-charcoal">
-                                                        
-                                                    </div>
-                                                    
-                                                </td>
-                                                
-                                                <td className="px-6 py-4 ">
-                                                    <div className="text-sm text-charcoal"></div>
-                                                </td>
-
-                                                <td className="px-6 py-4 ">
-                                                    <div className="text-sm text-charcoal"></div>
-                                                </td>
-
-                                                <td className="px-6 py-4  text-sm text-charcoal">
-                                                    
-                                                </td>
-
-                                                <td className="px-6 py-4  text-right text-sm font-medium">
-                                                    <a href="#" className="text-red hover:text-hovered">Remove</a>
-                                                </td>
-                                                
-                                            </tr>
-
-                                            
-
-                                            <tr className="odd:bg-white even:bg-coolblue">
-                                                <td className="px-6 py-4 ">
-                                                    {/* number on list */}
-                                                    <div className="text-sm font-medium text-charcoal">
-                                                        6.
-                                                    </div>
-                                                </td>
-                                                
-                                                <td className="px-6 py-4 ">
-                                                    <div className="text-sm font-medium text-charcoal">
-                                                        
-                                                    </div>
-                                                    
-                                                </td>
-                                                
-                                                <td className="px-6 py-4 ">
-                                                    <div className="text-sm text-charcoal"></div>
-                                                </td>
-
-                                                <td className="px-6 py-4 ">
-                                                    <div className="text-sm text-charcoal"></div>
-                                                </td>
-
-                                                <td className="px-6 py-4  text-sm text-charcoal">
-                                                    
-                                                </td>
-
-                                                <td className="px-6 py-4  text-right text-sm font-medium">
-                                                    <a href="#" className="text-red hover:text-hovered">Remove</a>
-                                                </td>
-
-                                            </tr>
-
-                                            <tr className="odd:bg-white even:bg-coolblue">
-                                                <td className="px-6 py-4 ">
-                                                    {/* number on list */}
-                                                    <div className="text-sm font-medium text-charcoal">
-                                                        7.
-                                                    </div>
-                                                </td>
-                                                
-                                                <td className="px-6 py-4 ">
-                                                    <div className="text-sm font-medium text-charcoal">
-                                                        
-                                                    </div>
-                                                    
-                                                </td>
-                                                
-                                                <td className="px-6 py-4 ">
-                                                    <div className="text-sm text-charcoal"></div>
-                                                </td>
-
-                                                <td className="px-6 py-4 ">
-                                                    <div className="text-sm text-charcoal"></div>
-                                                </td>
-
-                                                <td className="px-6 py-4  text-sm text-charcoal">
-                                                    
-                                                </td>
-
-                                                <td className="px-6 py-4  text-right text-sm font-medium">
-                                                    <a href="#" className="text-red hover:text-hovered">Remove</a>
-                                                </td>
-
-                                            </tr>
-
-                                            <tr className="odd:bg-white even:bg-coolblue">
-                                                <td className="px-6 py-4 ">
-                                                    {/* number on list */}
-                                                    <div className="text-sm font-medium text-charcoal">
-                                                        8.
-                                                    </div>
-                                                </td>
-                                                
-                                                <td className="px-6 py-4 ">
-                                                    <div className="text-sm font-medium text-charcoal">
-                                                        
-                                                    </div>
-                                                    
-                                                </td>
-                                                
-                                                <td className="px-6 py-4 ">
-                                                    <div className="text-sm text-charcoal"></div>
-                                                </td>
-
-                                                <td className="px-6 py-4 ">
-                                                    <div className="text-sm text-charcoal"></div>
-                                                </td>
-
-                                                <td className="px-6 py-4  text-sm text-charcoal">
-                                                    
-                                                </td>
-
-                                                <td className="px-6 py-4  text-right text-sm font-medium">
-                                                    <a href="#" className="text-red hover:text-hovered">Remove</a>
-                                                </td>
-
-                                            </tr>
-
-                                        </tbody>
-
-                                    </div>
-                                </table>
+                                <TeamList></TeamList>
                             </div>
                             
                         
                         
 
                             <div className="flex flex-row justify-center mt-12 gap-6 ">
-                                <button className="w-72 mb-4 uppercase shadow bg-white text-aqua hover:bg-navy hover:text-white rounded-full py-2 px-4 font-bold">ADD MEETING</button>
-                                <button className="w-72 mb-4 uppercase shadow border-2 border-white hover:border-grey hover:text-grey focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded-full">CANCEL</button>
+                                <button className="w-72 mb-4 uppercase shadow bg-white text-aqua hover:bg-navy hover:text-white rounded-full py-2 px-4 font-bold" onClick={submit}>ADD MEETING</button>
+                                <button className="w-72 mb-4 uppercase shadow border-2 border-white hover:border-grey hover:text-grey focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded-full" 
+                                onClick={() => {
+                                resetIdList()
+                                router.push('/dashboard')
+                            }}>CANCEL</button>
                                                     
                             </div>
                         </div>
