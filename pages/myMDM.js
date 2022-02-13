@@ -201,12 +201,9 @@ const MyMDMPage = () => {
               return (
                 <div
                   key={mdm.key}
-                  //   hover:bg-[#22577A] hover:text-white
+
                   className="rounded-md shadow-md bg-[#F1F5FA] p-2 w-4/5"
-                  //   onClick={() => {
-                  //     setmdmId(mdm.key);
-                  //     Router.push("/patientDetails");
-                  //   }}
+                  
                 >
                   <div className="flex flex-row gap-5">
                     <p className="text-lg font-bold">{mdm.mdm_name}</p>
@@ -234,7 +231,7 @@ const MyMDMPage = () => {
                     <p className="opacity-50">Chair: {mdm.mdm_chair}</p>
                   </div>
 
-                  <div className="flex flex-row justify-end">
+                  <div className="flex flex-row gap-2 justify-end">
                     <button
                       className="bg-[#C4C4C4] hover:bg-[#868686] text-black text-opacity-80 py-2 px-4 rounded-2xl w-36"
                       onClick={()=>{
@@ -243,6 +240,17 @@ const MyMDMPage = () => {
                       }}
                     >
                       Add Patient
+                    </button>
+
+
+                    <button
+                      className="bg-[#C4C4C4] hover:bg-[#868686] text-black text-opacity-80 py-2 px-4 rounded-2xl w-36"
+                      onClick={()=>{
+                        setmdmId(mdm.key);
+                        Router.push('/mdmDetails');
+                      }}
+                    >
+                      View MDM
                     </button>
                   </div>
                 </div>

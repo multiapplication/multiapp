@@ -15,12 +15,10 @@ const AddPatientPage = () => {
   const [user, setUser] = useState("");
   const [userData, setUserData] = useState([]);
   const [userName, setUserName] = useState("");
+  const [mdmData, setMDMData] = useState([]);
   const [pageLoading, setPageLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
-
-  // const [patientDetails, setPatientDetails] = useState([]);
-  // const patientId = useRecoilValue(currentPatientState);
 
   const mdmId = useRecoilValue(currentMDMState);
 
@@ -87,6 +85,7 @@ const AddPatientPage = () => {
             pathology_info: values.pathology_info,
             clinical_summary: values.clinical_summary,
             clinical_question: values.clinical_question,
+            scribe_notes: ""
           })
           .catch((error) => {
             setErrorMessage(error.message);
@@ -119,25 +118,25 @@ const AddPatientPage = () => {
     });
   };
 
-  // const getPatientDetails = () => {
-  //   auth.onAuthStateChanged((currentUser) => {
-  //     const docRef = db.collection("users").doc(currentUser.uid);
+  const getMDMDetails = ()=>{
+      auth.onAuthStateChanged((currentUser)=>{
+          setUser(currentUser.uid);
 
-  //     docRef
-  //       .collection("user_patients")
-  //       .doc(patientId)
-  //       .onSnapshot((doc) => {
-  //         if (doc.exists) {
-  //           setPatientDetails(doc.data());
-  //         } else {
-  //           console.log("No such document!");
-  //         }
-  //       });
-  //   });
-  // };
+          const docRef = db.collection("users").doc(currentUser.uid).collection("user_mdms").doc(mdmId);
+          docRef.onSnapshot((doc)=>{
+              if(doc.exists){
+                  setMDMData(doc.data());
+              }else{
+                  console.log("No such document");
+              }
+          });
+      });
+
+  }
 
   useEffect(() => {
     getUser();
+    getMDMDetails();
   }, []);
 
   return (
@@ -258,289 +257,291 @@ const AddPatientPage = () => {
           <div className="rounded-md shadow-md bg-[#E5E5E5] w-3/4  pb-2">
             <div className="bg-[#C4C4C4] text-white">
               <div className="flex flex-row justify-between font-bold p-2">
-                <p>MDM Name</p>
-                <p>Date</p>
+                <p>{mdmData.mdm_name}</p>
+                <p>{mdmData.mdm_date}</p>
               </div>
               <div className="flex flex-row justify-between p-2">
-                <p>Location</p>
-                <p>Time</p>
+                <p>{mdmData.mdm_location}</p>
+                <p>{mdmData.mdm_time}</p>
               </div>
             </div>
 
             <form onSubmit={formik.handleSubmit}>
-
-            <div className="flex flex-row justify-evenly mt-5">
-              <div className="md:w-1/3">
-                <input
-                  className="bg-white appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-[#57CC99]"
-                  placeholder="First Name"
-                  id="first_name"
-                  name="first_name"
-                  type="text"
-                  onChange={formik.handleChange}
-                  value={formik.values.first_name}
-                />
-                {formik.errors.first_name ? (
-                  <div className="text-red-600">{formik.errors.first_name}</div>
-                ) : null}
-              </div>
-
-              <div className="md:w-1/3">
-                <input
-                  className="bg-white appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-[#57CC99]"
-                  placeholder="Last Name"
-                  id="last_name"
-                  name="last_name"
-                  type="text"
-                  onChange={formik.handleChange}
-                  value={formik.values.last_name}
-                />
-                {formik.errors.last_name ? (
-                  <div className="text-red-600">{formik.errors.last_name}</div>
-                ) : null}
-              </div>
-            </div>
-
-            <div className="flex flex-row justify-evenly mt-5">
-              <div className="md:w-1/3">
-                <input
-                  className="bg-white appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-[#57CC99]"
-                  placeholder="DOB in dd/mm/yyyy "
-                  id="dob"
-                  name="dob"
-                  type="text"
-                  onChange={formik.handleChange}
-                  value={formik.values.dob}
-                />
-                {formik.errors.dob ? (
-                  <div className="text-red-600">{formik.errors.dob}</div>
-                ) : null}
-              </div>
-
-              <div className="md:w-1/3">
-                <select
-                  className="bg-white rounded w-full py-2 px-4 text-gray-700 leading-tight"
-                  id="gender"
-                  name="gender"
-                  onChange={formik.handleChange}
-                  value={formik.values.gender}
-                >
-                  <option value="" disabled selected>
-                    Gender
-                  </option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="Other">Other</option>
-                </select>
-                {formik.errors.gender ? (
-                  <div className="text-red-600">{formik.errors.gender}</div>
-                ) : null}
-              </div>
-            </div>
-
-            <div className="flex flex-row justify-evenly mt-5">
-              <div className="md:w-1/3">
-                <input
-                  className="bg-white appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-[#57CC99]"
-                  placeholder="Hospital"
-                  id="hospital"
-                  name="hospital"
-                  type="text"
-                  onChange={formik.handleChange}
-                  value={formik.values.hospital}
-                />
-              </div>
-
-              <div className="md:w-1/3">
-                <input
-                  className="bg-white appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-[#57CC99]"
-                  placeholder="U.R"
-                  id="ur"
-                  name="ur"
-                  type="text"
-                  onChange={formik.handleChange}
-                  value={formik.values.ur}
-                />
-              </div>
-            </div>
-
-            <div className="flex flex-row justify-evenly mt-5">
-              <div className="md:1/3">
-                <label
-                  className="block text-black font-semibold mb-2"
-                  htmlFor="patient_informed"
-                >
-                  Patient informed of MDM discussion ?
-                </label>
-                <select
-                  className="bg-white rounded w-full py-2 px-4 text-gray-700 leading-tight"
-                  id="patient_informed"
-                  name="patient_informed"
-                  onChange={formik.handleChange}
-                  value={formik.values.patient_informed}
-                >
-                  <option value="" disabled selected>
-                    Yes/No
-                  </option>
-                  <option value="Yes">Yes</option>
-                  <option value="No">No</option>
-                </select>
-              </div>
-
-              <div className="md:1/3">
-                <label
-                  className="block text-black font-semibold mb-2"
-                  htmlFor="mdm_discussion"
-                >
-                  MDM discussion ?
-                </label>
-                <select
-                  className="bg-white rounded w-full py-2 px-4 text-gray-700 leading-tight"
-                  id="mdm_discussion"
-                  name="mdm_discussion"
-                  onChange={formik.handleChange}
-                  value={formik.values.mdm_discussion}
-                >
-                  <option value="" disabled selected>
-                    Pre-Op/Post-Op
-                  </option>
-                  <option value="Pre-Op">Pre-Op</option>
-                  <option value="Post-Op">Post-Op</option>
-                </select>
-              </div>
-            </div>
-
-            <div className="flex flex-row justify-center mt-5">
-              <textarea
-                className="
-        w-2/3
-        h-48
-        px-3
-        py-1.5
-        text-base
-        font-normal
-        text-gray-700
-        bg-white bg-clip-padding
-        
-        rounded-lg
-        transition
-        ease-in-out
-        m-0
-        focus:text-gray-700
-      "
-                id="radiology_info"
-                name="radiology_info"
-                type="text"
-                onChange={formik.handleChange}
-                value={formik.values.radiology_info}
-                rows="3"
-                placeholder="Radiology info"
-              ></textarea>
-            </div>
-
-            <div className="flex flex-row justify-center mt-5">
-              <textarea
-                className="
-        w-2/3
-        h-48
-        px-3
-        py-1.5
-        text-base
-        font-normal
-        text-gray-700
-        bg-white bg-clip-padding
-        
-        rounded-lg
-        transition
-        ease-in-out
-        m-0
-        focus:text-gray-700
-      "
-                id="pathology_info"
-                name="pathology_info"
-                type="text"
-                onChange={formik.handleChange}
-                value={formik.values.pathology_info}
-                rows="3"
-                placeholder="Pathology info"
-              ></textarea>
-            </div>
-
-            <div className="flex flex-row justify-center mt-5">
-              <textarea
-                className="
-        w-2/3
-        h-48
-        px-3
-        py-1.5
-        text-base
-        font-normal
-        text-gray-700
-        bg-white bg-clip-padding
-        
-        rounded-lg
-        transition
-        ease-in-out
-        m-0
-        focus:text-gray-700
-      "
-                id="clinical_summary"
-                name="clinical_summary"
-                type="text"
-                onChange={formik.handleChange}
-                value={formik.values.clinical_summary}
-                rows="3"
-                placeholder="Clinical Summary/Diagnosis"
-              ></textarea>
-            </div>
-
-            <div className="flex flex-row justify-center mt-5 ">
-              <textarea
-                className="
-        w-2/3
-        h-48
-        px-3
-        py-1.5
-        text-base
-        font-normal
-        text-gray-700
-        bg-white bg-clip-padding
-        
-        rounded-lg
-        transition
-        ease-in-out
-        m-0
-        focus:text-gray-700
-      "
-                id="clinical_question"
-                name="clinical_question"
-                type="text"
-                onChange={formik.handleChange}
-                value={formik.values.clinical_question}
-                rows="3"
-                placeholder="Clinical Question"
-              ></textarea>
-            </div>
-
-            <div className="flex flex-row justify-evenly mt-5">
-              <button
-                className="bg-white hover:bg-[#22577A] hover:text-white text-gray-700 font-bold py-2 px-10 rounded-2xl w-fit"
-                type="submit"
-              >
-                {loading ? (
-                  <SpinnerCircularFixed
-                    size={30}
-                    thickness={180}
-                    speed={100}
-                    color="#ffffff"
-                    secondaryColor="rgba(0, 0, 0, 0)"
+              <div className="flex flex-row justify-evenly mt-5">
+                <div className="md:w-1/3">
+                  <input
+                    className="bg-white appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-[#57CC99]"
+                    placeholder="First Name"
+                    id="first_name"
+                    name="first_name"
+                    type="text"
+                    onChange={formik.handleChange}
+                    value={formik.values.first_name}
                   />
-                ) : (
-                  "Add Patient"
-                )}
-              </button>
-            </div>
+                  {formik.errors.first_name ? (
+                    <div className="text-red-600">
+                      {formik.errors.first_name}
+                    </div>
+                  ) : null}
+                </div>
 
+                <div className="md:w-1/3">
+                  <input
+                    className="bg-white appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-[#57CC99]"
+                    placeholder="Last Name"
+                    id="last_name"
+                    name="last_name"
+                    type="text"
+                    onChange={formik.handleChange}
+                    value={formik.values.last_name}
+                  />
+                  {formik.errors.last_name ? (
+                    <div className="text-red-600">
+                      {formik.errors.last_name}
+                    </div>
+                  ) : null}
+                </div>
+              </div>
+
+              <div className="flex flex-row justify-evenly mt-5">
+                <div className="md:w-1/3">
+                  <input
+                    className="bg-white appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-[#57CC99]"
+                    placeholder="DOB in dd/mm/yyyy "
+                    id="dob"
+                    name="dob"
+                    type="text"
+                    onChange={formik.handleChange}
+                    value={formik.values.dob}
+                  />
+                  {formik.errors.dob ? (
+                    <div className="text-red-600">{formik.errors.dob}</div>
+                  ) : null}
+                </div>
+
+                <div className="md:w-1/3">
+                  <select
+                    className="bg-white rounded w-full py-2 px-4 text-gray-700 leading-tight"
+                    id="gender"
+                    name="gender"
+                    onChange={formik.handleChange}
+                    value={formik.values.gender}
+                  >
+                    <option value="" disabled selected>
+                      Gender
+                    </option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </select>
+                  {formik.errors.gender ? (
+                    <div className="text-red-600">{formik.errors.gender}</div>
+                  ) : null}
+                </div>
+              </div>
+
+              <div className="flex flex-row justify-evenly mt-5">
+                <div className="md:w-1/3">
+                  <input
+                    className="bg-white appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-[#57CC99]"
+                    placeholder="Hospital"
+                    id="hospital"
+                    name="hospital"
+                    type="text"
+                    onChange={formik.handleChange}
+                    value={formik.values.hospital}
+                  />
+                </div>
+
+                <div className="md:w-1/3">
+                  <input
+                    className="bg-white appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-[#57CC99]"
+                    placeholder="U.R"
+                    id="ur"
+                    name="ur"
+                    type="text"
+                    onChange={formik.handleChange}
+                    value={formik.values.ur}
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-row justify-evenly mt-5">
+                <div className="md:1/3">
+                  <label
+                    className="block text-black font-semibold mb-2"
+                    htmlFor="patient_informed"
+                  >
+                    Patient informed of MDM discussion ?
+                  </label>
+                  <select
+                    className="bg-white rounded w-full py-2 px-4 text-gray-700 leading-tight"
+                    id="patient_informed"
+                    name="patient_informed"
+                    onChange={formik.handleChange}
+                    value={formik.values.patient_informed}
+                  >
+                    <option value="" disabled selected>
+                      Yes/No
+                    </option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                  </select>
+                </div>
+
+                <div className="md:1/3">
+                  <label
+                    className="block text-black font-semibold mb-2"
+                    htmlFor="mdm_discussion"
+                  >
+                    MDM discussion ?
+                  </label>
+                  <select
+                    className="bg-white rounded w-full py-2 px-4 text-gray-700 leading-tight"
+                    id="mdm_discussion"
+                    name="mdm_discussion"
+                    onChange={formik.handleChange}
+                    value={formik.values.mdm_discussion}
+                  >
+                    <option value="" disabled selected>
+                      Pre-Op/Post-Op
+                    </option>
+                    <option value="Pre-Op">Pre-Op</option>
+                    <option value="Post-Op">Post-Op</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="flex flex-row justify-center mt-5">
+                <textarea
+                  className="
+        w-2/3
+        h-48
+        px-3
+        py-1.5
+        text-base
+        font-normal
+        text-gray-700
+        bg-white bg-clip-padding
+        
+        rounded-lg
+        transition
+        ease-in-out
+        m-0
+        focus:text-gray-700
+      "
+                  id="radiology_info"
+                  name="radiology_info"
+                  type="text"
+                  onChange={formik.handleChange}
+                  value={formik.values.radiology_info}
+                  rows="3"
+                  placeholder="Radiology info"
+                ></textarea>
+              </div>
+
+              <div className="flex flex-row justify-center mt-5">
+                <textarea
+                  className="
+        w-2/3
+        h-48
+        px-3
+        py-1.5
+        text-base
+        font-normal
+        text-gray-700
+        bg-white bg-clip-padding
+        
+        rounded-lg
+        transition
+        ease-in-out
+        m-0
+        focus:text-gray-700
+      "
+                  id="pathology_info"
+                  name="pathology_info"
+                  type="text"
+                  onChange={formik.handleChange}
+                  value={formik.values.pathology_info}
+                  rows="3"
+                  placeholder="Pathology info"
+                ></textarea>
+              </div>
+
+              <div className="flex flex-row justify-center mt-5">
+                <textarea
+                  className="
+        w-2/3
+        h-48
+        px-3
+        py-1.5
+        text-base
+        font-normal
+        text-gray-700
+        bg-white bg-clip-padding
+        
+        rounded-lg
+        transition
+        ease-in-out
+        m-0
+        focus:text-gray-700
+      "
+                  id="clinical_summary"
+                  name="clinical_summary"
+                  type="text"
+                  onChange={formik.handleChange}
+                  value={formik.values.clinical_summary}
+                  rows="3"
+                  placeholder="Clinical Summary/Diagnosis"
+                ></textarea>
+              </div>
+
+              <div className="flex flex-row justify-center mt-5 ">
+                <textarea
+                  className="
+        w-2/3
+        h-48
+        px-3
+        py-1.5
+        text-base
+        font-normal
+        text-gray-700
+        bg-white bg-clip-padding
+        
+        rounded-lg
+        transition
+        ease-in-out
+        m-0
+        focus:text-gray-700
+      "
+                  id="clinical_question"
+                  name="clinical_question"
+                  type="text"
+                  onChange={formik.handleChange}
+                  value={formik.values.clinical_question}
+                  rows="3"
+                  placeholder="Clinical Question"
+                ></textarea>
+              </div>
+
+              <div className="flex flex-row justify-evenly mt-5">
+                <button
+                  className="bg-white hover:bg-[#22577A] hover:text-white text-gray-700 font-bold py-2 px-10 rounded-2xl w-fit"
+                  type="submit"
+                >
+                  {loading ? (
+                    <SpinnerCircularFixed
+                      size={30}
+                      thickness={180}
+                      speed={100}
+                      color="#ffffff"
+                      secondaryColor="rgba(0, 0, 0, 0)"
+                    />
+                  ) : (
+                    "Add Patient"
+                  )}
+                </button>
+              </div>
             </form>
             {errorMessage ? (
               <p className="text-xs text-red-600">{errorMessage}</p>
