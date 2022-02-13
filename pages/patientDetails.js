@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import { db, auth } from "../utils/firebase.config";
 import Avatar from "react-avatar";
-
 import Link from "next/link";
 import { useFormik } from "formik";
 import { SpinnerCircularFixed } from "spinners-react";

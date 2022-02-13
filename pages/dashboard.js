@@ -136,7 +136,9 @@ const DashboardPage = () => {
             </div>
 
             <div>
-              <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white">
+              <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white" onClick={()=>{
+                Router.push('myMDM');
+              }}>
                 <p className=" opacity-70 text-xl">My MDMs</p>
               </div>
 
@@ -155,9 +157,7 @@ const DashboardPage = () => {
 
                 <div
                   className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white"
-                  onClick={() => {
-                    Router.push("/manageMDM");
-                  }}
+                  
                 >
                   <p className=" opacity-70 ">Manage MDMs</p>
                 </div>

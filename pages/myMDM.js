@@ -237,7 +237,10 @@ const MyMDMPage = () => {
                   <div className="flex flex-row justify-end">
                     <button
                       className="bg-[#C4C4C4] hover:bg-[#868686] text-black text-opacity-80 py-2 px-4 rounded-2xl w-36"
-                    //   onClick={onClick}
+                      onClick={()=>{
+                        setmdmId(mdm.key);
+                        Router.push('/addPatient');
+                      }}
                     >
                       Add Patient
                     </button>
