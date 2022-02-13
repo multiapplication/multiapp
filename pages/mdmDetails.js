@@ -8,14 +8,13 @@ import { db, auth } from "../utils/firebase.config";
 import Router from "next/router";
 import { useFormik } from "formik";
 
-import {atom, useRecoilState, useRecoilValue } from "recoil";
+import { atom, useRecoilState, useRecoilValue } from "recoil";
 import { currentMDMState } from "./myMDM";
 
-
 export const currentMDMPatientState = atom({
-    key: "currentMDMPatientState",
-    default: "",
-})
+  key: "currentMDMPatientState",
+  default: "",
+});
 
 const MDMDetailsPage = () => {
   const [user, setUser] = useState("");
@@ -27,7 +26,9 @@ const MDMDetailsPage = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const [mdmPatientId, setmdmPatientId] = useRecoilState(currentMDMPatientState);
+  const [mdmPatientId, setmdmPatientId] = useRecoilState(
+    currentMDMPatientState
+  );
 
   const mdmId = useRecoilValue(currentMDMState);
 
@@ -221,11 +222,8 @@ const MDMDetailsPage = () => {
             </div>
 
             <div className="flex flex-row justify-center">
-            <p className="font-semibold text-lg">Patient Agenda</p>
-
+              <p className="font-semibold text-lg">Patient Agenda</p>
             </div>
-
-
 
             {patientList.length > 0 ? (
               patientList.map((patient) => {
@@ -241,39 +239,49 @@ const MDMDetailsPage = () => {
                       <p className="font-semibold">{patient.ur}</p>
                     </div>
                     <p className="font-semibold mt-2">Clinical Summary</p>
-                    <div>
-                        {patient.clinical_summary}
-                    </div>
+                    <div>{patient.clinical_summary}</div>
                     <p className="font-semibold mt-2">Clinical Question</p>
 
-                    <div>
-                        {patient.clinical_question}
-                    </div>
+                    <div>{patient.clinical_question}</div>
                     <p className="font-semibold mt-2">Radiology info</p>
 
-                    <div>
-                        {patient.radiology_info}
-                    </div>
+                    <div>{patient.radiology_info}</div>
                     <p className="font-semibold mt-2">Pathology info</p>
 
-                    <div>
-                        {patient.pathology_info}
-                    </div>
-                    <div className="flex flex-row justify-end mt-2">
-                    <button
-                      className="bg-[#C4C4C4] hover:bg-[#868686] text-black text-opacity-80 py-2 px-4 rounded-2xl w-36"
-                      onClick={()=>{
-                        setmdmPatientId(patient.key);
-                        Router.push("/scribePatient");
-                      }}
-                    >
-                      Scribe
-                    </button>
+                    <div>{patient.pathology_info}</div>
+                    <div className="flex flex-row gap-2 justify-end mt-2">
+                      <button
+                        className="bg-[#C4C4C4] hover:bg-[#868686] text-black text-opacity-80 py-2 px-4 rounded-2xl w-24"
+                        onClick={() => {
+                          setmdmPatientId(patient.key);
+                          Router.push("/scribePatient");
+                        }}
+                      >
+                        Scribe
+                      </button>
+                      <button
+                        className="bg-[#C4C4C4] hover:bg-red-500 text-black text-opacity-80 py-2 px-4 rounded-2xl w-24"
+                        onClick={() => {
+                          auth.onAuthStateChanged((currentUser) => {
+                            setUser(currentUser.uid);
+
+                            db.collection("users")
+                              .doc(currentUser.uid)
+                              .collection("user_mdms")
+                              .doc(mdmId)
+                              .collection("mdm_patients")
+                              .doc(patient.key).delete().then(()=>{
+                                console.log("Delete successful")
+                              }).catch((error)=>{
+                                console.error("Error removing document: ", error);
+                              });
+                          });
+                        }}
+                      >
+                        Delete
+                      </button>
                     </div>
                   </div>
-
-                    
-
                 );
               })
             ) : (
