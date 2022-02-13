@@ -156,7 +156,10 @@ const MDMDetailsPage = () => {
             </div>
 
             <div>
-              <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white">
+              <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white"
+              onClick={()=>{
+                Router.push('/myMDM');
+              }}>
                 <p className=" opacity-70 text-xl">My MDMs</p>
               </div>
 
@@ -201,9 +204,16 @@ const MDMDetailsPage = () => {
             </div>
 
             <div className="p-3">
-              <Link href="/">
-                <a className="text-red-500 text-l">Logout</a>
-              </Link>
+            <p
+                className="text-red-500 text-l cursor-pointer"
+                onClick={() => {
+                  auth.signOut().finally(() => {
+                    Router.push("/");
+                  });
+                }}
+              >
+                Logout
+              </p>
             </div>
           </div>
         </div>

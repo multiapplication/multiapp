@@ -8,6 +8,7 @@ import Searchbar from "../components/Searchbar";
 import Router from "next/router";
 import { SpinnerCircularFixed } from "spinners-react";
 import { atom, useRecoilState, useRecoilValue } from "recoil";
+import { setIn } from "formik";
 
 export const currentPatientState = atom({
   key: "currentPatientState",
@@ -22,7 +23,6 @@ export const currentPatientState = atom({
     clinical_summary: "",
     clinical_question: "",
     patient_outcome: "",
-
   },
 });
 
@@ -62,6 +62,8 @@ const DashboardPage = () => {
   const getPatients = () => {
     auth.onAuthStateChanged((currentUser) => {
       const docRef = db.collection("users").doc(currentUser.uid);
+
+      
       docRef.collection("user_mdms").onSnapshot((snapshot) => {
         const patients = [];
         snapshot.forEach((doc) => {
@@ -75,6 +77,8 @@ const DashboardPage = () => {
               });
               setPatientList(patients);
               setSearchPatientList(patients);
+              console.log(patientList);
+
               console.log("List fetched");
             });
         });
@@ -227,7 +231,6 @@ const DashboardPage = () => {
                   key={patient.key}
                   className="rounded-md shadow-md bg-[#F1F5FA] cursor-pointer hover:bg-[#22577A] hover:text-white p-2 w-4/5"
                   onClick={() => {
-
                     console.log(patientState);
                     setPatientState({
                       id: patient.key,

@@ -76,6 +76,8 @@ const AddPatientPage = () => {
           .doc(mdmId)
           .collection("mdm_patients");
 
+        // const userCollectionRef = db.collection("users").doc(currentUser.uid).collection("user_patients");
+
         collectionRef
           .add({
             first_name: values.first_name,
@@ -95,35 +97,6 @@ const AddPatientPage = () => {
             mdm_id: mdmId,
             attending_clinician: userName,
 
-          })
-          .catch((error) => {
-            setErrorMessage(error.message);
-            setLoading(false);
-          })
-          .finally(() => {
-            setLoading(false);
-          });
-
-
-          const anotherCollectionRef = db.collection("users").doc(currentUser.uid).collection("user_patients");
-
-          anotherCollectionRef.add({
-            first_name: values.first_name,
-            last_name: values.last_name,
-            dob: values.dob,
-            age: values.age,
-            gender: values.gender,
-            hospital: values.hospital,
-            ur: values.ur,
-            patient_informed: values.patient_informed,
-            mdm_discussion: values.mdm_discussion,
-            radiology_info: values.radiology_info,
-            pathology_info: values.pathology_info,
-            clinical_summary: values.clinical_summary,
-            clinical_question: values.clinical_question,
-            scribe_notes: "",
-            mdm_id: mdmId,
-            attending_clinician: userName
           })
           .catch((error) => {
             setErrorMessage(error.message);
@@ -242,7 +215,10 @@ const AddPatientPage = () => {
             </div>
 
             <div>
-              <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white">
+              <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white"
+              onClick={()=>{
+                Router.push('/myMDM');
+              }}>
                 <p className=" opacity-70 text-xl">My MDMs</p>
               </div>
 
@@ -261,9 +237,7 @@ const AddPatientPage = () => {
 
                 <div
                   className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white "
-                  onClick={() => {
-                    Router.push("/manageMDM");
-                  }}
+                  
                 >
                   <p className=" opacity-70 ">Manage MDMs</p>
                 </div>
@@ -287,9 +261,16 @@ const AddPatientPage = () => {
             </div>
 
             <div className="p-3">
-              <Link href="/">
-                <a className="text-red-500 text-l">Logout</a>
-              </Link>
+            <p
+                className="text-red-500 text-l cursor-pointer"
+                onClick={() => {
+                  auth.signOut().finally(() => {
+                    Router.push("/");
+                  });
+                }}
+              >
+                Logout
+              </p>
             </div>
           </div>
         </div>

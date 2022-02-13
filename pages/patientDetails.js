@@ -106,7 +106,10 @@ const PatientDetailsPage = () => {
             </div>
 
             <div>
-              <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white">
+              <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white"
+              onClick={()=>{
+                Router.push('/myMDM');
+              }}>
                 <p className=" opacity-70 text-xl">My MDMs</p>
               </div>
 
@@ -123,9 +126,7 @@ const PatientDetailsPage = () => {
                   <p className=" opacity-70 ">Attendance</p>
                 </div>
 
-                <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white " onClick={()=>{
-                  Router.push('/manageMDM');
-                }}>
+                <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white " >
                   <p className=" opacity-70 ">Manage MDMs</p>
                 </div>
 
@@ -149,9 +150,16 @@ const PatientDetailsPage = () => {
             
 
             <div className="p-3">
-              <Link href="/">
-                <a className="text-red-500 text-l">Logout</a>
-              </Link>
+            <p
+                className="text-red-500 text-l cursor-pointer"
+                onClick={() => {
+                  auth.signOut().finally(() => {
+                    Router.push("/");
+                  });
+                }}
+              >
+                Logout
+              </p>
             </div>
           </div>
         </div>
