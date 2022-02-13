@@ -13,7 +13,6 @@ const UserPage = () => {
   const [user, setUser] = useState("");
   const [userData, setUserData] = useState([]);
   const [userName, setUserName] = useState("");
-
   const [loading, setLoading] = useState(false);
   const [pageLoading, setPageLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);

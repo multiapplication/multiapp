@@ -7,7 +7,7 @@ import { useFormik } from "formik";
 import { SpinnerCircularFixed } from "spinners-react";
 import Select from "react-select";
 import { useRecoilValue } from "recoil";
-import { currentPatientState } from "./dashboard";
+import { currentPatientState} from "./dashboard";
 import Router from "next/router";
 
 
@@ -17,8 +17,7 @@ const PatientDetailsPage = () => {
   const [userName, setUserName] = useState("");
   const [pageLoading, setPageLoading] = useState(false);
 
-  const [patientDetails, setPatientDetails] = useState([]);
-  const patientId = useRecoilValue(currentPatientState);
+  const patientState = useRecoilValue(currentPatientState);
 
   const getUser = () => {
     setPageLoading(true);
@@ -40,27 +39,12 @@ const PatientDetailsPage = () => {
     });
   };
 
-  const getPatientDetails = () => {
-    auth.onAuthStateChanged((currentUser) => {
-      const docRef = db.collection("users").doc(currentUser.uid);
-
-      docRef
-        .collection("user_patients")
-        .doc(patientId)
-        .onSnapshot((doc) => {
-          if (doc.exists) {
-            setPatientDetails(doc.data());
-          } else {
-            console.log("No such document!");
-          }
-        });
-    });
-  };
+  
 
   useEffect(() => {
 
     getUser();
-    getPatientDetails();
+
   }, []);
 
   return (
@@ -176,31 +160,31 @@ const PatientDetailsPage = () => {
           <div className="rounded-md shadow-md bg-[#F1F5FA]  p-2 mt-5 w-3/4">
             <div className="flex flex-row justify-evenly mb-5">
               <p className="text-lg font-bold">
-                {patientDetails.first_name} {patientDetails.last_name}
+                {patientState.patient_name}
               </p>
-              <p className="text-lg">
-                {patientDetails.age} {patientDetails.sex}
+              <p className="opacity-50">
+                {patientState.age} {patientState.gender}
               </p>
-              <p className="opacity-50">{patientDetails.dob}</p>
-              <p className="opacity-50">Hospital</p>
-              <p className="opacity-50">URN</p>
+              <p className="opacity-50">{patientState.dob}</p>
+              <p className="opacity-50">{patientState.hospital}</p>
+              <p className="opacity-50">{patientState.ur}</p>
             </div>
 
             <div className="mb-5">
               <p className="text-lg font-bold opacity-50">Summary</p>
-              <p>{patientDetails.summary}</p>
+              <p>{patientState.clinical_summary}</p>
             </div>
 
             <div className="mb-5">
               <p className="text-lg font-bold opacity-50">Clinical Question</p>
-              <p>{patientDetails.clinical_question}</p>
+              <p>{patientState.clinical_question}</p>
             </div>
 
             <div className="mb-5">
               <p className="text-lg font-bold opacity-50">
-                Patient Outcomes(s)
+                Patient Outcome(s)
               </p>
-              <p>{patientDetails.patient_outcome}</p>
+              <p>{patientState.patient_outcome}</p>
             </div>
           </div>
         </div>

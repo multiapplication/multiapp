@@ -27,6 +27,7 @@ const AddPatientPage = () => {
       first_name: "",
       last_name: "",
       dob: "",
+      age: "",
       gender: "",
       hospital: "",
       ur: "",
@@ -50,6 +51,10 @@ const AddPatientPage = () => {
 
       if (!values.dob) {
         errors.dob = "Required";
+      }
+
+      if (!values.age) {
+        errors.age = "Required";
       }
 
       if (!values.gender) {
@@ -76,6 +81,7 @@ const AddPatientPage = () => {
             first_name: values.first_name,
             last_name: values.last_name,
             dob: values.dob,
+            age: values.age,
             gender: values.gender,
             hospital: values.hospital,
             ur: values.ur,
@@ -85,7 +91,39 @@ const AddPatientPage = () => {
             pathology_info: values.pathology_info,
             clinical_summary: values.clinical_summary,
             clinical_question: values.clinical_question,
-            scribe_notes: ""
+            scribe_notes: "",
+            mdm_id: mdmId,
+            attending_clinician: userName,
+
+          })
+          .catch((error) => {
+            setErrorMessage(error.message);
+            setLoading(false);
+          })
+          .finally(() => {
+            setLoading(false);
+          });
+
+
+          const anotherCollectionRef = db.collection("users").doc(currentUser.uid).collection("user_patients");
+
+          anotherCollectionRef.add({
+            first_name: values.first_name,
+            last_name: values.last_name,
+            dob: values.dob,
+            age: values.age,
+            gender: values.gender,
+            hospital: values.hospital,
+            ur: values.ur,
+            patient_informed: values.patient_informed,
+            mdm_discussion: values.mdm_discussion,
+            radiology_info: values.radiology_info,
+            pathology_info: values.pathology_info,
+            clinical_summary: values.clinical_summary,
+            clinical_question: values.clinical_question,
+            scribe_notes: "",
+            mdm_id: mdmId,
+            attending_clinician: userName
           })
           .catch((error) => {
             setErrorMessage(error.message);
@@ -118,21 +156,24 @@ const AddPatientPage = () => {
     });
   };
 
-  const getMDMDetails = ()=>{
-      auth.onAuthStateChanged((currentUser)=>{
-          setUser(currentUser.uid);
+  const getMDMDetails = () => {
+    auth.onAuthStateChanged((currentUser) => {
+      setUser(currentUser.uid);
 
-          const docRef = db.collection("users").doc(currentUser.uid).collection("user_mdms").doc(mdmId);
-          docRef.onSnapshot((doc)=>{
-              if(doc.exists){
-                  setMDMData(doc.data());
-              }else{
-                  console.log("No such document");
-              }
-          });
+      const docRef = db
+        .collection("users")
+        .doc(currentUser.uid)
+        .collection("user_mdms")
+        .doc(mdmId);
+      docRef.onSnapshot((doc) => {
+        if (doc.exists) {
+          setMDMData(doc.data());
+        } else {
+          console.log("No such document");
+        }
       });
-
-  }
+    });
+  };
 
   useEffect(() => {
     getUser();
@@ -316,6 +357,19 @@ const AddPatientPage = () => {
                   />
                   {formik.errors.dob ? (
                     <div className="text-red-600">{formik.errors.dob}</div>
+                  ) : null}
+
+                  <input
+                    className="bg-white appearance-none border-2 border-gray-200 rounded w-1/3 py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-[#57CC99]"
+                    placeholder="Age"
+                    id="age"
+                    name="age"
+                    type="text"
+                    onChange={formik.handleChange}
+                    value={formik.values.age}
+                  />
+                  {formik.errors.age? (
+                    <div className="text-red-600">{formik.errors.age}</div>
                   ) : null}
                 </div>
 

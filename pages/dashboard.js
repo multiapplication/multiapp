@@ -11,7 +11,19 @@ import { atom, useRecoilState, useRecoilValue } from "recoil";
 
 export const currentPatientState = atom({
   key: "currentPatientState",
-  default: "",
+  default: {
+    id: "",
+    patient_name: "",
+    gender: "",
+    age: "",
+    dob: "",
+    hospital: "",
+    ur: "",
+    clinical_summary: "",
+    clinical_question: "",
+    patient_outcome: "",
+
+  },
 });
 
 const DashboardPage = () => {
@@ -22,7 +34,7 @@ const DashboardPage = () => {
   const [userName, setUserName] = useState("");
   const [patientList, setPatientList] = useState([]);
   const [searchPatientList, setSearchPatientList] = useState([]);
-  const [patientId, setPatientId] = useRecoilState(currentPatientState);
+  const [patientState, setPatientState] = useRecoilState(currentPatientState);
 
   const [input, setInput] = useState("");
 
@@ -47,18 +59,25 @@ const DashboardPage = () => {
     });
   };
 
-  // fetch current patients for the user in authentication session
-  const getPatientList = () => {
+  const getPatients = () => {
     auth.onAuthStateChanged((currentUser) => {
       const docRef = db.collection("users").doc(currentUser.uid);
-      docRef.collection("user_patients").onSnapshot((snapshot) => {
+      docRef.collection("user_mdms").onSnapshot((snapshot) => {
         const patients = [];
         snapshot.forEach((doc) => {
-          patients.push({ ...doc.data(), key: doc.id });
+          docRef
+            .collection("user_mdms")
+            .doc(doc.id)
+            .collection("mdm_patients")
+            .onSnapshot((snapshot) => {
+              snapshot.forEach((doc) => {
+                patients.push({ ...doc.data(), key: doc.id });
+              });
+              setPatientList(patients);
+              setSearchPatientList(patients);
+              console.log("List fetched");
+            });
         });
-        setPatientList(patients);
-        setSearchPatientList(patients);
-        console.log("List fetched");
       });
     });
   };
@@ -74,7 +93,7 @@ const DashboardPage = () => {
 
   useEffect(() => {
     getUserDetails();
-    getPatientList();
+    getPatients();
   }, []);
 
   return (
@@ -127,18 +146,20 @@ const DashboardPage = () => {
             </div>
           </div>
 
-         <hr/>
+          <hr />
 
           <div className="flex flex-col gap-5">
             <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white flex flex-row">
-             
               <p className=" opacity-70 text-xl">My Patients</p>
             </div>
 
             <div>
-              <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white" onClick={()=>{
-                Router.push('myMDM');
-              }}>
+              <div
+                className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white"
+                onClick={() => {
+                  Router.push("myMDM");
+                }}
+              >
                 <p className=" opacity-70 text-xl">My MDMs</p>
               </div>
 
@@ -155,10 +176,7 @@ const DashboardPage = () => {
                   <p className=" opacity-70 ">Attendance</p>
                 </div>
 
-                <div
-                  className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white"
-                  
-                >
+                <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white">
                   <p className=" opacity-70 ">Manage MDMs</p>
                 </div>
 
@@ -196,7 +214,11 @@ const DashboardPage = () => {
         </div>
 
         <div className="bg-gradient-to-b from-[#22577A] via-[#38A3A5] to-[#57CC99] h-screen w-4/5 flex flex-col items-center gap-5">
-          <Searchbar setKeyword={updateInput}  keyword={input} placeholder="Search patients by first name"/>
+          <Searchbar
+            setKeyword={updateInput}
+            keyword={input}
+            placeholder="Search patients by first name"
+          />
 
           {searchPatientList.length > 0 ? (
             searchPatientList.map((patient) => {
@@ -205,7 +227,21 @@ const DashboardPage = () => {
                   key={patient.key}
                   className="rounded-md shadow-md bg-[#F1F5FA] cursor-pointer hover:bg-[#22577A] hover:text-white p-2 w-4/5"
                   onClick={() => {
-                    setPatientId(patient.key);
+
+                    console.log(patientState);
+                    setPatientState({
+                      id: patient.key,
+                      patient_name:
+                        patient.first_name + " " + patient.last_name,
+                      gender: patient.gender,
+                      age: patient.age,
+                      dob: patient.dob,
+                      hospital: patient.hospital,
+                      ur: patient.ur,
+                      clinical_summary: patient.clinical_summary,
+                      clinical_question: patient.clinical_question,
+                      patient_outcome: patient.scribe_notes,
+                    });
                     Router.push("/patientDetails");
                   }}
                 >
@@ -214,18 +250,9 @@ const DashboardPage = () => {
                       {patient.first_name} {patient.last_name}
                     </p>
                     <p className="text-lg">
-                      {patient.age} {patient.sex}
+                      {patient.age} {patient.gender}
                     </p>
                     <p className="opacity-50">{patient.dob}</p>
-                  </div>
-
-                  
-
-                  <div className="flex flex-col gap-1 mt-5">
-                    {patient.doctors_attending.map((doctor) => {
-                      // eslint-disable-next-line react/jsx-key
-                      return <p className="opacity-50">{doctor}</p>;
-                    })}
                   </div>
                 </div>
               );
