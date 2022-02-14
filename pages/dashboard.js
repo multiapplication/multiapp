@@ -104,7 +104,7 @@ const DashboardPage = () => {
     <>
       <div className="flex flex-row">
         {/* flex flex-col content-between justify-center items-center */}
-        <div className=" h-screen w-1/5 flex flex-col  ">
+        <div className=" h-screen w-1/5 flex flex-col">
           <div className="flex flex-col items-center">
             <img
               src="logo.svg"
@@ -192,12 +192,14 @@ const DashboardPage = () => {
 
             <div>
               <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white">
-                <p className=" opacity-70 text-xl">My Teams</p>
+                <p className=" opacity-70 text-xl"
+                  onClick={() => {Router.push("/myTeams");}}>My Teams</p>
               </div>
 
               <div className="ml-2">
                 <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
-                  <p className=" opacity-70 ">+ New Team</p>
+                  <p className=" opacity-70 "
+                    onClick={() => {Router.push("/createTeam");}}>+ New Team</p>
                 </div>
               </div>
             </div>

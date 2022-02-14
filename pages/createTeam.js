@@ -18,6 +18,10 @@ import 'react-confirm-alert/src/react-confirm-alert.css'; // CSS for dialog box
 import TeamList from "../components/TeamList";
 import AddParticipant from "../components/AddParticipant";
 import { idListState } from "../components/AddParticipant";
+import Router from "next/router";
+import Avatar from "react-avatar";
+import { SpinnerCircularFixed } from "spinners-react";
+import { db, auth } from "../utils/firebase.config";
 
 const createTeamPage = () => {
     const [teamName,setTeamName] = useState("");
@@ -26,6 +30,10 @@ const createTeamPage = () => {
     const idList = useRecoilValue(idListState);
     const auth = firebase.auth();
     const router = useRouter();
+    const [user, setUser] = useState("");
+    const [pageLoading, setPageLoading] = useState(false);
+    const [userData, setUserData] = useState([]);
+    const [userName, setUserName] = useState("");
 
     // if all fields are complete, add team to database
     const addTeam = async () => {
@@ -64,111 +72,147 @@ const createTeamPage = () => {
         });
     };
 
+    const getUserDetails = () => {
+        setPageLoading(true);
+        auth.onAuthStateChanged((currentUser) => {
+        setUser(currentUser.uid);
+
+        const docRef = db.collection("users").doc(currentUser.uid);
+
+        docRef.onSnapshot((doc) => {
+            if (doc.exists) {
+            setUserData(doc.data());
+            setUserName(doc.data().first_name + " " + doc.data().last_name);
+            console.log("shit happens");
+            setPageLoading(false);
+            } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+            }
+        });
+        });
+    };
+
     useEffect(() => {
         resetIdList();
+        getUserDetails();
     },[]);
 
     return (
         <div className="flex flex-row h-full">
     
-            {/* <!-- nav bar --> */}
-            <div className="flex flex-col bg-white w-64 p-4">
-                <div className="flex items-center justify-center">
-                    <img src="logo.png" className="h-16 mb-4"></img>
+            <div className=" h-screen w-1/5 flex flex-col  ">
+                <div className="flex flex-col items-center">
+                    <img
+                    src="logo.svg"
+                    alt="multi logo"
+                    className="mb-10 mt-5 w-1/3"
+                    ></img>
                 </div>
-    
-                <div className="flex flex-row border-metal border-b-2 items-center mb-6 p-2 hover:bg-navy hover:text-white">
-                   <div className="flex bg-green rounded-full w-12 h-12 mr-4 text-center items-center justify-center">
-                       SG 
-                       {/* <!-- placeholder for profile picture or initials if no pic uploaded --> */}
-                   </div>
-    
-                   <div className="flex flex-col">
-                        <div>
-                            Name
+
+                <div
+                    className="cursor-pointer hover:bg-[#22577A] hover:text-white"
+                    onClick={() => {
+                    Router.push("/user");
+                    }}
+                >
+                    <div className="flex flex-row mb-5 ml-5 mt-5">
+                    <div>
+                        {pageLoading ? (
+                        <SpinnerCircularFixed
+                            className="items-center"
+                            size={50}
+                            thickness={180}
+                            speed={100}
+                            color="#22577A"
+                            secondaryColor="rgba(0, 0, 0, 0)"
+                        />
+                        ) : (
+                        <Avatar
+                            name={userName}
+                            size="50"
+                            round={true}
+                            className="mr-5"
+                        />
+                        )}
+                    </div>
+
+                    <div>
+                        <p className="font-semibold opacity-70">
+                        {userData.first_name} {userData.last_name}
+                        </p>
+                        <p className="opacity-50">{userData.organisation}</p>
+                        <p className="opacity-50">{userData.role}</p>
+                    </div>
+                    </div>
+                </div>
+
+                <hr />
+
+                <div className="flex flex-col gap-5">
+                    <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white flex flex-row">
+                    <p className=" opacity-70 text-xl">My Patients</p>
+                    </div>
+
+                    <div>
+                    <div
+                        className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white"
+                        onClick={() => {
+                        Router.push("myMDM");
+                        }}
+                    >
+                        <p className=" opacity-70 text-xl">My MDMs</p>
+                    </div>
+
+                    <div className="ml-2">
+                        <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1 cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                        <p className=" opacity-70 ">Upcoming MDMs</p>
                         </div>
-                        <div className="text-sm mb-2">
-                            Organisation
+
+                        <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                        <p className=" opacity-70 ">Past MDMs</p>
                         </div>
-                        
-                        <div className="text-sm">
-                            Role
+
+                        <div className="ml-20 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                        <p className=" opacity-70 ">Attendance</p>
                         </div>
-                        
-                        <div className="text-sm">
-                            MDM Role
+
+                        <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white">
+                        <p className=" opacity-70 ">Manage MDMs</p>
                         </div>
-                        
-                   </div>
-                </div>
-    
-                <div className="flex flex-row hover:text-white hover:bg-navy">
-                    <img src="person-rolodex.png" className="hover:fill-coolblue w-12 h-12"></img>
-                    <div className="flex items-center justify-center ml-2">
-                        My Patients
-                    </div>
-                </div>
-    
-                <div className="flex flex-row mt-4 hover:text-white hover:bg-navy">
-                    <img src="clipboard.png" className="w-12 h-12"></img>
-                    <div className="flex items-center justify-center ml-2">
-                        My MDMs
-                    </div>
-    
-                    
-                </div>
-                
-                <div className="ml-2">
-                    <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1 hover:bg-navy hover:text-white">
-                        Upcoming MDMs
-                    </div>
-        
-                    <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1 hover:bg-navy hover:text-white">
-                        Past MDMs
-                    </div>
-        
-                    <div className="ml-20 mt-2 border-metal border-b-2 border-l-2 p-1 hover:bg-navy hover:text-white">
-                        Attendance
-                    </div>
-        
-                    <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1 hover:bg-navy hover:text-white">
-                        Manage MDMs
-                    </div>
-        
-                    <div className="ml-20 mt-2 border-metal border-b-2 border-l-2 p-1 hover:bg-navy hover:text-white">
-                        + New MDM
-                    </div>
-                </div>
-                
-    
-                <div className="flex flex-row mt-4 hover:text-white hover:bg-navy">
-                    <img src="people-fill.png" className="w-12 h-12"></img>
-                    <div className="flex items-center justify-center ml-2 hover:bg-navy">
-                        My Teams
-                    </div>
-    
-                    
-                </div>
-    
-                <div className="ml-2">
-                    <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 hover:bg-navy hover:bg-navy hover:text-white">
-                        + New Team
-                    </div>
-                </div>
-    
-                
-    
-                <div className="mb-4 mt-16 py-8 absolute bottom-0">
-    
-                    <button className="text-aqua font-bold">Logout</button>
-                    <div className="flex flex-row mt-2 hover:text-white hover:bg-navy">
-                        <img src="gear-fill.png" className="w-12 h-12"></img>
-                        <div className="flex items-center justify-center ml-2">
-                            Settings
+
+                        <div className="ml-20 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                        <p className=" opacity-70 ">+ New MDM</p>
                         </div>
                     </div>
+                    </div>
+
+                    <div>
+                    <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white">
+                        <p className=" opacity-70 text-xl"
+                        onClick={() => {Router.push("/myTeams");}}>My Teams</p>
+                    </div>
+
+                    <div className="ml-2">
+                        <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                        <p className=" opacity-70 ">+ New Team</p>
+                        </div>
+                    </div>
+                    </div>
+
+                    <div className="p-3">
+                    <p
+                        className="text-red-500 text-l cursor-pointer"
+                        onClick={() => {
+                        auth.signOut().finally(() => {
+                            Router.push("/");
+                        });
+                        }}
+                    >
+                        Logout
+                    </p>
+                    </div>
                 </div>
-                
             </div>
     
             {/* <!-- team creation page --> */}

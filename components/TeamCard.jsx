@@ -21,7 +21,7 @@ export const viewTeamState = atom({
     default:{},
 });
 
-const TeamCard = (authData) => {
+const TeamCard = () => {
 
     const [teams,setTeams] = useState([]); //holds all team data
     const [teamsId,setTeamsId] = useState([]); // holds all team ID
@@ -31,7 +31,7 @@ const TeamCard = (authData) => {
 
     // retrieve team data
     const getTeams = async (data) => {
-        if (data.teams.length){
+        if (data.teams){
             data.teams.forEach(async (teamRef)=> {
                 const team = await teamRef.get();
                 if (team.exists){
@@ -43,11 +43,14 @@ const TeamCard = (authData) => {
     }
     
     // retrieve user data           
-    const getUserDoc = async () => {
-        const db = firebase.firestore();
-        const userRef = db.collection("users").doc(authData.authId);
-        const doc = await userRef.get(); 
-        getTeams(doc.data());
+    const getUserDoc = () => {
+        const auth = firebase.auth()
+        auth.onAuthStateChanged(async (currentUser) => {
+            const db = firebase.firestore();
+            const userRef = db.collection("users").doc(currentUser.uid);
+            const doc = await userRef.get(); 
+            getTeams(doc.data());
+        })
     }
 
     // add selected team ID to global state and route to viewTeam page
@@ -62,10 +65,10 @@ const TeamCard = (authData) => {
     },[]);
 
     return (
-        <div className="grid gap-6">
+        <div className="grid gap-6 justify-center ">
             {/* Team card with elements mapped to team data */}
             {!teams.length
-            ? <div className="rounded-md shadow-md bg-coolblue p-2 w-fit "><p>You have no teams to view</p></div>
+            ? <div className=" rounded-md shadow-md bg-coolblue p-2 w-fit "><p>You have no teams to view</p></div>
             : teams.map(({ group_name, attached_hospital, participants },index) => (
                 <button id={index} className="flex flex-col sm:flex-row justify-between bg-coolblue rounded p-4 h-96 w-full sm:h-32 sm:w-full shadow-lg hover:bg-hovercoolblue" onClick={e=>clickTeam(e.target.id)}>
                     <div className="p-4 py-2">
