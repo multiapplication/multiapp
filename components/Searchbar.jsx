@@ -1,8 +1,8 @@
-const Searchbar = ({keyword, setKeyword, placeholder}) => {
+const Searchbar = ({keyword, setKeyword}) => {
     return (
 
         <div className="w-3/4 mt-5 h-10 pl-3 pr-2 bg-white border shadow-md rounded-full flex justify-between items-center relative">
-            <input type="search" name="search" id="search" placeholder={placeholder}
+            <input type="search" name="search" id="search" placeholder="Search for patients by first name"
                 className="appearance-none w-full outline-none focus:outline-none active:outline-none"
                 value={keyword}
                 

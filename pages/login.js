@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-undef */
 /* eslint-disable react/no-unescaped-entities */
 import { useFormik } from "formik";
 import { firebase } from "../utils/firebase.config";
