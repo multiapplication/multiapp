@@ -6,6 +6,8 @@ import { useState } from "react";
 import { SpinnerCircularFixed } from 'spinners-react';
 import Link from "next/link";
 
+const auth = firebase.auth();
+
 const LoginPage = () => {
 
 
