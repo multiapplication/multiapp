@@ -1,16 +1,10 @@
-/* eslint-disable @next/next/no-img-element */
-
-
 import { useEffect, useState } from "react";
 import { db, auth } from "../utils/firebase.config";
-
 import { SpinnerCircularFixed } from "spinners-react";
 import Router from "next/router";
 import Link from "next/link";
 import Avatar from "react-avatar";
-
-
-
+import MdmCard from "../components/MdmCard";
 
 const ManageMDMPage = () =>{
   const [user, setUser] = useState("");
@@ -29,7 +23,6 @@ const ManageMDMPage = () =>{
         if (doc.exists) {
           setUserData(doc.data());
           setUserName(doc.data().first_name + " " + doc.data().last_name);
-          console.log("shit happens");
           setPageLoading(false);
         } else {
           // doc.data() will be undefined in this case
@@ -46,7 +39,7 @@ const ManageMDMPage = () =>{
     return (<>
         <div className="flex flex-row">
           {/* flex flex-col content-between justify-center items-center */}
-          <div className=" h-screen w-1/5 flex flex-col  ">
+          <div className=" h-max w-1/5 flex flex-col  ">
             <div className="flex flex-col items-center">
               <img
                 src="logo.svg"
@@ -151,8 +144,7 @@ const ManageMDMPage = () =>{
           </div>
   
           <div className="bg-gradient-to-b from-[#22577A] via-[#38A3A5] to-[#57CC99] h-screen w-4/5 flex flex-col items-center gap-5">
-            
-            
+              <MdmCard></MdmCard>
           </div>
         </div>
       </>);

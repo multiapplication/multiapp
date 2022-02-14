@@ -28,18 +28,20 @@
     }
 
     const addToList = async () => {
-        const selectedTeamIndex = teamOptions.findIndex( object => {
-            return object.value == selectedTeamOption.value;
-        })
-        const resp = await TeamRefs[selectedTeamIndex].get(); 
-        resp.data().participants.forEach((participant)=>{
-            if (!idList.includes(participant)) {
-                setIdList((oldList) => [...oldList, participant]);
-            }
-            else {
-                console.log("user already in team!")
-            }
-        })
+        if (selectedTeamOption!== null){
+            const selectedTeamIndex = teamOptions.findIndex( object => {
+                return object.value == selectedTeamOption.value;
+            })
+            const resp = await TeamRefs[selectedTeamIndex].get(); 
+            resp.data().participants.forEach((participant)=>{
+                if (!idList.includes(participant)) {
+                    setIdList((oldList) => [...oldList, participant]);
+                }
+                else {
+                    console.log("user already in team!")
+                }
+            })
+        }
     }
 
     useEffect(() => {
