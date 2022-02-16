@@ -164,7 +164,8 @@ const DashboardPage = () => {
                   Router.push("myMDM");
                 }}
               >
-                <p className=" opacity-70 text-xl">My MDMs</p>
+                <p className=" opacity-70 text-xl"
+                  onClick={() => {Router.push("/myMDM");}}>My MDMs</p>
               </div>
 
               <div className="ml-2">
@@ -185,7 +186,8 @@ const DashboardPage = () => {
                 </div>
 
                 <div className="ml-20 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
-                  <p className=" opacity-70 ">+ New MDM</p>
+                  <p className=" opacity-70 "
+                    onClick={() => {Router.push("/createMDM");}}>+ New MDM</p>
                 </div>
               </div>
             </div>

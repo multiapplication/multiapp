@@ -194,7 +194,7 @@ const MyMDMPage = () => {
         </div>
 
         <div className="bg-gradient-to-b from-[#22577A] via-[#38A3A5] to-[#57CC99] h-screen w-4/5 flex flex-col items-center gap-5">
-          <Searchbar setKeyword={updateInput} keyword={input} placeholder="Search MDMs by name" />
+          <Searchbar setKeyword={updateInput} keyword={input} placeholder={"Search MDMs by name"}/>
 
           {searchMDMList.length > 0 ? (
             searchMDMList.map((mdm) => {

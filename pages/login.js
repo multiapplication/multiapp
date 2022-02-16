@@ -11,8 +11,6 @@ const auth = firebase.auth();
 
 const LoginPage = () => {
 
-
-
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
