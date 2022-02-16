@@ -20,8 +20,6 @@ const LoginPage = () => {
       password: "",
     },
     onSubmit: (values) => {
-
-    
       
       setLoading(true);
 

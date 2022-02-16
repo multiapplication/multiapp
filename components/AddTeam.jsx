@@ -20,11 +20,13 @@
     const [teamOptions, setTeamOptions] = useState([]);
 
     const fillTeamOptions = () => {
-        TeamRefs.forEach(async (team) => {
-            const resp = await team.get()
-            const option = {value: resp.data().group_name, label: resp.data().group_name}
-            setTeamOptions((options) => [...options, option]);
-        });
+        if (TeamRefs){
+            TeamRefs.forEach(async (team) => {
+                const resp = await team.get()
+                const option = {value: resp.data().group_name, label: resp.data().group_name}
+                setTeamOptions((options) => [...options, option]);
+            });
+        }
     }
 
     const addToList = async () => {
