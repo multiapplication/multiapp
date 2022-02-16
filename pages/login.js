@@ -46,7 +46,7 @@ const LoginPage = () => {
   });
   return (
     <div className="flex flex-row ">
-      <div className=" bg-gradient-to-b from-[#22577A] via-[#38A3A5] to-[#57CC99] h-screen w-1/3 flex flex-col content-between justify-center items-center">
+      <div className=" bg-gradient-to-b from-navy via-aqua to-green h-screen w-1/3 flex flex-col content-between justify-center items-center">
 
       </div>
       <div className="h-screen w-2/3 flex flex-col justify-center items-center content-between ">
@@ -65,7 +65,7 @@ const LoginPage = () => {
               </div>
               <div className="md:w-2/3">
                 <input
-                  className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-[#57CC99]"
+                  className="bg-light-gray appearance-none border-2 border-light-gray rounded w-full py-2 px-4 text-dark-grey leading-tight focus:outline-none focus:bg-white focus:border-green"
                   id="email"
                   name="email"
                   type="email"
@@ -86,7 +86,7 @@ const LoginPage = () => {
               </div>
               <div className="md:w-2/3">
                 <input
-                  className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-[#57CC99]"
+                  className="bg-light-grey appearance-none border-2 border-light-grey rounded w-full py-2 px-4 text-dark-grey leading-tight focus:outline-none focus:bg-white focus:border-green"
                   id="password"
                   name="password"
                   type="password"
@@ -100,7 +100,7 @@ const LoginPage = () => {
               <div className="md:w-1/3"></div>
               <div className="md:w-2/3">
                 <button
-                  className="shadow bg-[#57CC99] hover:bg-[#38A3A5] focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
+                  className="shadow bg-green hover:bg-aqua focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
                   type="submit"
                 >
                   {loading ? (
@@ -109,10 +109,10 @@ const LoginPage = () => {
                 </button>
                 <br/>
                 {errorMessage ? (
-                  <><br /><p className="text-xs text-red-600">{errorMessage}</p></>
+                  <><br /><p className="text-xs text-red">{errorMessage}</p></>
                 ): null}
                   <br/>
-                  <p className="text-xs text-gray-300">Don't have an account, <Link href="/signup"><a className="text-[#57CC99]">Sign Up</a></Link></p>
+                  <p className="text-xs text-gray">Don't have an account, <Link href="/signup"><a className="text-green">Sign Up</a></Link></p>
 
               </div>
              

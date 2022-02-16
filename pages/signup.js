@@ -94,7 +94,7 @@ const SignupPage = () => {
   });
   return (
     <div className="flex flex-row ">
-      <div className="bg-gradient-to-b from-[#22577A] via-[#38A3A5] to-[#57CC99] h-screen w-1/3 flex flex-col content-between justify-center items-center"></div>
+      <div className="bg-gradient-to-b from-navy via-aqua to-green h-screen w-1/3 flex flex-col content-between justify-center items-center"></div>
 
       <div className="h-screen w-2/3 flex flex-col justify-center items-center content-between ">
         <div>
@@ -110,7 +110,7 @@ const SignupPage = () => {
               </div>
               <div className="md:w-2/3">
                 <input
-                  className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-[#57CC99]"
+                  className="bg-light-grey appearance-none border-2 border-light-grey rounded w-full py-2 px-4 text-dark-grey leading-tight focus:outline-none focus:bg-white focus:border-green"
                   id="first_name"
                   name="first_name"
                   type="text"
@@ -118,7 +118,7 @@ const SignupPage = () => {
                   value={formik.values.first_name}
                 />
                 {formik.errors.first_name ? (
-                  <div className="text-red-600">{formik.errors.first_name}</div>
+                  <div className="text-red">{formik.errors.first_name}</div>
                 ) : null}
               </div>
             </div>
@@ -134,7 +134,7 @@ const SignupPage = () => {
               </div>
               <div className="md:w-2/3">
                 <input
-                  className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-[#57CC99]"
+                  className="bg-light-grey appearance-none border-2 border-light-grey rounded w-full py-2 px-4 text-dark-grey leading-tight focus:outline-none focus:bg-white focus:border-green"
                   id="last_name"
                   name="last_name"
                   type="text"
@@ -142,7 +142,7 @@ const SignupPage = () => {
                   value={formik.values.last_name}
                 />
                 {formik.errors.last_name ? (
-                  <div className="text-red-600">{formik.errors.last_name}</div>
+                  <div className="text-red">{formik.errors.last_name}</div>
                 ) : null}
               </div>
             </div>
@@ -158,7 +158,7 @@ const SignupPage = () => {
               </div>
               <div className="md:w-2/3">
                 <select
-                  // className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-my-green-300"
+                  // className="bg-light-grey appearance-none border-2 border-light-grey rounded w-full py-2 px-4 text-dark-grey leading-tight focus:outline-none focus:bg-white focus:border-my-green-300"
                   id="role"
                   name="role"
                   onChange={formik.handleChange}
@@ -188,7 +188,7 @@ const SignupPage = () => {
               </div>
               <div className="md:w-2/3">
                 <input
-                  className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-[#57CC99]"
+                  className="bg-light-grey appearance-none border-2 border-light-grey rounded w-full py-2 px-4 text-dark-grey leading-tight focus:outline-none focus:bg-white focus:border-green"
                   id="organisation"
                   name="organisation"
                   type="text"
@@ -209,7 +209,7 @@ const SignupPage = () => {
               </div>
               <div className="md:w-2/3">
                 <input
-                  className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-[#57CC99]"
+                  className="bg-light-grey appearance-none border-2 border-light-grey rounded w-full py-2 px-4 text-dark-grey leading-tight focus:outline-none focus:bg-white focus:border-green"
                   id="email"
                   name="email"
                   type="email"
@@ -217,7 +217,7 @@ const SignupPage = () => {
                   value={formik.values.email}
                 />
                 {formik.errors.email ? (
-                  <div className="text-red-600">{formik.errors.email}</div>
+                  <div className="text-red">{formik.errors.email}</div>
                 ) : null}
               </div>
             </div>
@@ -233,7 +233,7 @@ const SignupPage = () => {
               </div>
               <div className="md:w-2/3">
                 <input
-                  className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-[#57CC99]"
+                  className="bg-light-grey appearance-none border-2 border-light-grey rounded w-full py-2 px-4 text-dark-grey leading-tight focus:outline-none focus:bg-white focus:border-green"
                   id="password"
                   name="password"
                   type="password"
@@ -261,7 +261,7 @@ const SignupPage = () => {
                 </div>
                 <div className="md:w-2/3">
                   <input
-                    className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-[#57CC99]"
+                    className="bg-light-grey appearance-none border-2 border-light-grey rounded w-full py-2 px-4 text-dark-grey leading-tight focus:outline-none focus:bg-white focus:border-green"
                     id="changepassword"
                     name="changepassword"
                     type="password"
@@ -269,7 +269,7 @@ const SignupPage = () => {
                     value={formik.values.changepassword}
                   />
                   {formik.errors.changepassword ? (
-                    <div className="text-red-600">
+                    <div className="text-red">
                       {formik.errors.changepassword}
                     </div>
                   ) : null}
@@ -281,7 +281,7 @@ const SignupPage = () => {
               <div className="md:w-1/3"></div>
               <div className="md:w-2/3">
                 <button
-                  className="shadow bg-[#57CC99] hover:bg-[#38A3A5] focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
+                  className="shadow bg-green hover:bg-aqua focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
                   type="submit"
                 >
                   {loading ? (
@@ -298,7 +298,7 @@ const SignupPage = () => {
                 </button>
 
                 {errorMessage ? (
-                  <p className="text-xs text-red-600">{errorMessage}</p>
+                  <p className="text-xs text-red">{errorMessage}</p>
                 ) : null}
               </div>
             </div>

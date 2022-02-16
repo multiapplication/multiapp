@@ -49,7 +49,7 @@ const ManageMDMPage = () =>{
             </div>
   
             <div
-              className="cursor-pointer hover:bg-[#22577A] hover:text-white"
+              className="cursor-pointer hover:bg-navy hover:text-white"
               onClick={() => {
                 Router.push("/user");
               }}
@@ -88,47 +88,47 @@ const ManageMDMPage = () =>{
             <hr />
   
             <div className="flex flex-col gap-5">
-              <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white" onClick={()=>{
+              <div className="p-3 cursor-pointer hover:bg-navy hover:text-white" onClick={()=>{
                   Router.push('/dashboard');
               }}>
                 <p className=" opacity-70 text-xl">My Patients</p>
               </div>
   
               <div>
-                <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white">
+                <div className="p-3 cursor-pointer hover:bg-navy hover:text-white">
                   <p className=" opacity-70 text-xl">My MDMs</p>
                 </div>
   
                 <div className="ml-2">
-                  <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1 cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                  <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1 cursor-pointer hover:bg-navy hover:text-white ">
                     <p className=" opacity-70 ">Upcoming MDMs</p>
                   </div>
   
-                  <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                  <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-navy hover:text-white ">
                     <p className=" opacity-70 ">Past MDMs</p>
                   </div>
   
-                  <div className="ml-20 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                  <div className="ml-20 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-navy hover:text-white ">
                     <p className=" opacity-70 ">Attendance</p>
                   </div>
   
-                  <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                  <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-navy hover:text-white ">
                     <p className=" opacity-70 ">Manage MDMs</p>
                   </div>
   
-                  <div className="ml-20 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                  <div className="ml-20 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-navy hover:text-white ">
                     <p className=" opacity-70 ">+ New MDM</p>
                   </div>
                 </div>
               </div>
   
                     <div>
-                    <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white">
+                    <div className="p-3 cursor-pointer hover:bg-navy hover:text-white">
                 <p className=" opacity-70 text-xl">My Teams</p>
               </div>
   
               <div className="ml-2">
-                <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-navy hover:text-white ">
                   <p className=" opacity-70 ">+ New Team</p>
                 </div>
               </div>
@@ -137,13 +137,13 @@ const ManageMDMPage = () =>{
   
               <div className="p-3">
                 <Link href="/">
-                  <a className="text-red-500 text-l">Logout</a>
+                  <a className="text-red text-l">Logout</a>
                 </Link>
               </div>
             </div>
           </div>
   
-          <div className="bg-gradient-to-b from-[#22577A] via-[#38A3A5] to-[#57CC99] h-screen w-4/5 flex flex-col items-center gap-5">
+          <div className="bg-gradient-to-b from-navy via-aqua to-green h-screen w-4/5 flex flex-col items-center gap-5">
               <MdmCard></MdmCard>
           </div>
         </div>

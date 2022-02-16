@@ -114,7 +114,7 @@ const DashboardPage = () => {
           </div>
 
           <div
-            className="cursor-pointer hover:bg-[#22577A] hover:text-white"
+            className="cursor-pointer hover:bg-navy hover:text-white"
             onClick={() => {
               Router.push("/user");
             }}
@@ -153,13 +153,13 @@ const DashboardPage = () => {
           <hr />
 
           <div className="flex flex-col gap-5">
-            <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white flex flex-row">
+            <div className="p-3 cursor-pointer hover:bg-navy hover:text-white flex flex-row">
               <p className=" opacity-70 text-xl">My Patients</p>
             </div>
 
             <div>
               <div
-                className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white"
+                className="p-3 cursor-pointer hover:bg-navy hover:text-white"
                 onClick={() => {
                   Router.push("myMDM");
                 }}
@@ -169,23 +169,23 @@ const DashboardPage = () => {
               </div>
 
               <div className="ml-2">
-                <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1 cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1 cursor-pointer hover:bg-navy hover:text-white ">
                   <p className=" opacity-70 ">Upcoming MDMs</p>
                 </div>
 
-                <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-navy hover:text-white ">
                   <p className=" opacity-70 ">Past MDMs</p>
                 </div>
 
-                <div className="ml-20 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                <div className="ml-20 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-navy hover:text-white ">
                   <p className=" opacity-70 ">Attendance</p>
                 </div>
 
-                <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white">
+                <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-navy hover:text-white">
                   <p className=" opacity-70 ">Manage MDMs</p>
                 </div>
 
-                <div className="ml-20 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                <div className="ml-20 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-navy hover:text-white ">
                   <p className=" opacity-70 "
                     onClick={() => {Router.push("/createMDM");}}>+ New MDM</p>
                 </div>
@@ -193,13 +193,13 @@ const DashboardPage = () => {
             </div>
 
             <div>
-              <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white">
+              <div className="p-3 cursor-pointer hover:bg-navy hover:text-white">
                 <p className=" opacity-70 text-xl"
                   onClick={() => {Router.push("/myTeams");}}>My Teams</p>
               </div>
 
               <div className="ml-2">
-                <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-navy hover:text-white ">
                   <p className=" opacity-70 "
                     onClick={() => {Router.push("/createTeam");}}>+ New Team</p>
                 </div>
@@ -208,7 +208,7 @@ const DashboardPage = () => {
 
             <div className="p-3">
               <p
-                className="text-red-500 text-l cursor-pointer"
+                className="text-red text-l cursor-pointer"
                 onClick={() => {
                   auth.signOut().finally(() => {
                     Router.push("/");
@@ -221,7 +221,7 @@ const DashboardPage = () => {
           </div>
         </div>
 
-        <div className="bg-gradient-to-b from-[#22577A] via-[#38A3A5] to-[#57CC99] h-screen w-4/5 flex flex-col items-center gap-5">
+        <div className="bg-gradient-to-b from-navy via-aqua to-green h-screen w-4/5 flex flex-col items-center gap-5">
           <Searchbar
             setKeyword={updateInput}
             keyword={input}
@@ -233,7 +233,7 @@ const DashboardPage = () => {
               return (
                 <div
                   key={patient.key}
-                  className="rounded-md shadow-md bg-[#F1F5FA] cursor-pointer hover:bg-[#22577A] hover:text-white p-2 w-4/5"
+                  className="rounded-md shadow-md bg-white cursor-pointer hover:bg-navy hover:text-white p-2 w-4/5"
                   onClick={() => {
                     console.log(patientState);
                     setPatientState({
@@ -265,7 +265,7 @@ const DashboardPage = () => {
               );
             })
           ) : (
-            <div className="rounded-md shadow-md bg-[#F1F5FA] p-2 w-fit ">
+            <div className="rounded-md shadow-md bg-white p-2 w-fit ">
               <p>You have no patients to view</p>
             </div>
           )}

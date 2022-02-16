@@ -11,6 +11,7 @@
  import { useState, useEffect } from "react"
  import { atom, useRecoilState } from "recoil"
  import { useRouter } from 'next/router';
+ import Link from "next/link";
  
  // contains relevant mdm UID to use when viewing/editing 
  export const viewMdmState = atom({
@@ -21,25 +22,11 @@
  const MdmCard = (mdms) => {
  
      const [mdmData,setMdmData] = useState([]) //holds all mdm data
+     const [user, setUser] = useState("");
      const [viewMdm,setViewMdm] = useRecoilState(viewMdmState) // holds the mdm ID associated to a selected card 
  
-     const user = auth.currentUser.uid
      const router = useRouter()
-     
-     // retrieve all teams
-     const getMdms = async () => {
-        const userRef = db.collection("users").doc(user)
-        const data = await userRef.get()
-        const mdmRefs = data.data().mdms
-        if (mdmRefs.length){
-            mdmRefs.forEach(async (mdm) => {
-                const resp = await mdm.get();
-                if (resp.exists){
-                    setMdmData((arr) => [...arr, resp.data()]);
-                    console.log(resp.data())
-                }
-        })}
-     }
+  
  
      // add selected MDM ID to global state and route to viewMDM page
      // index is linked to order in which MDM cards are rendered  
@@ -47,13 +34,29 @@
          setViewMdm(mdms[index])
          router.push("/viewMDM")
      }
+
+     const getUserDetails = () => {
+        auth.onAuthStateChanged(async (currentUser) => {
+            const userRef = db.collection("users").doc(currentUser.uid)
+            setMdmData([]);
+
+            //Retrieve all Mdms linked to a user
+            const data = await userRef.get()
+            const mdmRefs = data.data().mdms
+            if (mdmRefs.length){
+                mdmRefs.forEach(async (mdm) => {
+                    const resp = await mdm.get();
+                    if (resp.exists){
+                        setMdmData((arr) => [...arr, resp.data()]);
+                        console.log(resp.data())
+                    }
+            })}
+        });
+      };
  
      useEffect(() => {
-        setMdmData([])
-        getMdms()
+        getUserDetails();
      },[]);
-
-    
  
      return (
          <div className="grid gap-6 mt-12 w-4/5">

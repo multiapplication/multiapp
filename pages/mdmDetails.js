@@ -107,7 +107,7 @@ const MDMDetailsPage = () => {
           </div>
 
           <div
-            className="cursor-pointer hover:bg-[#22577A] hover:text-white"
+            className="cursor-pointer hover:bg-navy hover:text-white"
             onClick={() => {
               Router.push("/user");
             }}
@@ -147,7 +147,7 @@ const MDMDetailsPage = () => {
 
           <div className="flex flex-col gap-5">
             <div
-              className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white"
+              className="p-3 cursor-pointer hover:bg-navy hover:text-white"
               onClick={() => {
                 Router.push("/dashboard");
               }}
@@ -156,7 +156,7 @@ const MDMDetailsPage = () => {
             </div>
 
             <div>
-              <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white"
+              <div className="p-3 cursor-pointer hover:bg-navy hover:text-white"
               onClick={()=>{
                 Router.push('/myMDM');
               }}>
@@ -164,20 +164,20 @@ const MDMDetailsPage = () => {
               </div>
 
               <div className="ml-2">
-                <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1 cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1 cursor-pointer hover:bg-navy hover:text-white ">
                   <p className=" opacity-70 ">Upcoming MDMs</p>
                 </div>
 
-                <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-navy hover:text-white ">
                   <p className=" opacity-70 ">Past MDMs</p>
                 </div>
 
-                <div className="ml-20 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                <div className="ml-20 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-navy hover:text-white ">
                   <p className=" opacity-70 ">Attendance</p>
                 </div>
 
                 <div
-                  className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white "
+                  className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-navy hover:text-white "
                   onClick={() => {
                     Router.push("/manageMDM");
                   }}
@@ -185,19 +185,19 @@ const MDMDetailsPage = () => {
                   <p className=" opacity-70 ">Manage MDMs</p>
                 </div>
 
-                <div className="ml-20 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                <div className="ml-20 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-navy hover:text-white ">
                   <p className=" opacity-70 ">+ New MDM</p>
                 </div>
               </div>
             </div>
 
             <div>
-              <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white">
+              <div className="p-3 cursor-pointer hover:bg-navy hover:text-white">
                 <p className=" opacity-70 text-xl">My Teams</p>
               </div>
 
               <div className="ml-2">
-                <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-navy hover:text-white ">
                   <p className=" opacity-70 ">+ New Team</p>
                 </div>
               </div>
@@ -205,7 +205,7 @@ const MDMDetailsPage = () => {
 
             <div className="p-3">
             <p
-                className="text-red-500 text-l cursor-pointer"
+                className="text-red text-l cursor-pointer"
                 onClick={() => {
                   auth.signOut().finally(() => {
                     Router.push("/");
@@ -218,9 +218,9 @@ const MDMDetailsPage = () => {
           </div>
         </div>
 
-        <div className="bg-gradient-to-b from-[#22577A] via-[#38A3A5] to-[#57CC99] h-screen w-4/5 flex flex-col justify-start items-center ">
-          <div className="rounded-md shadow-md bg-[#E5E5E5] w-3/4 ">
-            <div className="bg-[#C4C4C4] text-white">
+        <div className="bg-gradient-to-b from-navy via-aqua to-green h-screen w-4/5 flex flex-col justify-start items-center ">
+          <div className="rounded-md shadow-md bg-light-grey w-3/4 ">
+            <div className="bg-dark-grey text-white">
               <div className="flex flex-row justify-between font-bold p-2">
                 <p>{mdmData.mdm_name}</p>
                 <p>{mdmData.mdm_date}</p>
@@ -238,7 +238,7 @@ const MDMDetailsPage = () => {
             {patientList.length > 0 ? (
               patientList.map((patient) => {
                 return (
-                  <div key={patient.key} className="bg-[#F1F5FA] p-2 mt-4">
+                  <div key={patient.key} className="bg-white p-2 mt-4">
                     <div className="flex flex-row justify-evenly">
                       <p className="font-semibold">
                         {patient.first_name} {patient.last_name}
@@ -261,7 +261,7 @@ const MDMDetailsPage = () => {
                     <div>{patient.pathology_info}</div>
                     <div className="flex flex-row gap-2 justify-end mt-2">
                       <button
-                        className="bg-[#C4C4C4] hover:bg-[#868686] text-black text-opacity-80 py-2 px-4 rounded-2xl w-24"
+                        className="bg-dark-grey hover:bg-grey text-black text-opacity-80 py-2 px-4 rounded-2xl w-24"
                         onClick={() => {
                           setmdmPatientId(patient.key);
                           Router.push("/scribePatient");
@@ -270,7 +270,7 @@ const MDMDetailsPage = () => {
                         Scribe
                       </button>
                       <button
-                        className="bg-[#C4C4C4] hover:bg-red-500 text-black text-opacity-80 py-2 px-4 rounded-2xl w-24"
+                        className="bg-dark-grey hover:bg-red text-black text-opacity-80 py-2 px-4 rounded-2xl w-24"
                         onClick={() => {
                           auth.onAuthStateChanged((currentUser) => {
                             setUser(currentUser.uid);

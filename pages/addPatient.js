@@ -166,7 +166,7 @@ const AddPatientPage = () => {
           </div>
 
           <div
-            className="cursor-pointer hover:bg-[#22577A] hover:text-white"
+            className="cursor-pointer hover:bg-navy hover:text-white"
             onClick={() => {
               Router.push("/user");
             }}
@@ -206,7 +206,7 @@ const AddPatientPage = () => {
 
           <div className="flex flex-col gap-5">
             <div
-              className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white"
+              className="p-3 cursor-pointer hover:bg-navy hover:text-white"
               onClick={() => {
                 Router.push("/dashboard");
               }}
@@ -215,7 +215,7 @@ const AddPatientPage = () => {
             </div>
 
             <div>
-              <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white"
+              <div className="p-3 cursor-pointer hover:bg-navy hover:text-white"
               onClick={()=>{
                 Router.push('/myMDM');
               }}>
@@ -223,38 +223,38 @@ const AddPatientPage = () => {
               </div>
 
               <div className="ml-2">
-                <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1 cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1 cursor-pointer hover:bg-navy hover:text-white ">
                   <p className=" opacity-70 ">Upcoming MDMs</p>
                 </div>
 
-                <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-navy hover:text-white ">
                   <p className=" opacity-70 ">Past MDMs</p>
                 </div>
 
-                <div className="ml-20 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                <div className="ml-20 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-navy hover:text-white ">
                   <p className=" opacity-70 ">Attendance</p>
                 </div>
 
                 <div
-                  className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white "
+                  className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-navy hover:text-white "
                   
                 >
                   <p className=" opacity-70 ">Manage MDMs</p>
                 </div>
 
-                <div className="ml-20 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                <div className="ml-20 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-navy hover:text-white ">
                   <p className=" opacity-70 ">+ New MDM</p>
                 </div>
               </div>
             </div>
 
             <div>
-              <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white">
+              <div className="p-3 cursor-pointer hover:bg-navy hover:text-white">
                 <p className=" opacity-70 text-xl">My Teams</p>
               </div>
 
               <div className="ml-2">
-                <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-navy hover:text-white ">
                   <p className=" opacity-70 ">+ New Team</p>
                 </div>
               </div>
@@ -262,7 +262,7 @@ const AddPatientPage = () => {
 
             <div className="p-3">
             <p
-                className="text-red-500 text-l cursor-pointer"
+                className="text-red text-l cursor-pointer"
                 onClick={() => {
                   auth.signOut().finally(() => {
                     Router.push("/");
@@ -275,9 +275,9 @@ const AddPatientPage = () => {
           </div>
         </div>
 
-        <div className="bg-gradient-to-b from-[#22577A] via-[#38A3A5] to-[#57CC99] h-fit w-4/5 flex flex-col justify-start items-center ">
-          <div className="rounded-md shadow-md bg-[#E5E5E5] w-3/4  pb-2">
-            <div className="bg-[#C4C4C4] text-white">
+        <div className="bg-gradient-to-b from-navy via-aqua to-green h-fit w-4/5 flex flex-col justify-start items-center ">
+          <div className="rounded-md shadow-md bg-light-grey w-3/4  pb-2">
+            <div className="bg-dark-grey text-white">
               <div className="flex flex-row justify-between font-bold p-2">
                 <p>{mdmData.mdm_name}</p>
                 <p>{mdmData.mdm_date}</p>
@@ -292,7 +292,7 @@ const AddPatientPage = () => {
               <div className="flex flex-row justify-evenly mt-5">
                 <div className="md:w-1/3">
                   <input
-                    className="bg-white appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-[#57CC99]"
+                    className="bg-white appearance-none border-2 border-light-grey rounded w-full py-2 px-4 text-dark-grey leading-tight focus:outline-none focus:bg-white focus:border-green"
                     placeholder="First Name"
                     id="first_name"
                     name="first_name"
@@ -301,7 +301,7 @@ const AddPatientPage = () => {
                     value={formik.values.first_name}
                   />
                   {formik.errors.first_name ? (
-                    <div className="text-red-600">
+                    <div className="text-red">
                       {formik.errors.first_name}
                     </div>
                   ) : null}
@@ -309,7 +309,7 @@ const AddPatientPage = () => {
 
                 <div className="md:w-1/3">
                   <input
-                    className="bg-white appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-[#57CC99]"
+                    className="bg-white appearance-none border-2 border-light-grey rounded w-full py-2 px-4 text-dark-grey leading-tight focus:outline-none focus:bg-white focus:border-green"
                     placeholder="Last Name"
                     id="last_name"
                     name="last_name"
@@ -318,7 +318,7 @@ const AddPatientPage = () => {
                     value={formik.values.last_name}
                   />
                   {formik.errors.last_name ? (
-                    <div className="text-red-600">
+                    <div className="text-red">
                       {formik.errors.last_name}
                     </div>
                   ) : null}
@@ -328,7 +328,7 @@ const AddPatientPage = () => {
               <div className="flex flex-row justify-evenly mt-5">
                 <div className="md:w-1/3">
                   <input
-                    className="bg-white appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-[#57CC99]"
+                    className="bg-white appearance-none border-2 border-light-grey rounded w-full py-2 px-4 text-dark-grey leading-tight focus:outline-none focus:bg-white focus:border-green"
                     placeholder="DOB in dd/mm/yyyy "
                     id="dob"
                     name="dob"
@@ -337,11 +337,11 @@ const AddPatientPage = () => {
                     value={formik.values.dob}
                   />
                   {formik.errors.dob ? (
-                    <div className="text-red-600">{formik.errors.dob}</div>
+                    <div className="text-red">{formik.errors.dob}</div>
                   ) : null}
 
                   <input
-                    className="bg-white appearance-none border-2 border-gray-200 rounded w-1/3 py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-[#57CC99]"
+                    className="bg-white appearance-none border-2 border-light-grey rounded w-1/3 py-2 px-4 text-dark-grey leading-tight focus:outline-none focus:bg-white focus:border-green"
                     placeholder="Age"
                     id="age"
                     name="age"
@@ -350,13 +350,13 @@ const AddPatientPage = () => {
                     value={formik.values.age}
                   />
                   {formik.errors.age? (
-                    <div className="text-red-600">{formik.errors.age}</div>
+                    <div className="text-red">{formik.errors.age}</div>
                   ) : null}
                 </div>
 
                 <div className="md:w-1/3">
                   <select
-                    className="bg-white rounded w-full py-2 px-4 text-gray-700 leading-tight"
+                    className="bg-white rounded w-full py-2 px-4 text-dark-grey leading-tight"
                     id="gender"
                     name="gender"
                     onChange={formik.handleChange}
@@ -370,7 +370,7 @@ const AddPatientPage = () => {
                     <option value="Other">Other</option>
                   </select>
                   {formik.errors.gender ? (
-                    <div className="text-red-600">{formik.errors.gender}</div>
+                    <div className="text-red">{formik.errors.gender}</div>
                   ) : null}
                 </div>
               </div>
@@ -378,7 +378,7 @@ const AddPatientPage = () => {
               <div className="flex flex-row justify-evenly mt-5">
                 <div className="md:w-1/3">
                   <input
-                    className="bg-white appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-[#57CC99]"
+                    className="bg-white appearance-none border-2 border-light-grey rounded w-full py-2 px-4 text-dark-grey leading-tight focus:outline-none focus:bg-white focus:border-green"
                     placeholder="Hospital"
                     id="hospital"
                     name="hospital"
@@ -390,7 +390,7 @@ const AddPatientPage = () => {
 
                 <div className="md:w-1/3">
                   <input
-                    className="bg-white appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-[#57CC99]"
+                    className="bg-white appearance-none border-2 border-light-grey rounded w-full py-2 px-4 text-dark-grey leading-tight focus:outline-none focus:bg-white focus:border-green"
                     placeholder="U.R"
                     id="ur"
                     name="ur"
@@ -410,7 +410,7 @@ const AddPatientPage = () => {
                     Patient informed of MDM discussion ?
                   </label>
                   <select
-                    className="bg-white rounded w-full py-2 px-4 text-gray-700 leading-tight"
+                    className="bg-white rounded w-full py-2 px-4 text-dark-grey leading-tight"
                     id="patient_informed"
                     name="patient_informed"
                     onChange={formik.handleChange}
@@ -432,7 +432,7 @@ const AddPatientPage = () => {
                     MDM discussion ?
                   </label>
                   <select
-                    className="bg-white rounded w-full py-2 px-4 text-gray-700 leading-tight"
+                    className="bg-white rounded w-full py-2 px-4 text-dark-grey leading-tight"
                     id="mdm_discussion"
                     name="mdm_discussion"
                     onChange={formik.handleChange}
@@ -456,14 +456,14 @@ const AddPatientPage = () => {
         py-1.5
         text-base
         font-normal
-        text-gray-700
+        text-dark-grey
         bg-white bg-clip-padding
         
         rounded-lg
         transition
         ease-in-out
         m-0
-        focus:text-gray-700
+        focus:text-dark-grey
       "
                   id="radiology_info"
                   name="radiology_info"
@@ -484,14 +484,14 @@ const AddPatientPage = () => {
         py-1.5
         text-base
         font-normal
-        text-gray-700
+        text-dark-grey
         bg-white bg-clip-padding
         
         rounded-lg
         transition
         ease-in-out
         m-0
-        focus:text-gray-700
+        focus:text-dark-grey
       "
                   id="pathology_info"
                   name="pathology_info"
@@ -512,14 +512,14 @@ const AddPatientPage = () => {
         py-1.5
         text-base
         font-normal
-        text-gray-700
+        text-dark-grey
         bg-white bg-clip-padding
         
         rounded-lg
         transition
         ease-in-out
         m-0
-        focus:text-gray-700
+        focus:text-dark-grey
       "
                   id="clinical_summary"
                   name="clinical_summary"
@@ -540,14 +540,14 @@ const AddPatientPage = () => {
         py-1.5
         text-base
         font-normal
-        text-gray-700
+        text-dark-grey
         bg-white bg-clip-padding
         
         rounded-lg
         transition
         ease-in-out
         m-0
-        focus:text-gray-700
+        focus:text-dark-grey
       "
                   id="clinical_question"
                   name="clinical_question"
@@ -561,7 +561,7 @@ const AddPatientPage = () => {
 
               <div className="flex flex-row justify-evenly mt-5">
                 <button
-                  className="bg-white hover:bg-[#22577A] hover:text-white text-gray-700 font-bold py-2 px-10 rounded-2xl w-fit"
+                  className="bg-white hover:bg-navy hover:text-white text-dark-grey font-bold py-2 px-10 rounded-2xl w-fit"
                   type="submit"
                 >
                   {loading ? (
@@ -579,7 +579,7 @@ const AddPatientPage = () => {
               </div>
             </form>
             {errorMessage ? (
-              <p className="text-xs text-red-600">{errorMessage}</p>
+              <p className="text-xs text-red">{errorMessage}</p>
             ) : null}
           </div>
         </div>

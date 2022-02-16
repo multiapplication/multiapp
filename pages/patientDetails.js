@@ -60,7 +60,7 @@ const PatientDetailsPage = () => {
           </div>
 
           <div
-            className="cursor-pointer hover:bg-[#22577A] hover:text-white"
+            className="cursor-pointer hover:bg-navy hover:text-white"
             onClick={() => {
               Router.push("/user");
             }}
@@ -99,14 +99,14 @@ const PatientDetailsPage = () => {
           <hr />
 
           <div className="flex flex-col gap-5">
-            <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white" onClick={()=>{
+            <div className="p-3 cursor-pointer hover:bg-navy hover:text-white" onClick={()=>{
               Router.push('/dashboard');
             }}>
               <p className=" opacity-70 text-xl">My Patients</p>
             </div>
 
             <div>
-              <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white"
+              <div className="p-3 cursor-pointer hover:bg-navy hover:text-white"
               onClick={()=>{
                 Router.push('/myMDM');
               }}>
@@ -114,35 +114,35 @@ const PatientDetailsPage = () => {
               </div>
 
               <div className="ml-2">
-                <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1 cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1 cursor-pointer hover:bg-navy hover:text-white ">
                   <p className=" opacity-70 ">Upcoming MDMs</p>
                 </div>
 
-                <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-navy hover:text-white ">
                   <p className=" opacity-70 ">Past MDMs</p>
                 </div>
 
-                <div className="ml-20 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                <div className="ml-20 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-navy hover:text-white ">
                   <p className=" opacity-70 ">Attendance</p>
                 </div>
 
-                <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white " >
+                <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-navy hover:text-white " >
                   <p className=" opacity-70 ">Manage MDMs</p>
                 </div>
 
-                <div className="ml-20 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                <div className="ml-20 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-navy hover:text-white ">
                   <p className=" opacity-70 ">+ New MDM</p>
                 </div>
               </div>
             </div>
 
                   <div>
-                  <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white">
+                  <div className="p-3 cursor-pointer hover:bg-navy hover:text-white">
               <p className=" opacity-70 text-xl">My Teams</p>
             </div>
 
             <div className="ml-2">
-              <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+              <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-navy hover:text-white ">
                 <p className=" opacity-70 ">+ New Team</p>
               </div>
             </div>
@@ -151,7 +151,7 @@ const PatientDetailsPage = () => {
 
             <div className="p-3">
             <p
-                className="text-red-500 text-l cursor-pointer"
+                className="text-red text-l cursor-pointer"
                 onClick={() => {
                   auth.signOut().finally(() => {
                     Router.push("/");
@@ -164,7 +164,7 @@ const PatientDetailsPage = () => {
           </div>
         </div>
 
-        <div className="bg-gradient-to-b from-[#22577A] via-[#38A3A5] to-[#57CC99] h-screen w-4/5 flex flex-col justify-start items-center ">
+        <div className="bg-gradient-to-b from-navy via-aqua to-green h-screen w-4/5 flex flex-col justify-start items-center ">
           <div className="rounded-md shadow-md bg-[#F1F5FA]  p-2 mt-5 w-3/4">
             <div className="flex flex-row justify-evenly mb-5">
               <p className="text-lg font-bold">

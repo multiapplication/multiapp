@@ -8,6 +8,7 @@ import Searchbar from "../components/Searchbar";
 import Router from "next/router";
 import { SpinnerCircularFixed } from "spinners-react";
 import { atom, useRecoilState, useRecoilValue } from "recoil";
+import MdmCard from "../components/MdmCard";
 
 export const currentMDMState = atom({
   key: "currentMDMState",
@@ -194,7 +195,7 @@ const MyMDMPage = () => {
         </div>
 
         <div className="bg-gradient-to-b from-[#22577A] via-[#38A3A5] to-[#57CC99] h-screen w-4/5 flex flex-col items-center gap-5">
-          <Searchbar setKeyword={updateInput} keyword={input} placeholder={"Search MDMs by name"}/>
+          {/* <Searchbar setKeyword={updateInput} keyword={input} placeholder={"Search MDMs by name"}/>
 
           {searchMDMList.length > 0 ? (
             searchMDMList.map((mdm) => {
@@ -260,7 +261,9 @@ const MyMDMPage = () => {
             <div className="rounded-md shadow-md bg-[#F1F5FA] p-2 w-fit ">
               <p>You have no mdms to view</p>
             </div>
-          )}
+          )} */}
+          <MdmCard></MdmCard>
+
         </div>
       </div>
     </>
