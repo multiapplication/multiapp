@@ -8,33 +8,22 @@ import Searchbar from "../components/Searchbar";
 import Router from "next/router";
 import { SpinnerCircularFixed } from "spinners-react";
 import { atom, useRecoilState, useRecoilValue } from "recoil";
-import { setIn } from "formik";
+import MdmCard from "../components/MdmCard";
 
-export const currentPatientState = atom({
-  key: "currentPatientState",
-  default: {
-    id: "",
-    patient_name: "",
-    gender: "",
-    age: "",
-    dob: "",
-    hospital: "",
-    ur: "",
-    clinical_summary: "",
-    clinical_question: "",
-    patient_outcome: "",
-  },
+export const currentMDMState = atom({
+  key: "currentMDMState",
+  default: "",
 });
 
-const DashboardPage = () => {
+const MyMDMPage = () => {
   const [user, setUser] = useState("");
   const [pageLoading, setPageLoading] = useState(false);
 
   const [userData, setUserData] = useState([]);
   const [userName, setUserName] = useState("");
-  const [patientList, setPatientList] = useState([]);
-  const [searchPatientList, setSearchPatientList] = useState([]);
-  const [patientState, setPatientState] = useRecoilState(currentPatientState);
+  const [mdmList, setmdmList] = useState([]);
+  const [searchMDMList, setSearchMDMList] = useState([]);
+  const [mdmId, setmdmId] = useRecoilState(currentMDMState);
 
   const [input, setInput] = useState("");
 
@@ -59,74 +48,58 @@ const DashboardPage = () => {
     });
   };
 
-  const getPatients = () => {
+  const getMDMList = () => {
+    // auth.onAuthStateChanged((currentUser) => {
+    //   const docRef = db.collection("users").doc(currentUser.uid);
+    //   docRef.collection("user_mdms").onSnapshot((snapshot) => {
+    //     const mdms = [];
+    //     snapshot.forEach((doc) => {
+    //       mdms.push({ ...doc.data(), key: doc.id });
+    //     });
+    //     setmdmList(mdms);
+    //     setSearchMDMList(mdms);
+    //     console.log("List fetched");
+    //   });
+    // });
+
     auth.onAuthStateChanged((currentUser) => {
-      // const docRef = db.collection("users").doc(currentUser.uid);
-
-      
-      // docRef.collection("user_mdms").onSnapshot((snapshot) => {
-      //   const patients = [];
-      //   snapshot.forEach((doc) => {
-      //     docRef
-      //       .collection("user_mdms")
-      //       .doc(doc.id)
-      //       .collection("mdm_patients")
-      //       .onSnapshot((snapshot) => {
-      //         snapshot.forEach((doc) => {
-      //           patients.push({ ...doc.data(), key: doc.id });
-      //         });
-      //         setPatientList(patients);
-      //         setSearchPatientList(patients);
-      //         console.log(patientList);
-
-      //         console.log("List fetched");
-      //       });
-      //   });
-      // });
-
-
       const collectionRef = db.collection("mdms");
-      collectionRef.onSnapshot((snapshot)=>{
-        const patients = [];
-        snapshot.forEach((doc)=>{
+      collectionRef.onSnapshot((snapshot) => {
+        const mdms = [];
+        snapshot.forEach((doc) => {
           var participants = doc.data().participants;
 
-          if (participants.includes(currentUser.uid)){
-            
-            db.collection("mdms").doc(doc.id).collection("patients").onSnapshot((snapshot)=>{
-              snapshot.forEach((doc)=>{
-                patients.push({...doc.data(),key:doc.id});
-              });
-              setPatientList(patients);
-              setSearchPatientList(patients);
-              console.log(patientList);
-            });
+          if (participants.includes(currentUser.uid)) {
+            mdms.push({ ...doc.data(), key: doc.id });
           }
         });
-      })
+        setmdmList(mdms);
+        setSearchMDMList(mdms);
+        console.log("List fetched");
 
+      });
     });
   };
 
   // update input for search, based on key input to the search bar
   const updateInput = async (input) => {
-    const filtered = patientList.filter((patient) => {
-      return patient.first_name.toLowerCase().includes(input.toLowerCase());
+    const filtered = mdmList.filter((mdm) => {
+      return mdm.meeting_name.toLowerCase().includes(input.toLowerCase());
     });
     setInput(input);
-    setSearchPatientList(filtered);
+    setSearchMDMList(filtered);
   };
 
   useEffect(() => {
     getUserDetails();
-    getPatients();
+    getMDMList();
   }, []);
 
   return (
     <>
       <div className="flex flex-row">
         {/* flex flex-col content-between justify-center items-center */}
-        <div className=" h-screen w-1/5 flex flex-col">
+        <div className=" h-screen w-1/5 flex flex-col  ">
           <div className="flex flex-col items-center">
             <img
               src="logo.svg"
@@ -136,7 +109,7 @@ const DashboardPage = () => {
           </div>
 
           <div
-            className="cursor-pointer hover:bg-navy hover:text-white"
+            className="cursor-pointer hover:bg-[#22577A] hover:text-white"
             onClick={() => {
               Router.push("/user");
             }}
@@ -252,58 +225,79 @@ const DashboardPage = () => {
              </div>
         </div>
 
-        <div className="bg-gradient-to-b from-navy via-aqua to-green h-screen w-4/5 flex flex-col items-center gap-5">
-          <Searchbar
-            setKeyword={updateInput}
-            keyword={input}
-            placeholder="Search patients by first name"
-          />
+        <div className="bg-gradient-to-b from-[#22577A] via-[#38A3A5] to-[#57CC99] h-screen w-4/5 flex flex-col items-center gap-5">
+          <Searchbar setKeyword={updateInput} keyword={input} placeholder={"Search MDMs by name"}/>
 
-          {searchPatientList.length > 0 ? (
-            searchPatientList.map((patient) => {
+          {searchMDMList.length > 0 ? (
+            searchMDMList.map((mdm) => {
               return (
                 <div
-                  key={patient.key}
-                  className="rounded-md shadow-md bg-white cursor-pointer hover:bg-navy hover:text-white p-2 w-4/5"
-                  onClick={() => {
-                    console.log(patientState);
-                    setPatientState({
-                      id: patient.key,
-                      patient_name:
-                        patient.first_name + " " + patient.last_name,
-                      gender: patient.gender,
-                      age: patient.age,
-                      dob: patient.dob,
-                      hospital: patient.hospital,
-                      ur: patient.ur,
-                      clinical_summary: patient.clinical_summary,
-                      clinical_question: patient.clinical_question,
-                      patient_outcome: patient.scribe_notes,
-                    });
-                    Router.push("/patientDetails");
-                  }}
+                  key={mdm.key}
+
+                  className="rounded-md shadow-md bg-[#F1F5FA] p-2 w-4/5"
+                  
                 >
-                  <div className="flex flex-row gap-10">
-                    <p className="text-lg font-bold" id="patient">
-                      {patient.first_name} {patient.last_name}
-                    </p>
-                    <p className="text-lg">
-                      {patient.age} {patient.gender}
-                    </p>
-                    <p className="opacity-50">{patient.dob}</p>
+                  <div className="flex flex-row gap-5">
+                    <p className="text-lg font-bold">{mdm.meeting_name}</p>
+                    <p className="opacity-50">{mdm.meeting_format}</p>
+                  </div>
+
+                  <div className="flex flex-row gap-5 mt-2">
+                    <p>{mdm.meeting_date}</p>
+
+                  </div>
+
+                  <div className="mt-2">
+                    {mdm.meeting_link === "" ? (
+                      <p className="opacity-50">{mdm.meeting_location}</p>
+                    ) : (
+                      <>
+                        <Link href={mdm.meeting_link}>
+                          <a className="text-[#3b83f6]">{mdm.meeting_link}</a>
+                        </Link>
+                      </>
+                    )}
+                  </div>
+
+                  <div className="mt-2">
+                    <p className="opacity-50">Coordinator: {mdm.meeting_coordinator}</p>
+                  </div>
+
+                  <div className="flex flex-row gap-2 justify-end">
+                    <button
+                      className="bg-[#C4C4C4] hover:bg-[#868686] text-black text-opacity-80 py-2 px-4 rounded-2xl w-36"
+                      onClick={()=>{
+                        setmdmId(mdm.key);
+                        Router.push('/addPatient');
+                      }}
+                    >
+                      Add Patient
+                    </button>
+
+
+                    <button
+                      className="bg-[#C4C4C4] hover:bg-[#868686] text-black text-opacity-80 py-2 px-4 rounded-2xl w-36"
+                      onClick={()=>{
+                        setmdmId(mdm.key);
+                        Router.push('/mdmDetails');
+                      }}
+                    >
+                      View MDM
+                    </button>
                   </div>
                 </div>
               );
             })
           ) : (
-            <div className="rounded-md shadow-md bg-white p-2 w-fit ">
-              <p>You have no patients to view</p>
+            <div className="rounded-md shadow-md bg-[#F1F5FA] p-2 w-fit ">
+              <p>You have no mdms to view</p>
             </div>
           )}
+          {/* <MdmCard></MdmCard> */}
         </div>
       </div>
     </>
   );
 };
 
-export default DashboardPage;
+export default MyMDMPage;

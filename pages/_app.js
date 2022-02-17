@@ -1,9 +1,16 @@
-
 import '../styles/globals.css'
+import {RecoilRoot,} from 'recoil';
 
 
 function MultiApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
+  return (
+
+    <>
+      <RecoilRoot>
+        <Component {...pageProps}/>
+      </RecoilRoot>
+    </>
+  )
 }
 
-export default MultiApp
+export default MultiApp;

@@ -2,49 +2,29 @@
 import { useEffect, useState } from "react";
 import { db, auth } from "../utils/firebase.config";
 import Avatar from "react-avatar";
-import { UserIcon, UsersIcon } from "@heroicons/react/solid";
 import Link from "next/link";
-import Searchbar from "../components/Searchbar";
-import Router from "next/router";
+import { useFormik } from "formik";
 import { SpinnerCircularFixed } from "spinners-react";
-import { atom, useRecoilState, useRecoilValue } from "recoil";
-import { setIn } from "formik";
+import Select from "react-select";
+import { useRecoilValue } from "recoil";
+import { currentPatientState} from "./dashboard";
+import Router from "next/router";
 
-export const currentPatientState = atom({
-  key: "currentPatientState",
-  default: {
-    id: "",
-    patient_name: "",
-    gender: "",
-    age: "",
-    dob: "",
-    hospital: "",
-    ur: "",
-    clinical_summary: "",
-    clinical_question: "",
-    patient_outcome: "",
-  },
-});
 
-const DashboardPage = () => {
+const PatientDetailsPage = () => {
   const [user, setUser] = useState("");
-  const [pageLoading, setPageLoading] = useState(false);
-
   const [userData, setUserData] = useState([]);
   const [userName, setUserName] = useState("");
-  const [patientList, setPatientList] = useState([]);
-  const [searchPatientList, setSearchPatientList] = useState([]);
-  const [patientState, setPatientState] = useRecoilState(currentPatientState);
+  const [pageLoading, setPageLoading] = useState(false);
 
-  const [input, setInput] = useState("");
+  const patientState = useRecoilValue(currentPatientState);
 
-  const getUserDetails = () => {
+  const getUser = () => {
     setPageLoading(true);
     auth.onAuthStateChanged((currentUser) => {
       setUser(currentUser.uid);
 
       const docRef = db.collection("users").doc(currentUser.uid);
-
       docRef.onSnapshot((doc) => {
         if (doc.exists) {
           setUserData(doc.data());
@@ -59,74 +39,18 @@ const DashboardPage = () => {
     });
   };
 
-  const getPatients = () => {
-    auth.onAuthStateChanged((currentUser) => {
-      // const docRef = db.collection("users").doc(currentUser.uid);
-
-      
-      // docRef.collection("user_mdms").onSnapshot((snapshot) => {
-      //   const patients = [];
-      //   snapshot.forEach((doc) => {
-      //     docRef
-      //       .collection("user_mdms")
-      //       .doc(doc.id)
-      //       .collection("mdm_patients")
-      //       .onSnapshot((snapshot) => {
-      //         snapshot.forEach((doc) => {
-      //           patients.push({ ...doc.data(), key: doc.id });
-      //         });
-      //         setPatientList(patients);
-      //         setSearchPatientList(patients);
-      //         console.log(patientList);
-
-      //         console.log("List fetched");
-      //       });
-      //   });
-      // });
-
-
-      const collectionRef = db.collection("mdms");
-      collectionRef.onSnapshot((snapshot)=>{
-        const patients = [];
-        snapshot.forEach((doc)=>{
-          var participants = doc.data().participants;
-
-          if (participants.includes(currentUser.uid)){
-            
-            db.collection("mdms").doc(doc.id).collection("patients").onSnapshot((snapshot)=>{
-              snapshot.forEach((doc)=>{
-                patients.push({...doc.data(),key:doc.id});
-              });
-              setPatientList(patients);
-              setSearchPatientList(patients);
-              console.log(patientList);
-            });
-          }
-        });
-      })
-
-    });
-  };
-
-  // update input for search, based on key input to the search bar
-  const updateInput = async (input) => {
-    const filtered = patientList.filter((patient) => {
-      return patient.first_name.toLowerCase().includes(input.toLowerCase());
-    });
-    setInput(input);
-    setSearchPatientList(filtered);
-  };
+  
 
   useEffect(() => {
-    getUserDetails();
-    getPatients();
+
+    getUser();
+
   }, []);
 
   return (
     <>
       <div className="flex flex-row">
-        {/* flex flex-col content-between justify-center items-center */}
-        <div className=" h-screen w-1/5 flex flex-col">
+      <div className=" h-screen w-1/5 flex flex-col  ">
           <div className="flex flex-col items-center">
             <img
               src="logo.svg"
@@ -252,58 +176,41 @@ const DashboardPage = () => {
              </div>
         </div>
 
-        <div className="bg-gradient-to-b from-navy via-aqua to-green h-screen w-4/5 flex flex-col items-center gap-5">
-          <Searchbar
-            setKeyword={updateInput}
-            keyword={input}
-            placeholder="Search patients by first name"
-          />
-
-          {searchPatientList.length > 0 ? (
-            searchPatientList.map((patient) => {
-              return (
-                <div
-                  key={patient.key}
-                  className="rounded-md shadow-md bg-white cursor-pointer hover:bg-navy hover:text-white p-2 w-4/5"
-                  onClick={() => {
-                    console.log(patientState);
-                    setPatientState({
-                      id: patient.key,
-                      patient_name:
-                        patient.first_name + " " + patient.last_name,
-                      gender: patient.gender,
-                      age: patient.age,
-                      dob: patient.dob,
-                      hospital: patient.hospital,
-                      ur: patient.ur,
-                      clinical_summary: patient.clinical_summary,
-                      clinical_question: patient.clinical_question,
-                      patient_outcome: patient.scribe_notes,
-                    });
-                    Router.push("/patientDetails");
-                  }}
-                >
-                  <div className="flex flex-row gap-10">
-                    <p className="text-lg font-bold" id="patient">
-                      {patient.first_name} {patient.last_name}
-                    </p>
-                    <p className="text-lg">
-                      {patient.age} {patient.gender}
-                    </p>
-                    <p className="opacity-50">{patient.dob}</p>
-                  </div>
-                </div>
-              );
-            })
-          ) : (
-            <div className="rounded-md shadow-md bg-white p-2 w-fit ">
-              <p>You have no patients to view</p>
+        <div className="bg-gradient-to-b from-navy via-aqua to-green h-screen w-4/5 flex flex-col justify-start items-center ">
+          <div className="rounded-md shadow-md bg-[#F1F5FA]  p-2 mt-5 w-3/4">
+            <div className="flex flex-row justify-evenly mb-5">
+              <p className="text-lg font-bold">
+                {patientState.patient_name}
+              </p>
+              <p className="opacity-50">
+                {patientState.age} {patientState.gender}
+              </p>
+              <p className="opacity-50">{patientState.dob}</p>
+              <p className="opacity-50">{patientState.hospital}</p>
+              <p className="opacity-50">{patientState.ur}</p>
             </div>
-          )}
+
+            <div className="mb-5">
+              <p className="text-lg font-bold opacity-50">Summary</p>
+              <p>{patientState.clinical_summary}</p>
+            </div>
+
+            <div className="mb-5">
+              <p className="text-lg font-bold opacity-50">Clinical Question</p>
+              <p>{patientState.clinical_question}</p>
+            </div>
+
+            <div className="mb-5">
+              <p className="text-lg font-bold opacity-50">
+                Patient Outcome(s)
+              </p>
+              <p>{patientState.patient_outcome}</p>
+            </div>
+          </div>
         </div>
       </div>
     </>
   );
 };
 
-export default DashboardPage;
+export default PatientDetailsPage;

@@ -2,49 +2,44 @@
 import { useEffect, useState } from "react";
 import { db, auth } from "../utils/firebase.config";
 import Avatar from "react-avatar";
-import { UserIcon, UsersIcon } from "@heroicons/react/solid";
 import Link from "next/link";
-import Searchbar from "../components/Searchbar";
-import Router from "next/router";
+import { useFormik } from "formik";
 import { SpinnerCircularFixed } from "spinners-react";
-import { atom, useRecoilState, useRecoilValue } from "recoil";
-import { setIn } from "formik";
+import Select from "react-select";
+import Router from "next/router";
+import { useRecoilValue } from "recoil";
+import { currentMDMPatientState } from "./mdmDetails";
+import { currentMDMState } from "./myMDM";
 
-export const currentPatientState = atom({
-  key: "currentPatientState",
-  default: {
-    id: "",
-    patient_name: "",
-    gender: "",
-    age: "",
-    dob: "",
-    hospital: "",
-    ur: "",
-    clinical_summary: "",
-    clinical_question: "",
-    patient_outcome: "",
-  },
-});
-
-const DashboardPage = () => {
+const ScribePatientPage = () => {
   const [user, setUser] = useState("");
-  const [pageLoading, setPageLoading] = useState(false);
-
   const [userData, setUserData] = useState([]);
   const [userName, setUserName] = useState("");
-  const [patientList, setPatientList] = useState([]);
-  const [searchPatientList, setSearchPatientList] = useState([]);
-  const [patientState, setPatientState] = useRecoilState(currentPatientState);
+  const [loading, setLoading] = useState(false);
+  const [pageLoading, setPageLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
 
-  const [input, setInput] = useState("");
+  const [mdmPatientDetails, setmdmPatientDetails] = useState([]);
 
-  const getUserDetails = () => {
+  const mdmPatientId = useRecoilValue(currentMDMPatientState);
+  const mdmId = useRecoilValue(currentMDMState);
+
+  //   form logic hook
+  const formik = useFormik({
+    initialValues: {
+      scribe_notes: mdmPatientDetails.scribe_notes,
+    },
+    enableReinitialize: "true",
+  });
+
+  // fetching user data for rendering
+
+  const getUser = () => {
     setPageLoading(true);
     auth.onAuthStateChanged((currentUser) => {
       setUser(currentUser.uid);
 
       const docRef = db.collection("users").doc(currentUser.uid);
-
       docRef.onSnapshot((doc) => {
         if (doc.exists) {
           setUserData(doc.data());
@@ -59,74 +54,34 @@ const DashboardPage = () => {
     });
   };
 
-  const getPatients = () => {
+  const getMDMPatientDetails = () => {
     auth.onAuthStateChanged((currentUser) => {
-      // const docRef = db.collection("users").doc(currentUser.uid);
-
-      
-      // docRef.collection("user_mdms").onSnapshot((snapshot) => {
-      //   const patients = [];
-      //   snapshot.forEach((doc) => {
-      //     docRef
-      //       .collection("user_mdms")
-      //       .doc(doc.id)
-      //       .collection("mdm_patients")
-      //       .onSnapshot((snapshot) => {
-      //         snapshot.forEach((doc) => {
-      //           patients.push({ ...doc.data(), key: doc.id });
-      //         });
-      //         setPatientList(patients);
-      //         setSearchPatientList(patients);
-      //         console.log(patientList);
-
-      //         console.log("List fetched");
-      //       });
-      //   });
-      // });
-
-
-      const collectionRef = db.collection("mdms");
-      collectionRef.onSnapshot((snapshot)=>{
-        const patients = [];
-        snapshot.forEach((doc)=>{
-          var participants = doc.data().participants;
-
-          if (participants.includes(currentUser.uid)){
-            
-            db.collection("mdms").doc(doc.id).collection("patients").onSnapshot((snapshot)=>{
-              snapshot.forEach((doc)=>{
-                patients.push({...doc.data(),key:doc.id});
-              });
-              setPatientList(patients);
-              setSearchPatientList(patients);
-              console.log(patientList);
-            });
-          }
-        });
-      })
-
+      const docRef = db
+        .collection("mdms")
+        .doc(mdmId)
+        .collection("patients")
+        .doc(mdmPatientId)
+        
+      docRef.onSnapshot((doc) => {
+        if (doc.exists) {
+          setmdmPatientDetails(doc.data());
+        } else {
+          console.log("No such document");
+        }
+      });
     });
-  };
-
-  // update input for search, based on key input to the search bar
-  const updateInput = async (input) => {
-    const filtered = patientList.filter((patient) => {
-      return patient.first_name.toLowerCase().includes(input.toLowerCase());
-    });
-    setInput(input);
-    setSearchPatientList(filtered);
   };
 
   useEffect(() => {
-    getUserDetails();
-    getPatients();
+    getUser();
+
+    getMDMPatientDetails();
   }, []);
 
   return (
     <>
       <div className="flex flex-row">
-        {/* flex flex-col content-between justify-center items-center */}
-        <div className=" h-screen w-1/5 flex flex-col">
+        <div className=" h-screen w-1/5 flex flex-col  ">
           <div className="flex flex-col items-center">
             <img
               src="logo.svg"
@@ -250,60 +205,120 @@ const DashboardPage = () => {
               </p>
                </div>
              </div>
+
+         
+          
         </div>
-
-        <div className="bg-gradient-to-b from-navy via-aqua to-green h-screen w-4/5 flex flex-col items-center gap-5">
-          <Searchbar
-            setKeyword={updateInput}
-            keyword={input}
-            placeholder="Search patients by first name"
-          />
-
-          {searchPatientList.length > 0 ? (
-            searchPatientList.map((patient) => {
-              return (
-                <div
-                  key={patient.key}
-                  className="rounded-md shadow-md bg-white cursor-pointer hover:bg-navy hover:text-white p-2 w-4/5"
-                  onClick={() => {
-                    console.log(patientState);
-                    setPatientState({
-                      id: patient.key,
-                      patient_name:
-                        patient.first_name + " " + patient.last_name,
-                      gender: patient.gender,
-                      age: patient.age,
-                      dob: patient.dob,
-                      hospital: patient.hospital,
-                      ur: patient.ur,
-                      clinical_summary: patient.clinical_summary,
-                      clinical_question: patient.clinical_question,
-                      patient_outcome: patient.scribe_notes,
-                    });
-                    Router.push("/patientDetails");
-                  }}
-                >
-                  <div className="flex flex-row gap-10">
-                    <p className="text-lg font-bold" id="patient">
-                      {patient.first_name} {patient.last_name}
-                    </p>
-                    <p className="text-lg">
-                      {patient.age} {patient.gender}
-                    </p>
-                    <p className="opacity-50">{patient.dob}</p>
-                  </div>
-                </div>
-              );
-            })
-          ) : (
-            <div className="rounded-md shadow-md bg-white p-2 w-fit ">
-              <p>You have no patients to view</p>
+        <div className="bg-gradient-to-b from-navy via-aqua to-green h-screen w-4/5 flex flex-col justify-start gap-10 items-center ">
+          <div className="rounded-md shadow-md bg-light-grey w-3/4 pb-2">
+            <div className="bg-light-grey text-black">
+              <div className="flex flex-row justify-between font-bold p-2">
+                <p>
+                  {mdmPatientDetails.first_name} {mdmPatientDetails.last_name}
+                </p>
+                <p>{mdmPatientDetails.dob}</p>
+                <p>{mdmPatientDetails.gender}</p>
+              </div>
             </div>
-          )}
+
+            <div className="p-2">
+              <p className="font-semibold mt-2">Clinical Summary</p>
+              <p>{mdmPatientDetails.clinical_summary}</p>
+            </div>
+
+            <div className="p-2">
+              <p className="font-semibold mt-2">Clinical Question</p>
+              <p>{mdmPatientDetails.clinical_question}</p>
+            </div>
+
+            <div className="p-2">
+              <p className="font-semibold mt-2">Radiology info</p>
+              <p>{mdmPatientDetails.radiology_info}</p>
+            </div>
+
+            <div className="p-2">
+              <p className="font-semibold mt-2">Pathology info</p>
+              <p>{mdmPatientDetails.pathology_info}</p>
+            </div>
+
+            <div className="p-2">
+              <p className="font-semibold mt-2">Scribe Sheet</p>
+              <textarea
+                className="
+        w-full
+        h-48
+        px-3
+        py-1.5
+        text-base
+        font-normal
+        text-black
+        bg-white bg-clip-padding
+        
+        rounded-lg
+        transition
+        ease-in-out
+        m-0
+        focus:text-black
+      "
+                id="scribe_notes"
+                name="scribe_notes"
+                type="text"
+                onChange={formik.handleChange}
+                value={formik.values.scribe_notes}
+                rows="3"
+                placeholder="Scribe..."
+              ></textarea>
+            </div>
+
+            <div className="flex flex-row justify-evenly mt-5">
+              <button
+                className="bg-white hover:bg-navy hover:text-white text-black font-bold py-2 px-10 rounded-2xl w-fit"
+                onClick={() => {
+                  setLoading(true);
+                  auth.onAuthStateChanged((currentUser) => {
+                    setUser(currentUser.uid);
+
+                    const docRef = db
+                      .collection("mdms")
+                      .doc(mdmId)
+                      .collection("patients")
+                      .doc(mdmPatientId)
+                    
+                    docRef
+                      .update({
+                        scribe_notes: formik.values.scribe_notes,
+                      })
+                      .catch((error) => {
+                        setErrorMessage(error.message);
+                        setLoading(false);
+                      })
+                      .finally(() => {
+                        setLoading(false);
+                      });
+                  });
+                }}
+              >
+                {loading ? (
+                  <SpinnerCircularFixed
+                    size={30}
+                    thickness={180}
+                    speed={100}
+                    color="#ffffff"
+                    secondaryColor="rgba(0, 0, 0, 0)"
+                  />
+                ) : (
+                  "Save"
+                )}
+              </button>
+              {errorMessage ? (
+                <p className="text-xs text-red">{errorMessage}</p>
+              ) : null}
+            </div>
+          </div>
         </div>
       </div>
     </>
   );
 };
 
-export default DashboardPage;
+export default ScribePatientPage;
