@@ -192,7 +192,7 @@ const UserPage = () => {
               Healthcare Occupation
             </label>
             <input
-              className="bg-white rounded-lg w-96 py-2 px-4 text-dark-grey leading-tight"
+              className="bg-white rounded-lg w-96 py-2 px-4 text-black leading-tight"
               id="healthcare_occupation"
               name="healthcare_occupation"
               type="text"
@@ -209,7 +209,7 @@ const UserPage = () => {
               MDM Meeting Role
             </label>
             <select
-              className="bg-white rounded-lg w-96 py-2 px-4 text-dark-grey leading-tight"
+              className="bg-white rounded-lg w-96 py-2 px-4 text-black leading-tight"
               id="role"
               name="role"
               onChange={formik.handleChange}
@@ -230,7 +230,7 @@ const UserPage = () => {
               Organisation(s)
             </label>
             <input
-              className="bg-white rounded-lg w-96 py-2 px-4 text-dark-grey leading-tight"
+              className="bg-white rounded-lg w-96 py-2 px-4 text-black leading-tight"
               id="organisation"
               name="organisation"
               type="text"
@@ -247,14 +247,14 @@ const UserPage = () => {
         py-1.5
         text-base
         font-normal
-        text-dark-grey
+        text-black
         bg-white bg-clip-padding
         
         rounded-lg
         transition
         ease-in-out
         m-0
-        focus:text-dark-grey
+        focus:text-black
       "
               id="about_me"
               name="about_me"
@@ -266,7 +266,7 @@ const UserPage = () => {
             ></textarea>
           </div>
           <button
-            className="bg-white hover:bg-navy hover:text-white text-dark-grey font-bold py-2 px-10 rounded-2xl w-fit"
+            className="bg-white hover:bg-navy hover:text-white text-black font-bold py-2 px-10 rounded-2xl w-fit"
             onClick={() => {
               setLoading(true);
               auth.onAuthStateChanged((currentUser) => {

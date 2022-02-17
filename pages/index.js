@@ -9,7 +9,7 @@ const HomePage = () => {
     <div className="flex flex-row ">
       <div className="bg-gradient-to-b from-navy via-aqua to-green h-screen w-1/3 flex flex-col content-between justify-center items-center">
        <FadeIn delay={400}>
-       <p className="text-white text-3xl ">Manage your MDMs with ease</p>
+       <p className="text-white text-3xl ">Manage MDMs with ease</p>
        </FadeIn>
       </div>
 

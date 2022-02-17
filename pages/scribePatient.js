@@ -238,14 +238,14 @@ const ScribePatientPage = () => {
         py-1.5
         text-base
         font-normal
-        text-dark-grey
+        text-black
         bg-white bg-clip-padding
         
         rounded-lg
         transition
         ease-in-out
         m-0
-        focus:text-dark-grey
+        focus:text-black
       "
                 id="scribe_notes"
                 name="scribe_notes"
@@ -259,7 +259,7 @@ const ScribePatientPage = () => {
 
             <div className="flex flex-row justify-evenly mt-5">
               <button
-                className="bg-white hover:bg-navy hover:text-white text-dark-grey font-bold py-2 px-10 rounded-2xl w-fit"
+                className="bg-white hover:bg-navy hover:text-white text-black font-bold py-2 px-10 rounded-2xl w-fit"
                 onClick={() => {
                   setLoading(true);
                   auth.onAuthStateChanged((currentUser) => {

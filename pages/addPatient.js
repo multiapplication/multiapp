@@ -268,8 +268,8 @@ const AddPatientPage = () => {
         </div>
 
         <div className="bg-gradient-to-b from-navy via-aqua to-green h-fit w-4/5 flex flex-col justify-start items-center ">
-          <div className="rounded-md shadow-md bg-light-grey w-3/4  pb-2">
-            <div className="bg-dark-grey text-white">
+          <div className="rounded-md shadow-md bg-light-grey w-3/4 pb-2">
+            <div className="bg-dark-grey text-black">
               <div className="flex flex-row justify-between font-bold p-2">
                 <p>{mdmData.meeting_name}</p>
                 <p>{mdmData.meeting_date}</p>
@@ -284,7 +284,7 @@ const AddPatientPage = () => {
               <div className="flex flex-row justify-evenly mt-5">
                 <div className="md:w-1/3">
                   <input
-                    className="bg-white appearance-none border-2 border-light-grey rounded w-full py-2 px-4 text-dark-grey leading-tight focus:outline-none focus:bg-white focus:border-green"
+                    className="bg-white appearance-none border-2 border-light-grey rounded w-full py-2 px-4 text-black leading-tight focus:outline-none focus:bg-white focus:border-green"
                     placeholder="First Name"
                     id="first_name"
                     name="first_name"
@@ -301,7 +301,7 @@ const AddPatientPage = () => {
 
                 <div className="md:w-1/3">
                   <input
-                    className="bg-white appearance-none border-2 border-light-grey rounded w-full py-2 px-4 text-dark-grey leading-tight focus:outline-none focus:bg-white focus:border-green"
+                    className="bg-white appearance-none border-2 border-light-grey rounded w-full py-2 px-4 text-black leading-tight focus:outline-none focus:bg-white focus:border-green"
                     placeholder="Last Name"
                     id="last_name"
                     name="last_name"
@@ -320,7 +320,7 @@ const AddPatientPage = () => {
               <div className="flex flex-row justify-evenly mt-5">
                 <div className="md:w-1/3">
                   <input
-                    className="bg-white appearance-none border-2 border-light-grey rounded w-full py-2 px-4 text-dark-grey leading-tight focus:outline-none focus:bg-white focus:border-green"
+                    className="bg-white appearance-none border-2 border-light-grey rounded w-full py-2 px-4 text-black leading-tight focus:outline-none focus:bg-white focus:border-green"
                     placeholder="DOB in dd/mm/yyyy "
                     id="dob"
                     name="dob"
@@ -333,7 +333,7 @@ const AddPatientPage = () => {
                   ) : null}
 
                   <input
-                    className="bg-white appearance-none border-2 border-light-grey rounded w-1/3 py-2 px-4 text-dark-grey leading-tight focus:outline-none focus:bg-white focus:border-green"
+                    className="bg-white appearance-none border-2 border-light-grey rounded w-1/3 py-2 px-4 text-black leading-tight focus:outline-none focus:bg-white focus:border-green"
                     placeholder="Age"
                     id="age"
                     name="age"
@@ -348,7 +348,7 @@ const AddPatientPage = () => {
 
                 <div className="md:w-1/3">
                   <select
-                    className="bg-white rounded w-full py-2 px-4 text-dark-grey leading-tight"
+                    className="bg-white rounded w-full py-2 px-4 text-black leading-tight"
                     id="gender"
                     name="gender"
                     onChange={formik.handleChange}
@@ -370,7 +370,7 @@ const AddPatientPage = () => {
               <div className="flex flex-row justify-evenly mt-5">
                 <div className="md:w-1/3">
                   <input
-                    className="bg-white appearance-none border-2 border-light-grey rounded w-full py-2 px-4 text-dark-grey leading-tight focus:outline-none focus:bg-white focus:border-green"
+                    className="bg-white appearance-none border-2 border-light-grey rounded w-full py-2 px-4 text-black leading-tight focus:outline-none focus:bg-white focus:border-green"
                     placeholder="Hospital"
                     id="hospital"
                     name="hospital"
@@ -382,7 +382,7 @@ const AddPatientPage = () => {
 
                 <div className="md:w-1/3">
                   <input
-                    className="bg-white appearance-none border-2 border-light-grey rounded w-full py-2 px-4 text-dark-grey leading-tight focus:outline-none focus:bg-white focus:border-green"
+                    className="bg-white appearance-none border-2 border-light-grey rounded w-full py-2 px-4 text-black leading-tight focus:outline-none focus:bg-white focus:border-green"
                     placeholder="U.R"
                     id="ur"
                     name="ur"
@@ -402,7 +402,7 @@ const AddPatientPage = () => {
                     Patient informed of MDM discussion ?
                   </label>
                   <select
-                    className="bg-white rounded w-full py-2 px-4 text-dark-grey leading-tight"
+                    className="bg-white rounded w-full py-2 px-4 text-black leading-tight"
                     id="patient_informed"
                     name="patient_informed"
                     onChange={formik.handleChange}
@@ -424,7 +424,7 @@ const AddPatientPage = () => {
                     MDM discussion ?
                   </label>
                   <select
-                    className="bg-white rounded w-full py-2 px-4 text-dark-grey leading-tight"
+                    className="bg-white rounded w-full py-2 px-4 text-black leading-tight"
                     id="mdm_discussion"
                     name="mdm_discussion"
                     onChange={formik.handleChange}
@@ -448,14 +448,14 @@ const AddPatientPage = () => {
         py-1.5
         text-base
         font-normal
-        text-dark-grey
+        text-black
         bg-white bg-clip-padding
         
         rounded-lg
         transition
         ease-in-out
         m-0
-        focus:text-dark-grey
+        focus:text-black
       "
                   id="radiology_info"
                   name="radiology_info"
@@ -476,14 +476,14 @@ const AddPatientPage = () => {
         py-1.5
         text-base
         font-normal
-        text-dark-grey
+        text-black
         bg-white bg-clip-padding
         
         rounded-lg
         transition
         ease-in-out
         m-0
-        focus:text-dark-grey
+        focus:text-black
       "
                   id="pathology_info"
                   name="pathology_info"
@@ -504,14 +504,14 @@ const AddPatientPage = () => {
         py-1.5
         text-base
         font-normal
-        text-dark-grey
+        text-black
         bg-white bg-clip-padding
         
         rounded-lg
         transition
         ease-in-out
         m-0
-        focus:text-dark-grey
+        focus:text-black
       "
                   id="clinical_summary"
                   name="clinical_summary"
@@ -532,14 +532,14 @@ const AddPatientPage = () => {
         py-1.5
         text-base
         font-normal
-        text-dark-grey
+        text-black
         bg-white bg-clip-padding
         
         rounded-lg
         transition
         ease-in-out
         m-0
-        focus:text-dark-grey
+        focus:text-black
       "
                   id="clinical_question"
                   name="clinical_question"
@@ -553,7 +553,7 @@ const AddPatientPage = () => {
 
               <div className="flex flex-row justify-evenly mt-5">
                 <button
-                  className="bg-white hover:bg-navy hover:text-white text-dark-grey font-bold py-2 px-10 rounded-2xl w-fit"
+                  className="bg-white hover:bg-navy hover:text-white text-black font-bold py-2 px-10 rounded-2xl w-fit"
                   type="submit"
                 >
                   {loading ? (

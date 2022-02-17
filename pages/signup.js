@@ -4,6 +4,8 @@ import * as Yup from "yup";
 import Router from "next/router";
 import { SpinnerCircularFixed } from "spinners-react";
 import { useState } from "react";
+import FadeIn from 'react-fade-in';
+
 
 const Schema = Yup.object().shape({
   password: Yup.string().required("This field is required"),
@@ -94,7 +96,13 @@ const SignupPage = () => {
   });
   return (
     <div className="flex flex-row ">
-      <div className="bg-gradient-to-b from-navy via-aqua to-green h-screen w-1/3 flex flex-col content-between justify-center items-center"></div>
+      <div className="bg-gradient-to-b from-navy via-aqua to-green h-screen w-1/3 flex flex-col content-between justify-center items-center">
+      <FadeIn delay={400}>
+        <h1 className="text-6xl text-transparent bg-clip-text bg-white font-bold mb-24">Project Multi</h1>
+        </FadeIn>
+
+      </div>
+      
 
       <div className="h-screen w-2/3 flex flex-col justify-center items-center content-between ">
         <div>

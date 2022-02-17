@@ -218,7 +218,7 @@ const MDMDetailsPage = () => {
 
         <div className="bg-gradient-to-b from-navy via-aqua to-green h-screen w-4/5 flex flex-col justify-start items-center ">
           <div className="rounded-md shadow-md bg-light-grey w-3/4 ">
-            <div className="bg-dark-grey text-white">
+            <div className="bg-dark-grey text-black">
               <div className="flex flex-row justify-between font-bold p-2">
                 <p>{mdmData.meeting_name}</p>
                 <p>{mdmData.meeting_date}</p>
