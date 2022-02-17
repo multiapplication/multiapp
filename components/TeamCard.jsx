@@ -70,7 +70,7 @@ const TeamCard = () => {
             {!teams.length
             ? <div className=" rounded-md shadow-md bg-coolblue p-2 w-fit "><p>You have no teams to view</p></div>
             : teams.map(({ group_name, attached_hospital, participants },index) => (
-                <button id={index} className="flex flex-col sm:flex-row justify-between bg-coolblue rounded p-4 h-96 w-full sm:h-32 sm:w-full shadow-lg hover:bg-hovercoolblue" onClick={e=>clickTeam(e.target.id)}>
+                <button id={index} className="flex flex-col sm:flex-row justify-between bg-coolblue rounded p-4  w-full sm:h-32 sm:w-full shadow-lg hover:bg-hovercoolblue" onClick={e=>clickTeam(e.target.id)}>
                     <div className="p-4 py-2">
                         {group_name}
                     </div>

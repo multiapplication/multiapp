@@ -186,7 +186,10 @@ const viewTeamPage = () => {
                 <hr />
 
                 <div className="flex flex-col gap-5">
-                    <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white flex flex-row">
+                    <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white flex flex-row"
+                    onClick={() => {
+                        Router.push("/dashboard");
+                      }}>
                     <p className=" opacity-70 text-xl">My Patients</p>
                     </div>
 
@@ -213,11 +216,17 @@ const viewTeamPage = () => {
                         <p className=" opacity-70 ">Attendance</p>
                         </div>
 
-                        <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white">
+                        <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white"
+                        onClick={() => {
+                            Router.push("/manageMDM");
+                          }}>
                         <p className=" opacity-70 ">Manage MDMs</p>
                         </div>
 
-                        <div className="ml-20 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                        <div className="ml-20 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white "
+                        onClick={() => {
+                            Router.push("/createMDM");
+                          }}>
                         <p className=" opacity-70 ">+ New MDM</p>
                         </div>
                     </div>

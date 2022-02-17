@@ -95,7 +95,10 @@ const ManageMDMPage = () =>{
               </div>
   
               <div>
-                <div className="p-3 cursor-pointer hover:bg-navy hover:text-white">
+                <div className="p-3 cursor-pointer hover:bg-navy hover:text-white"
+                 onClick={() => {
+                  Router.push("/myMDM");
+                }}>
                   <p className=" opacity-70 text-xl">My MDMs</p>
                 </div>
   
@@ -112,23 +115,37 @@ const ManageMDMPage = () =>{
                     <p className=" opacity-70 ">Attendance</p>
                   </div>
   
-                  <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-navy hover:text-white ">
+                  <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-navy hover:text-white "
+                   onClick={() => {
+                    Router.push("/manageMDM");
+                  }}
+                  
+                  >
                     <p className=" opacity-70 ">Manage MDMs</p>
                   </div>
   
-                  <div className="ml-20 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-navy hover:text-white ">
+                  <div className="ml-20 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-navy hover:text-white "
+                   onClick={() => {
+                    Router.push("/createMDM");
+                  }}>
                     <p className=" opacity-70 ">+ New MDM</p>
                   </div>
                 </div>
               </div>
   
                     <div>
-                    <div className="p-3 cursor-pointer hover:bg-navy hover:text-white">
+                    <div className="p-3 cursor-pointer hover:bg-navy hover:text-white"
+                     onClick={() => {
+                      Router.push("/myTeams");
+                    }}>
                 <p className=" opacity-70 text-xl">My Teams</p>
               </div>
   
               <div className="ml-2">
-                <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-navy hover:text-white ">
+                <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-navy hover:text-white "
+                 onClick={() => {
+                  Router.push("/createTeam");
+                }}>
                   <p className=" opacity-70 ">+ New Team</p>
                 </div>
               </div>
@@ -136,9 +153,16 @@ const ManageMDMPage = () =>{
               
   
               <div className="p-3">
-                <Link href="/">
-                  <a className="text-red text-l">Logout</a>
-                </Link>
+              <p
+                className="text-red text-l cursor-pointer"
+                onClick={() => {
+                  auth.signOut().finally(() => {
+                    Router.push("/");
+                  });
+                }}
+              >
+                Logout
+              </p>
               </div>
             </div>
           </div>
