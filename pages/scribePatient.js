@@ -57,13 +57,11 @@ const ScribePatientPage = () => {
   const getMDMPatientDetails = () => {
     auth.onAuthStateChanged((currentUser) => {
       const docRef = db
-        .collection("users")
-        .doc(currentUser.uid)
-        .collection("user_mdms")
+        .collection("mdms")
         .doc(mdmId)
-        .collection("mdm_patients")
-        .doc(mdmPatientId);
-
+        .collection("patients")
+        .doc(mdmPatientId)
+        
       docRef.onSnapshot((doc) => {
         if (doc.exists) {
           setmdmPatientDetails(doc.data());
@@ -268,14 +266,11 @@ const ScribePatientPage = () => {
                     setUser(currentUser.uid);
 
                     const docRef = db
-                      .collection("users")
-                      .doc(currentUser.uid)
-                      .collection("user_mdms")
+                      .collection("mdms")
                       .doc(mdmId)
-                      .collection("mdm_patients")
-                      .doc(mdmPatientId);
-
-
+                      .collection("patients")
+                      .doc(mdmPatientId)
+                    
                     docRef
                       .update({
                         scribe_notes: formik.values.scribe_notes,

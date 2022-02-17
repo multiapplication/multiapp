@@ -61,28 +61,50 @@ const DashboardPage = () => {
 
   const getPatients = () => {
     auth.onAuthStateChanged((currentUser) => {
-      const docRef = db.collection("users").doc(currentUser.uid);
+      // const docRef = db.collection("users").doc(currentUser.uid);
 
       
-      docRef.collection("user_mdms").onSnapshot((snapshot) => {
+      // docRef.collection("user_mdms").onSnapshot((snapshot) => {
+      //   const patients = [];
+      //   snapshot.forEach((doc) => {
+      //     docRef
+      //       .collection("user_mdms")
+      //       .doc(doc.id)
+      //       .collection("mdm_patients")
+      //       .onSnapshot((snapshot) => {
+      //         snapshot.forEach((doc) => {
+      //           patients.push({ ...doc.data(), key: doc.id });
+      //         });
+      //         setPatientList(patients);
+      //         setSearchPatientList(patients);
+      //         console.log(patientList);
+
+      //         console.log("List fetched");
+      //       });
+      //   });
+      // });
+
+
+      const collectionRef = db.collection("mdms");
+      collectionRef.onSnapshot((snapshot)=>{
         const patients = [];
-        snapshot.forEach((doc) => {
-          docRef
-            .collection("user_mdms")
-            .doc(doc.id)
-            .collection("mdm_patients")
-            .onSnapshot((snapshot) => {
-              snapshot.forEach((doc) => {
-                patients.push({ ...doc.data(), key: doc.id });
+        snapshot.forEach((doc)=>{
+          var participants = doc.data().participants;
+
+          if (participants.includes(currentUser.uid)){
+            
+            db.collection("mdms").doc(doc.id).collection("patients").onSnapshot((snapshot)=>{
+              snapshot.forEach((doc)=>{
+                patients.push({...doc.data(),key:doc.id});
               });
               setPatientList(patients);
               setSearchPatientList(patients);
               console.log(patientList);
-
-              console.log("List fetched");
             });
+          }
         });
-      });
+      })
+
     });
   };
 

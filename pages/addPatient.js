@@ -69,14 +69,8 @@ const AddPatientPage = () => {
       auth.onAuthStateChanged((currentUser) => {
         setUser(currentUser.uid);
 
-        const collectionRef = db
-          .collection("users")
-          .doc(currentUser.uid)
-          .collection("user_mdms")
-          .doc(mdmId)
-          .collection("mdm_patients");
-
-        // const userCollectionRef = db.collection("users").doc(currentUser.uid).collection("user_patients");
+      
+        const collectionRef = db.collection("mdms").doc(mdmId).collection("patients");
 
         collectionRef
           .add({
@@ -134,9 +128,7 @@ const AddPatientPage = () => {
       setUser(currentUser.uid);
 
       const docRef = db
-        .collection("users")
-        .doc(currentUser.uid)
-        .collection("user_mdms")
+        .collection("mdms")
         .doc(mdmId);
       docRef.onSnapshot((doc) => {
         if (doc.exists) {
@@ -279,12 +271,12 @@ const AddPatientPage = () => {
           <div className="rounded-md shadow-md bg-light-grey w-3/4  pb-2">
             <div className="bg-dark-grey text-white">
               <div className="flex flex-row justify-between font-bold p-2">
-                <p>{mdmData.mdm_name}</p>
-                <p>{mdmData.mdm_date}</p>
+                <p>{mdmData.meeting_name}</p>
+                <p>{mdmData.meeting_date}</p>
               </div>
               <div className="flex flex-row justify-between p-2">
-                <p>{mdmData.mdm_location}</p>
-                <p>{mdmData.mdm_time}</p>
+                <p>{mdmData.meeting_location}</p>
+
               </div>
             </div>
 

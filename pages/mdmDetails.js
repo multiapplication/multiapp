@@ -57,10 +57,9 @@ const MDMDetailsPage = () => {
       setUser(currentUser.uid);
 
       const docRef = db
-        .collection("users")
-        .doc(currentUser.uid)
-        .collection("user_mdms")
-        .doc(mdmId);
+        .collection("mdms")
+        .doc(mdmId)
+        
       docRef.onSnapshot((doc) => {
         if (doc.exists) {
           setMDMData(doc.data());
@@ -74,11 +73,10 @@ const MDMDetailsPage = () => {
   const getMDMPatientList = () => {
     auth.onAuthStateChanged((currentUser) => {
       const docRef = db
-        .collection("users")
-        .doc(currentUser.uid)
-        .collection("user_mdms")
-        .doc(mdmId);
-      docRef.collection("mdm_patients").onSnapshot((snapshot) => {
+        .collection("mdms")
+        .doc(mdmId)
+        
+      docRef.collection("patients").onSnapshot((snapshot) => {
         const patients = [];
         snapshot.forEach((doc) => {
           patients.push({ ...doc.data(), key: doc.id });
@@ -222,12 +220,12 @@ const MDMDetailsPage = () => {
           <div className="rounded-md shadow-md bg-light-grey w-3/4 ">
             <div className="bg-dark-grey text-white">
               <div className="flex flex-row justify-between font-bold p-2">
-                <p>{mdmData.mdm_name}</p>
-                <p>{mdmData.mdm_date}</p>
+                <p>{mdmData.meeting_name}</p>
+                <p>{mdmData.meeting_date}</p>
               </div>
               <div className="flex flex-row justify-between p-2">
-                <p>{mdmData.mdm_location}</p>
-                <p>{mdmData.mdm_time}</p>
+                <p>{mdmData.meeting_location}</p>
+
               </div>
             </div>
 
@@ -275,11 +273,9 @@ const MDMDetailsPage = () => {
                           auth.onAuthStateChanged((currentUser) => {
                             setUser(currentUser.uid);
 
-                            db.collection("users")
-                              .doc(currentUser.uid)
-                              .collection("user_mdms")
+                            db.collection("mdms")
                               .doc(mdmId)
-                              .collection("mdm_patients")
+                              .collection("patients")
                               .doc(patient.key).delete().then(()=>{
                                 console.log("Delete successful")
                               }).catch((error)=>{
