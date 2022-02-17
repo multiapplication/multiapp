@@ -63,20 +63,39 @@ const MyMDMPage = () => {
     // });
 
     auth.onAuthStateChanged((currentUser) => {
-      const collectionRef = db.collection("mdms");
-      collectionRef.onSnapshot((snapshot) => {
-        const mdms = [];
-        snapshot.forEach((doc) => {
-          var participants = doc.data().participants;
+      // const collectionRef = db.collection("mdms");
+      // collectionRef.onSnapshot((snapshot) => {
+      //   const mdms = [];
+      //   snapshot.forEach((doc) => {
+      //     var participants = doc.data().participants;
 
-          if (participants.includes(currentUser.uid)) {
-            mdms.push({ ...doc.data(), key: doc.id });
-          }
-        });
+      //     if (participants.includes(currentUser.uid)) {
+      //       mdms.push({ ...doc.data(), key: doc.id });
+      //     }
+      //   });
+      //   setmdmList(mdms);
+      //   setSearchMDMList(mdms);
+      //   console.log("List fetched");
+
+      // });
+      const doc = db.collection("users").doc(currentUser.uid);
+
+      const observer = doc.onSnapshot(docSnapshot => {
+        //Retrieve all Mdms linked to a user
+        const mdmRefs = docSnapshot.data().mdms
+        if (mdmRefs){
+            const mdms = [];
+            mdmRefs.forEach(async (mdm) => {
+                const resp = await mdm.get();
+                if (resp.exists){
+                    mdms.push({ ...resp.data(), key: resp.id });
+                }
+        })
         setmdmList(mdms);
         setSearchMDMList(mdms);
-        console.log("List fetched");
-
+      }
+      }, err => {
+        console.log(`Encountered error: ${err}`);
       });
     });
   };
@@ -175,10 +194,7 @@ const MyMDMPage = () => {
                      <p className=" opacity-70 ">Attendance</p>
                    </div>
    
-                   <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white "
-                   onClick={()=>{
-                    Router.push('/manageMDM');
-                }}>
+                   <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
                      <p className=" opacity-70 ">Manage MDMs</p>
                    </div>
    

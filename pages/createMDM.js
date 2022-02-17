@@ -19,7 +19,7 @@
  import AddTeam from "../components/AddTeam";
  import TeamList from "../components/TeamList";
  import { idListState } from "../components/AddParticipant";
- import { useRecoilValue, useResetRecoilState } from "recoil";
+ import { useRecoilState, useResetRecoilState } from "recoil";
  import { confirmAlert } from "react-confirm-alert";
  import 'react-confirm-alert/src/react-confirm-alert.css';
  import { SpinnerCircularFixed } from "spinners-react";
@@ -40,7 +40,7 @@
      const [startDate, setStartDate] = useState(new Date());
      const [cutOffDays, setCutOffDays] = useState(0);
      const [reminderDays, setReminderDays] = useState(0);
-     const idList = useRecoilValue(idListState);
+     const [idList,setIdList] = useRecoilState(idListState);
      const resetIdList = useResetRecoilState(idListState);
  
      const router = useRouter();
@@ -66,6 +66,10 @@
                  // doc.data() will be undefined in this case
                  console.log("No such document!");
              }
+
+             if (!idList.includes(currentUser.uid)){
+              setIdList((arr) => [...arr, currentUser.uid]);
+              }
              });
          });
      };
@@ -112,9 +116,9 @@
          const respUser = await userRef.update({
              mdms: firebase.firestore.FieldValue.arrayUnion(db.doc('mdms/'+respMeeting.id))
          })
+         router.push("/dashboard");
          linkParticipants(respMeeting.id)
          resetIdList()
-         router.push("/dashboard");
      }
  
      const submit = () =>{
@@ -135,7 +139,7 @@
  
      useEffect(()=>{
          getUserData();
-     },[idList]);
+     },[]);
  
      return (
          <div className="flex flex-row h-full">
@@ -216,10 +220,7 @@
                      <p className=" opacity-70 ">Attendance</p>
                    </div>
    
-                   <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white "
-                   onClick={()=>{
-                    Router.push('/manageMDM');
-                }}>
+                   <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
                      <p className=" opacity-70 ">Manage MDMs</p>
                    </div>
    
