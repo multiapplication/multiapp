@@ -327,7 +327,7 @@
  
                              <div className="flex flex-col lg:flex-row">
                                  <div className="mt-5">
-                                     <label for="datepicker" className="block text-sm text-charcoal mt-8 mb-2">MDM Date</label>
+                                     <label  className="block text-sm text-charcoal mt-8 mb-2">MDM Date</label>
                                      <DatePicker
                                      className="bg-white border-2 border-white appearance-none rounded-lg py-2 px-4 ml-6 w-full text-charcoal leading-tight focus:outline-none focus:bg-white focus:border-green"
                                      showTimeSelect
@@ -339,8 +339,8 @@
                                  
  
                                  <div className="lg:ml-8">
-                                     <label for="cutoff" className="block text-sm text-charcoal mt-8 ">Days before meeting: </label>
-                                     <label for="cutoff" className="block text-sm text-charcoal mb-2">Cuttoff patient additions</label>
+                                     <label  className="block text-sm text-charcoal mt-8 ">Days before meeting: </label>
+                                     <label  className="block text-sm text-charcoal mb-2">Cuttoff patient additions</label>
                                      <input
                                          className="bg-white border-2 border-white appearance-none rounded-lg py-2 px-4 text-charcoal leading-tight focus:outline-none focus:bg-white focus:border-green"
                                          type="number"                        
@@ -351,8 +351,8 @@
                                  </div>
  
                                  <div className="lg:ml-4">
-                                     <label for="reminder" className="block text-sm text-charcoal mt-8">Days before meeting:</label>
-                                     <label for="cutoff" className="block text-sm text-charcoal mb-2">Email reminder to participants</label>
+                                     <label  className="block text-sm text-charcoal mt-8">Days before meeting:</label>
+                                     <label  className="block text-sm text-charcoal mb-2">Email reminder to participants</label>
                                      <input
                                          className="bg-white border-2 border-white appearance-none rounded-lg py-2 px-4 text-charcoal leading-tight focus:outline-none focus:bg-white focus:border-green"
                                          type="number"                        

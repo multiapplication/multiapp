@@ -241,7 +241,7 @@ const CreateTeamPage = () => {
                 
                     <div className="bg-metal py-6 px-12 h-full">
                         <div>
-                            <label for="teamName" className="mt-12">Team name</label>
+                            <label  className="mt-12">Team name</label>
                             <input
                                 className="bg-white appearance-none border-2 border-metal rounded-lg w-1/3 mx-4 py-2 px-4 text-charcoal leading-tight focus:outline-none focus:bg-white focus:border-green"
                                 id="teamName"
@@ -253,7 +253,7 @@ const CreateTeamPage = () => {
                             />
                         </div>
                         <div className="mt-6">
-                            <label for="attached_hospital" className="mt-12">Attached hospital</label>
+                            <label  className="mt-12">Attached hospital</label>
                             <input
                                 className="bg-white appearance-none border-2 border-metal rounded-lg w-1/3 mx-4 py-2 px-4 text-charcoal leading-tight focus:outline-none focus:bg-white focus:border-green"
                                 id="attached_hospital"
