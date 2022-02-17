@@ -13,11 +13,11 @@ const UserPage = () => {
   const [user, setUser] = useState("");
   const [userData, setUserData] = useState([]);
   const [userName, setUserName] = useState("");
-
   const [loading, setLoading] = useState(false);
   const [pageLoading, setPageLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
+  // form logic hook
   const formik = useFormik({
     initialValues: {
       healthcare_occupation: userData.healthcare_occupation,
@@ -27,6 +27,9 @@ const UserPage = () => {
     },
     enableReinitialize: "true",
   });
+
+
+  // fetching user data for rendering
 
   const getUser = () => {
     setPageLoading(true);
@@ -65,7 +68,7 @@ const UserPage = () => {
           </div>
 
           <div
-            className="cursor-pointer hover:bg-[#22577A] hover:text-white"
+            className="cursor-pointer hover:bg-navy hover:text-white"
             onClick={() => {
               Router.push("/user");
             }}
@@ -104,47 +107,62 @@ const UserPage = () => {
           <hr />
 
           <div className="flex flex-col gap-5">
-            <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white" onClick={()=>{
+            <div className="p-3 cursor-pointer hover:bg-navy hover:text-white" onClick={()=>{
               Router.push('/dashboard');
             }}>
               <p className=" opacity-70 text-xl">My Patients</p>
             </div>
 
             <div>
-              <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white">
+              <div className="p-3 cursor-pointer hover:bg-navy hover:text-white"
+              onClick={()=>{
+                Router.push('/myMDM');
+              }}>
                 <p className=" opacity-70 text-xl">My MDMs</p>
               </div>
 
               <div className="ml-2">
-                <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1 cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1 cursor-pointer hover:bg-navy hover:text-white ">
                   <p className=" opacity-70 ">Upcoming MDMs</p>
                 </div>
 
-                <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-navy hover:text-white ">
                   <p className=" opacity-70 ">Past MDMs</p>
                 </div>
 
-                <div className="ml-20 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                <div className="ml-20 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-navy hover:text-white ">
                   <p className=" opacity-70 ">Attendance</p>
                 </div>
 
-                <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-navy hover:text-white "
+                onClick={() => {
+                  Router.push("/manageMDM");
+                }} >
                   <p className=" opacity-70 ">Manage MDMs</p>
                 </div>
 
-                <div className="ml-20 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                <div className="ml-20 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-navy hover:text-white "
+                onClick={() => {
+                  Router.push("/createMDM");
+                }}>
                   <p className=" opacity-70 ">+ New MDM</p>
                 </div>
               </div>
             </div>
 
                   <div>
-                  <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white">
+                  <div className="p-3 cursor-pointer hover:bg-navy hover:text-white"
+                  onClick={() => {
+                    Router.push("/myTeams");
+                  }}>
               <p className=" opacity-70 text-xl">My Teams</p>
             </div>
 
             <div className="ml-2">
-              <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+              <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-navy hover:text-white "
+              onClick={() => {
+                Router.push("/createTeam");
+              }}>
                 <p className=" opacity-70 ">+ New Team</p>
               </div>
             </div>
@@ -152,13 +170,20 @@ const UserPage = () => {
             
 
             <div className="p-3">
-              <Link href="/">
-                <a className="text-red-500 text-l">Logout</a>
-              </Link>
+            <p
+                className="text-red text-l cursor-pointer"
+                onClick={() => {
+                  auth.signOut().finally(() => {
+                    Router.push("/");
+                  });
+                }}
+              >
+                Logout
+              </p>
             </div>
           </div>
         </div>
-        <div className="bg-gradient-to-b from-[#22577A] via-[#38A3A5] to-[#57CC99] h-screen w-4/5 flex flex-col justify-start gap-10 items-center ">
+        <div className="bg-gradient-to-b from-navy via-aqua to-green h-screen w-4/5 flex flex-col justify-start gap-10 items-center ">
           {pageLoading ? (
             <SpinnerCircularFixed
               size={50}
@@ -179,7 +204,7 @@ const UserPage = () => {
               Healthcare Occupation
             </label>
             <input
-              className="bg-white rounded-lg w-96 py-2 px-4 text-gray-700 leading-tight"
+              className="bg-white rounded-lg w-96 py-2 px-4 text-black leading-tight"
               id="healthcare_occupation"
               name="healthcare_occupation"
               type="text"
@@ -196,7 +221,7 @@ const UserPage = () => {
               MDM Meeting Role
             </label>
             <select
-              className="bg-white rounded-lg w-96 py-2 px-4 text-gray-700 leading-tight"
+              className="bg-white rounded-lg w-96 py-2 px-4 text-black leading-tight"
               id="role"
               name="role"
               onChange={formik.handleChange}
@@ -217,7 +242,7 @@ const UserPage = () => {
               Organisation(s)
             </label>
             <input
-              className="bg-white rounded-lg w-96 py-2 px-4 text-gray-700 leading-tight"
+              className="bg-white rounded-lg w-96 py-2 px-4 text-black leading-tight"
               id="organisation"
               name="organisation"
               type="text"
@@ -234,14 +259,14 @@ const UserPage = () => {
         py-1.5
         text-base
         font-normal
-        text-gray-700
+        text-black
         bg-white bg-clip-padding
         
         rounded-lg
         transition
         ease-in-out
         m-0
-        focus:text-gray-700
+        focus:text-black
       "
               id="about_me"
               name="about_me"
@@ -253,7 +278,7 @@ const UserPage = () => {
             ></textarea>
           </div>
           <button
-            className="bg-white hover:bg-[#22577A] hover:text-white text-gray-700 font-bold py-2 px-10 rounded-2xl w-fit"
+            className="bg-white hover:bg-navy hover:text-white text-black font-bold py-2 px-10 rounded-2xl w-fit"
             onClick={() => {
               setLoading(true);
               auth.onAuthStateChanged((currentUser) => {
@@ -291,7 +316,7 @@ const UserPage = () => {
             )}
           </button>
           {errorMessage ? (
-            <p className="text-xs text-red-600">{errorMessage}</p>
+            <p className="text-xs text-red">{errorMessage}</p>
           ) : null}
         </div>
       </div>

@@ -2,29 +2,38 @@
 import { useEffect, useState } from "react";
 import { db, auth } from "../utils/firebase.config";
 import Avatar from "react-avatar";
+import { UserIcon, UsersIcon } from "@heroicons/react/solid";
 import Link from "next/link";
-import { useFormik } from "formik";
-import { SpinnerCircularFixed } from "spinners-react";
-import Select from "react-select";
-import { useRecoilValue } from "recoil";
-import { currentPatientState} from "./dashboard";
+import Searchbar from "../components/Searchbar";
 import Router from "next/router";
+import { SpinnerCircularFixed } from "spinners-react";
+import { atom, useRecoilState, useRecoilValue } from "recoil";
+import MdmCard from "../components/MdmCard";
 
+export const currentMDMState = atom({
+  key: "currentMDMState",
+  default: "",
+});
 
-const PatientDetailsPage = () => {
+const MyMDMPage = () => {
   const [user, setUser] = useState("");
-  const [userData, setUserData] = useState([]);
-  const [userName, setUserName] = useState("");
   const [pageLoading, setPageLoading] = useState(false);
 
-  const patientState = useRecoilValue(currentPatientState);
+  const [userData, setUserData] = useState([]);
+  const [userName, setUserName] = useState("");
+  const [mdmList, setmdmList] = useState([]);
+  const [searchMDMList, setSearchMDMList] = useState([]);
+  const [mdmId, setmdmId] = useRecoilState(currentMDMState);
 
-  const getUser = () => {
+  const [input, setInput] = useState("");
+
+  const getUserDetails = () => {
     setPageLoading(true);
     auth.onAuthStateChanged((currentUser) => {
       setUser(currentUser.uid);
 
       const docRef = db.collection("users").doc(currentUser.uid);
+
       docRef.onSnapshot((doc) => {
         if (doc.exists) {
           setUserData(doc.data());
@@ -39,18 +48,58 @@ const PatientDetailsPage = () => {
     });
   };
 
-  
+  const getMDMList = () => {
+    // auth.onAuthStateChanged((currentUser) => {
+    //   const docRef = db.collection("users").doc(currentUser.uid);
+    //   docRef.collection("user_mdms").onSnapshot((snapshot) => {
+    //     const mdms = [];
+    //     snapshot.forEach((doc) => {
+    //       mdms.push({ ...doc.data(), key: doc.id });
+    //     });
+    //     setmdmList(mdms);
+    //     setSearchMDMList(mdms);
+    //     console.log("List fetched");
+    //   });
+    // });
+
+    auth.onAuthStateChanged((currentUser) => {
+      const collectionRef = db.collection("mdms");
+      collectionRef.onSnapshot((snapshot) => {
+        const mdms = [];
+        snapshot.forEach((doc) => {
+          var participants = doc.data().participants;
+
+          if (participants.includes(currentUser.uid)) {
+            mdms.push({ ...doc.data(), key: doc.id });
+          }
+        });
+        setmdmList(mdms);
+        setSearchMDMList(mdms);
+        console.log("List fetched");
+
+      });
+    });
+  };
+
+  // update input for search, based on key input to the search bar
+  const updateInput = async (input) => {
+    const filtered = mdmList.filter((mdm) => {
+      return mdm.meeting_name.toLowerCase().includes(input.toLowerCase());
+    });
+    setInput(input);
+    setSearchMDMList(filtered);
+  };
 
   useEffect(() => {
-
-    getUser();
-
+    getUserDetails();
+    getMDMList();
   }, []);
 
   return (
     <>
       <div className="flex flex-row">
-      <div className=" h-screen w-1/5 flex flex-col  ">
+        {/* flex flex-col content-between justify-center items-center */}
+        <div className=" h-screen w-1/5 flex flex-col  ">
           <div className="flex flex-col items-center">
             <img
               src="logo.svg"
@@ -60,7 +109,7 @@ const PatientDetailsPage = () => {
           </div>
 
           <div
-            className="cursor-pointer hover:bg-navy hover:text-white"
+            className="cursor-pointer hover:bg-[#22577A] hover:text-white"
             onClick={() => {
               Router.push("/user");
             }}
@@ -176,41 +225,79 @@ const PatientDetailsPage = () => {
              </div>
         </div>
 
-        <div className="bg-gradient-to-b from-navy via-aqua to-green h-screen w-4/5 flex flex-col justify-start items-center ">
-          <div className="rounded-md shadow-md bg-[#F1F5FA]  p-2 mt-5 w-3/4">
-            <div className="flex flex-row justify-evenly mb-5">
-              <p className="text-lg font-bold">
-                {patientState.patient_name}
-              </p>
-              <p className="opacity-50">
-                {patientState.age} {patientState.gender}
-              </p>
-              <p className="opacity-50">{patientState.dob}</p>
-              <p className="opacity-50">{patientState.hospital}</p>
-              <p className="opacity-50">{patientState.ur}</p>
-            </div>
+        <div className="bg-gradient-to-b from-[#22577A] via-[#38A3A5] to-[#57CC99] h-screen w-4/5 flex flex-col items-center gap-5">
+          <Searchbar setKeyword={updateInput} keyword={input} placeholder={"Search MDMs by name"}/>
 
-            <div className="mb-5">
-              <p className="text-lg font-bold opacity-50">Summary</p>
-              <p>{patientState.clinical_summary}</p>
-            </div>
+          {searchMDMList.length > 0 ? (
+            searchMDMList.map((mdm) => {
+              return (
+                <div
+                  key={mdm.key}
 
-            <div className="mb-5">
-              <p className="text-lg font-bold opacity-50">Clinical Question</p>
-              <p>{patientState.clinical_question}</p>
-            </div>
+                  className="rounded-md shadow-md bg-[#F1F5FA] p-2 w-4/5"
+                  
+                >
+                  <div className="flex flex-row gap-5">
+                    <p className="text-lg font-bold">{mdm.meeting_name}</p>
+                    <p className="opacity-50">{mdm.meeting_format}</p>
+                  </div>
 
-            <div className="mb-5">
-              <p className="text-lg font-bold opacity-50">
-                Patient Outcome(s)
-              </p>
-              <p>{patientState.patient_outcome}</p>
+                  <div className="flex flex-row gap-5 mt-2">
+                    <p>{mdm.meeting_date}</p>
+
+                  </div>
+
+                  <div className="mt-2">
+                    {mdm.meeting_link === "" ? (
+                      <p className="opacity-50">{mdm.meeting_location}</p>
+                    ) : (
+                      <>
+                        <Link href={mdm.meeting_link}>
+                          <a className="text-[#3b83f6]">{mdm.meeting_link}</a>
+                        </Link>
+                      </>
+                    )}
+                  </div>
+
+                  <div className="mt-2">
+                    <p className="opacity-50">Coordinator: {mdm.meeting_coordinator}</p>
+                  </div>
+
+                  <div className="flex flex-row gap-2 justify-end">
+                    <button
+                      className="bg-[#C4C4C4] hover:bg-[#868686] text-black text-opacity-80 py-2 px-4 rounded-2xl w-36"
+                      onClick={()=>{
+                        setmdmId(mdm.key);
+                        Router.push('/addPatient');
+                      }}
+                    >
+                      Add Patient
+                    </button>
+
+
+                    <button
+                      className="bg-[#C4C4C4] hover:bg-[#868686] text-black text-opacity-80 py-2 px-4 rounded-2xl w-36"
+                      onClick={()=>{
+                        setmdmId(mdm.key);
+                        Router.push('/mdmDetails');
+                      }}
+                    >
+                      View MDM
+                    </button>
+                  </div>
+                </div>
+              );
+            })
+          ) : (
+            <div className="rounded-md shadow-md bg-[#F1F5FA] p-2 w-fit ">
+              <p>You have no mdms to view</p>
             </div>
-          </div>
+          )}
+          {/* <MdmCard></MdmCard> */}
         </div>
       </div>
     </>
   );
 };
 
-export default PatientDetailsPage;
+export default MyMDMPage;

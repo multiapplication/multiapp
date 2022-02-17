@@ -2,16 +2,28 @@
 import { useEffect, useState } from "react";
 import { db, auth } from "../utils/firebase.config";
 import Avatar from "react-avatar";
-import { UsersIcon } from "@heroicons/react/solid";
+import { UserIcon, UsersIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import Searchbar from "../components/Searchbar";
 import Router from "next/router";
 import { SpinnerCircularFixed } from "spinners-react";
 import { atom, useRecoilState, useRecoilValue } from "recoil";
+import { setIn } from "formik";
 
 export const currentPatientState = atom({
   key: "currentPatientState",
-  default: "",
+  default: {
+    id: "",
+    patient_name: "",
+    gender: "",
+    age: "",
+    dob: "",
+    hospital: "",
+    ur: "",
+    clinical_summary: "",
+    clinical_question: "",
+    patient_outcome: "",
+  },
 });
 
 const DashboardPage = () => {
@@ -21,8 +33,10 @@ const DashboardPage = () => {
   const [userData, setUserData] = useState([]);
   const [userName, setUserName] = useState("");
   const [patientList, setPatientList] = useState([]);
+  const [searchPatientList, setSearchPatientList] = useState([]);
+  const [patientState, setPatientState] = useRecoilState(currentPatientState);
 
-  const [patientId, setPatientId] = useRecoilState(currentPatientState);
+  const [input, setInput] = useState("");
 
   const getUserDetails = () => {
     setPageLoading(true);
@@ -45,30 +59,74 @@ const DashboardPage = () => {
     });
   };
 
-  const getPatientList = () => {
+  const getPatients = () => {
     auth.onAuthStateChanged((currentUser) => {
-      const docRef = db.collection("users").doc(currentUser.uid);
-      docRef.collection("user_patients").onSnapshot((snapshot) => {
+      // const docRef = db.collection("users").doc(currentUser.uid);
+
+      
+      // docRef.collection("user_mdms").onSnapshot((snapshot) => {
+      //   const patients = [];
+      //   snapshot.forEach((doc) => {
+      //     docRef
+      //       .collection("user_mdms")
+      //       .doc(doc.id)
+      //       .collection("mdm_patients")
+      //       .onSnapshot((snapshot) => {
+      //         snapshot.forEach((doc) => {
+      //           patients.push({ ...doc.data(), key: doc.id });
+      //         });
+      //         setPatientList(patients);
+      //         setSearchPatientList(patients);
+      //         console.log(patientList);
+
+      //         console.log("List fetched");
+      //       });
+      //   });
+      // });
+
+
+      const collectionRef = db.collection("mdms");
+      collectionRef.onSnapshot((snapshot)=>{
         const patients = [];
-        snapshot.forEach((doc) => {
-          patients.push({ ...doc.data(), key: doc.id });
+        snapshot.forEach((doc)=>{
+          var participants = doc.data().participants;
+
+          if (participants.includes(currentUser.uid)){
+            
+            db.collection("mdms").doc(doc.id).collection("patients").onSnapshot((snapshot)=>{
+              snapshot.forEach((doc)=>{
+                patients.push({...doc.data(),key:doc.id});
+              });
+              setPatientList(patients);
+              setSearchPatientList(patients);
+              console.log(patientList);
+            });
+          }
         });
-        setPatientList(patients);
-        console.log("List fetched");
-      });
+      })
+
     });
+  };
+
+  // update input for search, based on key input to the search bar
+  const updateInput = async (input) => {
+    const filtered = patientList.filter((patient) => {
+      return patient.first_name.toLowerCase().includes(input.toLowerCase());
+    });
+    setInput(input);
+    setSearchPatientList(filtered);
   };
 
   useEffect(() => {
     getUserDetails();
-    getPatientList();
+    getPatients();
   }, []);
 
   return (
     <>
       <div className="flex flex-row">
         {/* flex flex-col content-between justify-center items-center */}
-        <div className=" h-screen w-1/5 flex flex-col  ">
+        <div className=" h-screen w-1/5 flex flex-col">
           <div className="flex flex-col items-center">
             <img
               src="logo.svg"
@@ -78,7 +136,7 @@ const DashboardPage = () => {
           </div>
 
           <div
-            className="cursor-pointer hover:bg-[#22577A] hover:text-white"
+            className="cursor-pointer hover:bg-navy hover:text-white"
             onClick={() => {
               Router.push("/user");
             }}
@@ -117,70 +175,111 @@ const DashboardPage = () => {
           <hr />
 
           <div className="flex flex-col gap-5">
-            <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white">
-              <p className=" opacity-70 text-xl">My Patients</p>
-            </div>
-
-            <div>
-              <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white">
-                <p className=" opacity-70 text-xl">My MDMs</p>
-              </div>
-
-              <div className="ml-2">
-                <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1 cursor-pointer hover:bg-[#22577A] hover:text-white ">
-                  <p className=" opacity-70 ">Upcoming MDMs</p>
-                </div>
-
-                <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
-                  <p className=" opacity-70 ">Past MDMs</p>
-                </div>
-
-                <div className="ml-20 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
-                  <p className=" opacity-70 ">Attendance</p>
-                </div>
-
-                <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
-                  <p className=" opacity-70 ">Manage MDMs</p>
-                </div>
-
-                <div className="ml-20 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
-                  <p className=" opacity-70 ">+ New MDM</p>
-                </div>
-              </div>
-            </div>
-
-                  <div>
-                  <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white">
-              <p className=" opacity-70 text-xl">My Teams</p>
-            </div>
-
-            <div className="ml-2">
-              <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
-                <p className=" opacity-70 ">+ New Team</p>
-              </div>
-            </div>
-                  </div>
-            
-
-            <div className="p-3">
-              <Link href="/">
-                <a className="text-red-500 text-l">Logout</a>
-              </Link>
-            </div>
-          </div>
+               <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white" onClick={()=>{
+                   Router.push('/dashboard');
+               }}>
+                 <p className=" opacity-70 text-xl">My Patients</p>
+               </div>
+   
+               <div>
+                 <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white"
+                 onClick={()=>{
+                  Router.push('/myMDM');
+              }}>
+                   <p className=" opacity-70 text-xl">My MDMs</p>
+                 </div>
+   
+                 <div className="ml-2">
+                   <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1 cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                     <p className=" opacity-70 ">Upcoming MDMs</p>
+                   </div>
+   
+                   <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                     <p className=" opacity-70 ">Past MDMs</p>
+                   </div>
+   
+                   <div className="ml-20 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                     <p className=" opacity-70 ">Attendance</p>
+                   </div>
+   
+                   <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white "
+                   onClick={()=>{
+                    Router.push('/manageMDM');
+                }}>
+                     <p className=" opacity-70 ">Manage MDMs</p>
+                   </div>
+   
+                   <div className="ml-20 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white "
+                   onClick={()=>{
+                    Router.push('/createMDM');
+                }}>
+                     <p className=" opacity-70 ">+ New MDM</p>
+                   </div>
+                 </div>
+             </div>
+   
+             <div>
+                 <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white"
+                 onClick={()=>{
+                  Router.push('/myTeams');
+              }}>
+                     <p className=" opacity-70 text-xl">My Teams</p>
+                 </div>
+   
+                 <div className="ml-2">
+                     <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white "
+                     onClick={()=>{
+                      Router.push('/createTeam');
+                  }}>
+                     <p className=" opacity-70 ">+ New Team</p>
+                     </div>
+                 </div>
+             </div>
+               
+   
+               <div className="p-3">
+               <p
+                className="text-red text-l cursor-pointer"
+                onClick={() => {
+                  auth.signOut().finally(() => {
+                    Router.push("/");
+                  });
+                }}
+              >
+                Logout
+              </p>
+               </div>
+             </div>
         </div>
 
-        <div className="bg-gradient-to-b from-[#22577A] via-[#38A3A5] to-[#57CC99] h-screen w-4/5 flex flex-col items-center gap-5">
-          <Searchbar />
+        <div className="bg-gradient-to-b from-navy via-aqua to-green h-screen w-4/5 flex flex-col items-center gap-5">
+          <Searchbar
+            setKeyword={updateInput}
+            keyword={input}
+            placeholder="Search patients by first name"
+          />
 
-          {patientList.length > 0 ? (
-            patientList.map((patient) => {
+          {searchPatientList.length > 0 ? (
+            searchPatientList.map((patient) => {
               return (
                 <div
                   key={patient.key}
-                  className="rounded-md shadow-md bg-[#F1F5FA] cursor-pointer hover:bg-[#22577A] hover:text-white p-2 w-4/5"
+                  className="rounded-md shadow-md bg-white cursor-pointer hover:bg-navy hover:text-white p-2 w-4/5"
                   onClick={() => {
-                    setPatientId(patient.key);
+                    console.log(patientState);
+                    setPatientState({
+                      id: patient.key,
+                      patient_name:
+                        patient.first_name + " " + patient.last_name,
+                      gender: patient.gender,
+                      age: patient.age,
+                      dob: patient.dob,
+                      hospital: patient.hospital,
+                      ur: patient.ur,
+                      clinical_summary: patient.clinical_summary,
+                      clinical_question: patient.clinical_question,
+                      patient_outcome: patient.scribe_notes,
+                    });
                     Router.push("/patientDetails");
                   }}
                 >
@@ -189,28 +288,16 @@ const DashboardPage = () => {
                       {patient.first_name} {patient.last_name}
                     </p>
                     <p className="text-lg">
-                      {patient.age} {patient.sex}
+                      {patient.age} {patient.gender}
                     </p>
                     <p className="opacity-50">{patient.dob}</p>
-                  </div>
-
-                  {/* <div className="mt-5">
-                    <p className="text-lg font-semibold">Summary</p>
-                    <p>{patient.summary}</p>
-                  </div> */}
-
-                  <div className="flex flex-col gap-1 mt-5">
-                    {patient.doctors_attending.map((doctor) => {
-                      // eslint-disable-next-line react/jsx-key
-                      return <p className="opacity-50">{doctor}</p>;
-                    })}
                   </div>
                 </div>
               );
             })
           ) : (
-            <div className="rounded-md shadow-md bg-[#F1F5FA] p-2 w-fit ">
-              <p>You have no patients to view yet</p>
+            <div className="rounded-md shadow-md bg-white p-2 w-fit ">
+              <p>You have no patients to view</p>
             </div>
           )}
         </div>
