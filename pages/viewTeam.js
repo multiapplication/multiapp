@@ -23,7 +23,7 @@ import Avatar from "react-avatar";
 import { SpinnerCircularFixed } from "spinners-react";
 import { db, auth } from "../utils/firebase.config";
 
-const viewTeamPage = () => {
+const ViewTeamPage = () => {
     const [teamName,setTeamName] = useState("");
     const [hospitalName,setHospitalName] = useState("");
     const [idList, setIdList] = useRecoilState(idListState); // All relevant user ID linked to a team 
@@ -313,4 +313,4 @@ const viewTeamPage = () => {
     )
 }
 
-export default viewTeamPage
+export default ViewTeamPage

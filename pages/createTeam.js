@@ -23,7 +23,7 @@ import Avatar from "react-avatar";
 import { SpinnerCircularFixed } from "spinners-react";
 import { db, auth } from "../utils/firebase.config";
 
-const createTeamPage = () => {
+const CreateTeamPage = () => {
     const [teamName,setTeamName] = useState("");
     const [hospitalName,setHospitalName] = useState("");
     const resetIdList = useResetRecoilState(idListState);
@@ -284,4 +284,4 @@ const createTeamPage = () => {
     )
 }
 
-export default createTeamPage
+export default CreateTeamPage

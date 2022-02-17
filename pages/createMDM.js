@@ -27,7 +27,7 @@
  import Link from "next/link";
  import Avatar from "react-avatar";
  
- const createMDMPage = () => {
+ const CreateMDMPage = () => {
      const [user, setUser] = useState("");
      const [userName, setUserName] = useState("");
      const [userData, setUserData] = useState([]);
@@ -392,4 +392,4 @@
      )
  }
  
- export default createMDMPage
+ export default CreateMDMPage

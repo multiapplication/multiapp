@@ -17,7 +17,7 @@ import Avatar from "react-avatar";
 import { SpinnerCircularFixed } from "spinners-react";
 import { db, auth } from "../utils/firebase.config";
 
-const myTeamsPage = () => {
+const MyTeamsPage = () => {
     const [user, setUser] = useState("");
     const [pageLoading, setPageLoading] = useState(false);
     const [userData, setUserData] = useState([]);
@@ -191,4 +191,4 @@ const myTeamsPage = () => {
     )
 }
 
-export default myTeamsPage
+export default MyTeamsPage
