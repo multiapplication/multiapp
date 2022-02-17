@@ -83,6 +83,7 @@ const TeamList = () => {
 
                         {/* based on id array, map the relevant user data to display participant list */}
                         {userList.map(({id,first_name, last_name, healthcare_occupation, organisation, role},index) => ( 
+                            // eslint-disable-next-line react/jsx-key
                             <tr className="odd:bg-white even:bg-coolblue" id={index}>
                                 <td className="px-6 py-4 ">
                                     <div className="text-sm font-medium text-charcoal">

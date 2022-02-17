@@ -61,6 +61,7 @@
      return (
          <div className="grid gap-6 mt-12 w-4/5">
              {mdmData.map(({ meeting_name, meeting_format, meeting_date, meeting_location, meeting_link,meeting_coordinator},index) => (
+                // eslint-disable-next-line react/jsx-key
                 <div id={index} className="flex flex-col justify-between bg-coolblue rounded p-4 h-max sm:h-fit sm:w-full shadow-lg">
                     <div className="flex flex-row gap-5">
                         <p className="text-lg font-bold">{meeting_name}</p>
