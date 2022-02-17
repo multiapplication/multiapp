@@ -49,16 +49,34 @@ const MyMDMPage = () => {
   };
 
   const getMDMList = () => {
+    // auth.onAuthStateChanged((currentUser) => {
+    //   const docRef = db.collection("users").doc(currentUser.uid);
+    //   docRef.collection("user_mdms").onSnapshot((snapshot) => {
+    //     const mdms = [];
+    //     snapshot.forEach((doc) => {
+    //       mdms.push({ ...doc.data(), key: doc.id });
+    //     });
+    //     setmdmList(mdms);
+    //     setSearchMDMList(mdms);
+    //     console.log("List fetched");
+    //   });
+    // });
+
     auth.onAuthStateChanged((currentUser) => {
-      const docRef = db.collection("users").doc(currentUser.uid);
-      docRef.collection("user_mdms").onSnapshot((snapshot) => {
+      const collectionRef = db.collection("mdms");
+      collectionRef.onSnapshot((snapshot) => {
         const mdms = [];
         snapshot.forEach((doc) => {
-          mdms.push({ ...doc.data(), key: doc.id });
+          var participants = doc.data().participants;
+
+          if (participants.includes(currentUser.uid)) {
+            mdms.push({ ...doc.data(), key: doc.id });
+          }
         });
         setmdmList(mdms);
         setSearchMDMList(mdms);
         console.log("List fetched");
+
       });
     });
   };
@@ -66,7 +84,7 @@ const MyMDMPage = () => {
   // update input for search, based on key input to the search bar
   const updateInput = async (input) => {
     const filtered = mdmList.filter((mdm) => {
-      return mdm.mdm_name.toLowerCase().includes(input.toLowerCase());
+      return mdm.meeting_name.toLowerCase().includes(input.toLowerCase());
     });
     setInput(input);
     setSearchMDMList(filtered);
@@ -195,7 +213,7 @@ const MyMDMPage = () => {
         </div>
 
         <div className="bg-gradient-to-b from-[#22577A] via-[#38A3A5] to-[#57CC99] h-screen w-4/5 flex flex-col items-center gap-5">
-          {/* <Searchbar setKeyword={updateInput} keyword={input} placeholder={"Search MDMs by name"}/>
+          <Searchbar setKeyword={updateInput} keyword={input} placeholder={"Search MDMs by name"}/>
 
           {searchMDMList.length > 0 ? (
             searchMDMList.map((mdm) => {
@@ -207,29 +225,29 @@ const MyMDMPage = () => {
                   
                 >
                   <div className="flex flex-row gap-5">
-                    <p className="text-lg font-bold">{mdm.mdm_name}</p>
-                    <p className="opacity-50">{mdm.mdm_mode}</p>
+                    <p className="text-lg font-bold">{mdm.meeting_name}</p>
+                    <p className="opacity-50">{mdm.meeting_format}</p>
                   </div>
 
                   <div className="flex flex-row gap-5 mt-2">
-                    <p>{mdm.mdm_date}</p>
-                    <p>{mdm.mdm_time}</p>
+                    <p>{mdm.meeting_date}</p>
+
                   </div>
 
                   <div className="mt-2">
-                    {mdm.mdm_link === "" ? (
-                      <p className="opacity-50">{mdm.mdm_location}</p>
+                    {mdm.meeting_link === "" ? (
+                      <p className="opacity-50">{mdm.meeting_location}</p>
                     ) : (
                       <>
-                        <Link href={mdm.mdm_link}>
-                          <a className="text-blue-500">{mdm.mdm_link}</a>
+                        <Link href={mdm.meeting_link}>
+                          <a className="text-[#3b83f6]">{mdm.meeting_link}</a>
                         </Link>
                       </>
                     )}
                   </div>
 
                   <div className="mt-2">
-                    <p className="opacity-50">Chair: {mdm.mdm_chair}</p>
+                    <p className="opacity-50">Coordinator: {mdm.meeting_coordinator}</p>
                   </div>
 
                   <div className="flex flex-row gap-2 justify-end">
@@ -261,9 +279,8 @@ const MyMDMPage = () => {
             <div className="rounded-md shadow-md bg-[#F1F5FA] p-2 w-fit ">
               <p>You have no mdms to view</p>
             </div>
-          )} */}
-          <MdmCard></MdmCard>
-
+          )}
+          {/* <MdmCard></MdmCard> */}
         </div>
       </div>
     </>
