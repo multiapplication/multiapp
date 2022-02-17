@@ -105,72 +105,71 @@ const UserPage = () => {
           </div>
 
           <hr />
-
           <div className="flex flex-col gap-5">
-            <div className="p-3 cursor-pointer hover:bg-navy hover:text-white" onClick={()=>{
-              Router.push('/dashboard');
-            }}>
-              <p className=" opacity-70 text-xl">My Patients</p>
-            </div>
-
-            <div>
-              <div className="p-3 cursor-pointer hover:bg-navy hover:text-white"
-              onClick={()=>{
-                Router.push('/myMDM');
+               <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white" onClick={()=>{
+                   Router.push('/dashboard');
+               }}>
+                 <p className=" opacity-70 text-xl">My Patients</p>
+               </div>
+   
+               <div>
+                 <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white"
+                 onClick={()=>{
+                  Router.push('/myMDM');
               }}>
-                <p className=" opacity-70 text-xl">My MDMs</p>
-              </div>
-
-              <div className="ml-2">
-                <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1 cursor-pointer hover:bg-navy hover:text-white ">
-                  <p className=" opacity-70 ">Upcoming MDMs</p>
-                </div>
-
-                <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-navy hover:text-white ">
-                  <p className=" opacity-70 ">Past MDMs</p>
-                </div>
-
-                <div className="ml-20 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-navy hover:text-white ">
-                  <p className=" opacity-70 ">Attendance</p>
-                </div>
-
-                <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-navy hover:text-white "
-                onClick={() => {
-                  Router.push("/manageMDM");
-                }} >
-                  <p className=" opacity-70 ">Manage MDMs</p>
-                </div>
-
-                <div className="ml-20 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-navy hover:text-white "
-                onClick={() => {
-                  Router.push("/createMDM");
+                   <p className=" opacity-70 text-xl">My MDMs</p>
+                 </div>
+   
+                 <div className="ml-2">
+                   <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1 cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                     <p className=" opacity-70 ">Upcoming MDMs</p>
+                   </div>
+   
+                   <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                     <p className=" opacity-70 ">Past MDMs</p>
+                   </div>
+   
+                   <div className="ml-20 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white ">
+                     <p className=" opacity-70 ">Attendance</p>
+                   </div>
+   
+                   <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white "
+                   onClick={()=>{
+                    Router.push('');
                 }}>
-                  <p className=" opacity-70 ">+ New MDM</p>
-                </div>
-              </div>
-            </div>
-
-                  <div>
-                  <div className="p-3 cursor-pointer hover:bg-navy hover:text-white"
-                  onClick={() => {
-                    Router.push("/myTeams");
-                  }}>
-              <p className=" opacity-70 text-xl">My Teams</p>
-            </div>
-
-            <div className="ml-2">
-              <div className="ml-12 mt-2 border-my-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-navy hover:text-white "
-              onClick={() => {
-                Router.push("/createTeam");
+                     <p className=" opacity-70 ">Manage MDMs</p>
+                   </div>
+   
+                   <div className="ml-20 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white "
+                   onClick={()=>{
+                    Router.push('/createMDM');
+                }}>
+                     <p className=" opacity-70 ">+ New MDM</p>
+                   </div>
+                 </div>
+             </div>
+   
+             <div>
+                 <div className="p-3 cursor-pointer hover:bg-[#22577A] hover:text-white"
+                 onClick={()=>{
+                  Router.push('/myTeams');
               }}>
-                <p className=" opacity-70 ">+ New Team</p>
-              </div>
-            </div>
-                  </div>
-            
-
-            <div className="p-3">
-            <p
+                     <p className=" opacity-70 text-xl">My Teams</p>
+                 </div>
+   
+                 <div className="ml-2">
+                     <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white "
+                     onClick={()=>{
+                      Router.push('/createTeam');
+                  }}>
+                     <p className=" opacity-70 ">+ New Team</p>
+                     </div>
+                 </div>
+             </div>
+               
+   
+               <div className="p-3">
+               <p
                 className="text-red text-l cursor-pointer"
                 onClick={() => {
                   auth.signOut().finally(() => {
@@ -180,8 +179,9 @@ const UserPage = () => {
               >
                 Logout
               </p>
-            </div>
-          </div>
+               </div>
+             </div>
+          
         </div>
         <div className="bg-gradient-to-b from-navy via-aqua to-green h-screen w-4/5 flex flex-col justify-start gap-10 items-center ">
           {pageLoading ? (

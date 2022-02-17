@@ -226,7 +226,7 @@ const AddPatientPage = () => {
    
                    <div className="ml-12 mt-2 border-metal border-b-2 border-l-2 p-1  cursor-pointer hover:bg-[#22577A] hover:text-white "
                    onClick={()=>{
-                    Router.push('/manageMDM');
+                    Router.push('');
                 }}>
                      <p className=" opacity-70 ">Manage MDMs</p>
                    </div>
