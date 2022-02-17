@@ -110,7 +110,7 @@ const SignupPage = () => {
               </div>
               <div className="md:w-2/3">
                 <input
-                  className="bg-light-grey appearance-none border-2 border-light-grey rounded w-full py-2 px-4 text-dark-grey leading-tight focus:outline-none focus:bg-white focus:border-green"
+                  className="bg-light-grey appearance-none border-2 border-light-grey rounded w-full py-2 px-4 text-black leading-tight focus:outline-none focus:bg-white focus:border-green"
                   id="first_name"
                   name="first_name"
                   type="text"
@@ -134,7 +134,7 @@ const SignupPage = () => {
               </div>
               <div className="md:w-2/3">
                 <input
-                  className="bg-light-grey appearance-none border-2 border-light-grey rounded w-full py-2 px-4 text-dark-grey leading-tight focus:outline-none focus:bg-white focus:border-green"
+                  className="bg-light-grey appearance-none border-2 border-light-grey rounded w-full py-2 px-4 text-black leading-tight focus:outline-none focus:bg-white focus:border-green"
                   id="last_name"
                   name="last_name"
                   type="text"
@@ -188,7 +188,7 @@ const SignupPage = () => {
               </div>
               <div className="md:w-2/3">
                 <input
-                  className="bg-light-grey appearance-none border-2 border-light-grey rounded w-full py-2 px-4 text-dark-grey leading-tight focus:outline-none focus:bg-white focus:border-green"
+                  className="bg-light-grey appearance-none border-2 border-light-grey rounded w-full py-2 px-4 text-black leading-tight focus:outline-none focus:bg-white focus:border-green"
                   id="organisation"
                   name="organisation"
                   type="text"
@@ -209,7 +209,7 @@ const SignupPage = () => {
               </div>
               <div className="md:w-2/3">
                 <input
-                  className="bg-light-grey appearance-none border-2 border-light-grey rounded w-full py-2 px-4 text-dark-grey leading-tight focus:outline-none focus:bg-white focus:border-green"
+                  className="bg-light-grey appearance-none border-2 border-light-grey rounded w-full py-2 px-4 text-black leading-tight focus:outline-none focus:bg-white focus:border-green"
                   id="email"
                   name="email"
                   type="email"
@@ -233,7 +233,7 @@ const SignupPage = () => {
               </div>
               <div className="md:w-2/3">
                 <input
-                  className="bg-light-grey appearance-none border-2 border-light-grey rounded w-full py-2 px-4 text-dark-grey leading-tight focus:outline-none focus:bg-white focus:border-green"
+                  className="bg-light-grey appearance-none border-2 border-light-grey rounded w-full py-2 px-4 text-black leading-tight focus:outline-none focus:bg-white focus:border-green"
                   id="password"
                   name="password"
                   type="password"
@@ -261,7 +261,7 @@ const SignupPage = () => {
                 </div>
                 <div className="md:w-2/3">
                   <input
-                    className="bg-light-grey appearance-none border-2 border-light-grey rounded w-full py-2 px-4 text-dark-grey leading-tight focus:outline-none focus:bg-white focus:border-green"
+                    className="bg-light-grey appearance-none border-2 border-light-grey rounded w-full py-2 px-4 text-black leading-tight focus:outline-none focus:bg-white focus:border-green"
                     id="changepassword"
                     name="changepassword"
                     type="password"
