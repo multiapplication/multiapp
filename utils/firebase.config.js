@@ -3,12 +3,12 @@ import 'firebase/auth'
 import 'firebase/firestore'
 
 const config = {
-  apiKey: "AIzaSyDB75_JAYGKciHl-K4XUSVC9NxS7TDWXjE",
-  authDomain: "multiapp-dev-dd122.firebaseapp.com",
-  projectId: "multiapp-dev-dd122",
-  storageBucket: "multiapp-dev-dd122.appspot.com",
-  messagingSenderId: "665532418682",
-  appId: "1:665532418682:web:dda45edbbf5fca964c49c3"
+  apiKey: "AIzaSyC-IFtsSnIzoHLAU5NgBitiDIBTXPRLDoE",
+  authDomain: "multiapp-staging.firebaseapp.com",
+  projectId: "multiapp-staging",
+  storageBucket: "multiapp-staging.appspot.com",
+  messagingSenderId: "609024697656",
+  appId: "1:609024697656:web:ce2bcdd29b4c7969368dcd"
 };
 
 
