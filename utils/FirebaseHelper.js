@@ -6,31 +6,6 @@ Usage:
 1) instantiate new class 
 2) call in useEffect 
 3) retrieve required information to render elements via class properties
-
-
-e.g.
-import {useEffect} from "react";
-import {auth} from "../utils/firebase.config";
-import {FirebaseHelper} from "../utils/FirebaseHelper"
-
-const firebaseHelper = new FirebaseHelper();
-
- const testFunction = () => { // called with onClick
-    console.log(firebaseHelper.teams)
-}
-
-const getUserDetails = () => {
-    auth.onAuthStateChanged((currentUser) => { 
-        firebaseHelper.id = currentUser.uid;
-        firebaseHelper.get_details();
-        firebaseHelper.get_teams();
-        firebaseHelper.get_mdms();
-    })
-}
-
-useEffect(() => {
-    getUserDetails();
-},[]);
 */
 
 import {db} from "./firebase.config";
@@ -44,8 +19,11 @@ export class FirebaseHelper {
         this.email;
         this.organisation; 
         this.teams = []; 
+        this.teams_id = []; 
         this.mdms = [];
+        this.mdms_id = [];
         this.patients = [];
+        this.patients_id = [];
     }
 
     get_userRef(){
@@ -81,7 +59,8 @@ export class FirebaseHelper {
                     teams.forEach(async (teamRef)=> { 
                         const team = await teamRef.get();
                         if (team.exists){
-                            this.teams.push(team.id,team.data());
+                            this.teams_id.push(team.id);
+                            this.teams.push(team.data());
                         }
                     })
                 }
@@ -102,7 +81,8 @@ export class FirebaseHelper {
                     mdms.forEach(async (mdmRef)=> { 
                         const mdm = await mdmRef.get();
                         if (mdm.exists){
-                            this.mdms.push(mdm.id,mdm.data())
+                            this.mdms_id.push(mdm.id)
+                            this.mdms.push(mdm.data())
                         }
                     })
                 }
@@ -123,7 +103,8 @@ export class FirebaseHelper {
                     patients.forEach(async (patientRef)=> { 
                         const patient = await patientRef.get();
                         if (patient.exists){
-                            this.patients.push(patient.id,patient.data())
+                            this.patients_id.push(patient.id)
+                            this.patients.push(patient.data())
                         }
                     })
                 }
