@@ -45,6 +45,7 @@ export class FirebaseHelper {
         this.organisation; 
         this.teams = []; 
         this.mdms = [];
+        this.patients = [];
     }
 
     get_userRef(){
@@ -57,12 +58,13 @@ export class FirebaseHelper {
 
         this.get_userRef();
         this.userRef.onSnapshot((doc) => { // attach listener to user doc
-            if (doc.exists) { 
+            if (doc.exists) {  // get all user information
                 this.first_name = doc.data().first_name;
                 this.last_name = doc.data().last_name;
                 this.email = doc.data().email;
                 this.organisation = doc.data().organisation;
-            } else {
+            } 
+            else {
                 console.log("No such document!");
             }
         });
@@ -79,11 +81,12 @@ export class FirebaseHelper {
                     teams.forEach(async (teamRef)=> { 
                         const team = await teamRef.get();
                         if (team.exists){
-                            this.teams.push(team.id,team.data())
+                            this.teams.push(team.id,team.data());
                         }
                     })
                 }
-            } else {
+            } 
+            else {
                 console.log("No such document!");
             }
         });
@@ -103,7 +106,29 @@ export class FirebaseHelper {
                         }
                     })
                 }
-            } else {
+            } 
+            else {
+                console.log("No such document!");
+            }
+        });
+    }
+
+    get_patients() {
+        
+        this.get_userRef();
+        this.userRef.onSnapshot((doc) => { // attach listener to user doc
+            if (doc.exists) { 
+                if(doc.data().patients){
+                    const patients = doc.data().patients; // get list of references to patients linked to user 
+                    patients.forEach(async (patientRef)=> { 
+                        const patient = await patientRef.get();
+                        if (patient.exists){
+                            this.patients.push(patient.id,patient.data())
+                        }
+                    })
+                }
+            } 
+            else {
                 console.log("No such document!");
             }
         });
